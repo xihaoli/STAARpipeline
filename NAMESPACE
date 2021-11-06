@@ -1,0 +1,18 @@
+exportPattern("^[[:alpha:]]+")
+import(Rcpp, STAAR, SCANG, dplyr, SeqArray, TxDb.Hsapiens.UCSC.hg38.knownGene, GMMAT, Matrix, methods)
+importFrom("stats", "pchisq", "lm", "model.matrix", "quantile", "rnorm", "binomial")
+importFrom("SeqVarTools", "isSNV")
+importFrom("GenomicFeatures", "genes", "promoters")
+importFrom("GENESIS", "makeSparseMatrix")
+
+useDynLib(STAARpipeline, .registration = TRUE)
+
+# functions
+export(fit_nullmodel,
+       genesis2staar_nullmodel,staar2scang_nullmodel,
+       Individual_Analysis,Individual_Analysis_cond,
+       Gene_Centric_Coding,Gene_Centric_Coding_cond,
+       Gene_Centric_Noncoding,Gene_Centric_Noncoding_cond,
+       ncRNA,ncRNA_cond,
+       Sliding_Window,Sliding_Window_cond,Dynamic_Window_SCANG,
+       LD_pruning)

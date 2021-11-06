@@ -12,7 +12,7 @@ install:
 # Adapt as necessary starting from here
 
 environment:
-  my_variable:
+  GITHUB_PAT:
     secure: ZA36EuQkSKxhMT8evNT3GWl6YQ1l8w/b5ghkn/t8Ng90xjwzq14JHdQ3YLHpHnd5
   matrix:
   - R_VERSION: stable

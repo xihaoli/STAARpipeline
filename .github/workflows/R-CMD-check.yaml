@@ -20,6 +20,7 @@ jobs:
         run: |
           install.packages(c("remotes", "rcmdcheck"))
           remotes::install_deps(dependencies = TRUE)
+          Sys.unsetenv("GITHUB_PAT")
           remotes::install_github(c("xihaoli/STAAR", "zilinli1988/SCANG"))
         shell: Rscript {0}
       - name: Check

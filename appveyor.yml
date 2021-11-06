@@ -12,13 +12,13 @@ install:
 # Adapt as necessary starting from here
 
 environment:
+  my_variable:
+    secure: ZA36EuQkSKxhMT8evNT3GWl6YQ1l8w/b5ghkn/t8Ng90xjwzq14JHdQ3YLHpHnd5
   matrix:
   - R_VERSION: stable
     R_ARCH: x64
     BIOC_USE_DEVEL: FALSE
     PKGTYPE: both
-  my_variable:
-    secure: ZA36EuQkSKxhMT8evNT3GWl6YQ1l8w/b5ghkn/t8Ng90xjwzq14JHdQ3YLHpHnd5
 
 branches:
   only:

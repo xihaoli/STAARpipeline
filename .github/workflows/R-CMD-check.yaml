@@ -19,9 +19,8 @@ jobs:
       - name: Install dependencies
         run: |
           install.packages(c("remotes", "rcmdcheck"))
-          Sys.setenv(GITHUB_PAT = 'MY_TOKEN_HERE')
           remotes::install_deps(dependencies = TRUE)
-          remotes::install_github(c("xihaoli/STAAR", "zilinli1988/SCANG"))
+          remotes::install_github(c("xihaoli/STAAR", "zilinli1988/SCANG"), auth_token = 'MY_TOKEN_HERE')
         shell: Rscript {0}
       - name: Check
         run: rcmdcheck::rcmdcheck(args = "--no-manual", error_on = "error")

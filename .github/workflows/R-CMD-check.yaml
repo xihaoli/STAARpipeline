@@ -20,7 +20,10 @@ jobs:
         run: |
           install.packages(c("devtools", "rcmdcheck"))
           devtools::install_deps(dependencies = TRUE)
+          github_pat(1)
+          Sys.getenv("GITHUB_PAT")
           Sys.unsetenv("GITHUB_PAT")
+          Sys.getenv("GITHUB_PAT")
           devtools::install_github(c("xihaoli/STAAR", "zilinli1988/SCANG"))
         shell: Rscript {0}
       - name: Check

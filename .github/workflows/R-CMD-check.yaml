@@ -20,7 +20,7 @@ jobs:
         run: |
           install.packages(c("devtools", "rcmdcheck"))
           devtools::install_deps(dependencies = TRUE)
-          github_pat(1)
+          devtools::github_pat(1)
           Sys.getenv("GITHUB_PAT")
           Sys.unsetenv("GITHUB_PAT")
           Sys.getenv("GITHUB_PAT")

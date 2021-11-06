@@ -15,6 +15,6 @@ bioc_packages:
 - TxDb.Hsapiens.UCSC.hg38.knownGene
 - GENESIS
 
-r_github_packages
+r_github_packages:
 - xihaoli/STAAR
 - zilinli1988/SCANG

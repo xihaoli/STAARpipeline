@@ -21,8 +21,8 @@ jobs:
       - name: Install dependencies
         run: |
           install.packages(c("remotes", "rcmdcheck"))
-          remotes::install_github(c("xihaoli/STAAR", "zilinli1988/SCANG"))
           remotes::install_deps(dependencies = TRUE)
+          remotes::install_github(c("xihaoli/STAAR", "zilinli1988/SCANG"))
         shell: Rscript {0}
       - name: Check
         run: rcmdcheck::rcmdcheck(args = "--no-manual", error_on = "error")

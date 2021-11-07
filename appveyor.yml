@@ -13,7 +13,7 @@ install:
 
 environment:
   GITHUB_PAT:
-    secure: ZA36EuQkSKxhMT8evNT3GWl6YQ1l8w/b5ghkn/t8Ng90xjwzq14JHdQ3YLHpHnd5
+    secure: 9twYD7Na9QbhjqQTj5oPknSJJG4pU1SB0JH4dJV3+K/V66wXaz8j7V/ZDeJh4eve
   matrix:
   - R_VERSION: stable
     R_ARCH: x64

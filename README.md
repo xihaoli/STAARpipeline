@@ -18,7 +18,7 @@ STAARpipeline links to R packages <a href="https://cran.r-project.org/web/packag
 ## Installation
 ```
 library(devtools)
-devtools::install_github("xihaoli/STAARpipeline")
+devtools::install_github("xihaoli/STAARpipeline",ref="main")
 ```
 ## Usage
 Please see the <a href="docs/STAARpipeline_manual.pdf">**STAARpipeline** user manual</a> for detailed usage of STAARpipeline package. Please see the <a href="https://github.com/xihaoli/STAARpipeline-Tutorial">**STAARpipeline** tutorial</a> for a detailed example of analyzing sequencing data using STAARpipeline.

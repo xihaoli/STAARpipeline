@@ -10,7 +10,7 @@ Sliding_Window_cond(
   end_loc,
   genofile,
   obj_nullmodel,
-  known_loci,
+  known_loci = NULL,
   rare_maf_cutoff = 0.01,
   rv_num_cutoff = 2,
   method_cond = c("optimal", "naive"),
@@ -37,7 +37,7 @@ or the output from \code{fitNullModel} function in the \code{GENESIS} package an
 
 \item{known_loci}{the data frame of variants to be adjusted for in conditional analysis and should
 contain 4 columns in the following order: chromosome (CHR), position (POS), reference allele (REF),
-and alternative allele (ALT).}
+and alternative allele (ALT) (default = NULL).}
 
 \item{rare_maf_cutoff}{the cutoff of maximum minor allele frequency in
 defining rare variants (default = 0.01).}

@@ -11,7 +11,7 @@
 #' or the output from \code{fitNullModel} function in the \code{GENESIS} package and transformed using the \code{\link{genesis2staar_nullmodel}} function.
 #' @param known_loci the data frame of variants to be adjusted for in conditional analysis and should
 #' contain 4 columns in the following order: chromosome (CHR), position (POS), reference allele (REF),
-#' and alternative allele (ALT).
+#' and alternative allele (ALT) (default = NULL).
 #' @param method_cond a character value indicating the method for conditional analysis.
 #' \code{optimal} refers to regressing residuals from the null model on \code{known_loci}
 #' as well as all covariates used in fitting the null model (fully adjusted) and taking the residuals;
@@ -29,7 +29,7 @@
 #' (\href{https://doi.org/10.1002/gepi.22188}{pub})
 #' @export
 
-Individual_Analysis_cond <- function(chr,individual_results,genofile,obj_nullmodel,known_loci,
+Individual_Analysis_cond <- function(chr,individual_results,genofile,obj_nullmodel,known_loci=NULL,
                                      method_cond=c("optimal","naive"),
                                      QC_label="annotation/filter",variant_type=c("variant","SNV","Indel"),geno_missing_imputation=c("mean","minor")){
 
@@ -74,51 +74,55 @@ Individual_Analysis_cond <- function(chr,individual_results,genofile,obj_nullmod
 	Chr_Info <- Chr_Info[SNVlist,]
 
 	### known SNV Info
+	if(is.null(known_loci))
+	{
+		known_loci <- data.frame(chr=logical(0),pos=logical(0),ref=character(0),alt=character(0))
+	}
 	known_loci_chr <- known_loci[known_loci[,1]==chr,]
 	if(dim(known_loci_chr)[1]>=1)
 	{
-	  known_loci_chr <- known_loci_chr[order(known_loci_chr[,2]),]
+		known_loci_chr <- known_loci_chr[order(known_loci_chr[,2]),]
 
-	  known_loci_chr$CHR <- as.numeric(known_loci_chr$CHR)
+		known_loci_chr$CHR <- as.numeric(known_loci_chr$CHR)
 
-	  known_loci_chr <- left_join(known_loci_chr,Chr_Info,by=c("CHR"="CHR","POS"="POS","REF"="REF","ALT"="ALT"))
-	  variant.id.in <- known_loci_chr$variant_id
-	  seqSetFilter(genofile,variant.id=variant.id.in,sample.id=phenotype.id)
+		known_loci_chr <- left_join(known_loci_chr,Chr_Info,by=c("CHR"="CHR","POS"="POS","REF"="REF","ALT"="ALT"))
+		variant.id.in <- known_loci_chr$variant_id
+		seqSetFilter(genofile,variant.id=variant.id.in,sample.id=phenotype.id)
 
-	  ## genotype id
-	  id.genotype <- seqGetData(genofile,"sample.id")
+		## genotype id
+		id.genotype <- seqGetData(genofile,"sample.id")
 
-	  id.genotype.merge <- data.frame(id.genotype,index=seq(1,length(id.genotype)))
-	  phenotype.id.merge <- data.frame(phenotype.id)
-	  phenotype.id.merge <- dplyr::left_join(phenotype.id.merge,id.genotype.merge,by=c("phenotype.id"="id.genotype"))
-	  id.genotype.match <- phenotype.id.merge$index
+		id.genotype.merge <- data.frame(id.genotype,index=seq(1,length(id.genotype)))
+		phenotype.id.merge <- data.frame(phenotype.id)
+		phenotype.id.merge <- dplyr::left_join(phenotype.id.merge,id.genotype.merge,by=c("phenotype.id"="id.genotype"))
+		id.genotype.match <- phenotype.id.merge$index
 
-	  Geno_adjusted <- seqGetData(genofile, "$dosage")
-	  Geno_adjusted <- Geno_adjusted[id.genotype.match,,drop=FALSE]
+		Geno_adjusted <- seqGetData(genofile, "$dosage")
+		Geno_adjusted <- Geno_adjusted[id.genotype.match,,drop=FALSE]
 
-	  ## impute missing
-	  if(!is.null(dim(Geno_adjusted)))
-	  {
-		if(dim(Geno_adjusted)[2]>0)
+		## impute missing
+		if(!is.null(dim(Geno_adjusted)))
 		{
-			if(geno_missing_imputation=="mean")
+			if(dim(Geno_adjusted)[2]>0)
 			{
-				Geno_adjusted <- matrix_flip_mean(Geno_adjusted)$Geno
-			}
-			if(geno_missing_imputation=="minor")
-			{
-				Geno_adjusted <- matrix_flip_minor(Geno_adjusted)$Geno
+				if(geno_missing_imputation=="mean")
+				{
+					Geno_adjusted <- matrix_flip_mean(Geno_adjusted)$Geno
+				}
+				if(geno_missing_imputation=="minor")
+				{
+					Geno_adjusted <- matrix_flip_minor(Geno_adjusted)$Geno
+				}
 			}
 		}
-	  }
 
-	  AF <- apply(Geno_adjusted,2,mean)/2
-	  MAF <- AF*(AF<0.5) + (1-AF)*(AF>=0.5)
+		AF <- apply(Geno_adjusted,2,mean)/2
+		MAF <- AF*(AF<0.5) + (1-AF)*(AF>=0.5)
 
-	  Geno_adjusted <- Geno_adjusted[,MAF>0,drop=FALSE]
-	  known_loci_chr <- known_loci_chr[MAF>0,]
+		Geno_adjusted <- Geno_adjusted[,MAF>0,drop=FALSE]
+		known_loci_chr <- known_loci_chr[MAF>0,]
 
-	  seqResetFilter(genofile)
+		seqResetFilter(genofile)
 	}
 
 	### Input Geno
@@ -171,15 +175,15 @@ Individual_Analysis_cond <- function(chr,individual_results,genofile,obj_nullmod
 			X_adj <- model.matrix(residuals.phenotype.fit)
 
 			### sparse GRM
-		    if(obj_nullmodel$sparse_kins)
-		    {
+			if(obj_nullmodel$sparse_kins)
+			{
 				Score_test <- Individual_Score_Test_cond(as.matrix(Geno[,k],ncol=1), Sigma_i, Sigma_iX, cov, X_adj, residuals.phenotype)
 				pvalue_cond_log10 <- c(pvalue_cond_log10,Score_test$pvalue_log/log(10))
-            }
+			}
 
 			### dense GRM
 			if(!obj_nullmodel$sparse_kins)
-		    {
+			{
 				P <- obj_nullmodel$P
 				P_scalar <- sqrt(dim(P)[1])
 				P <- P*P_scalar
@@ -204,18 +208,18 @@ Individual_Analysis_cond <- function(chr,individual_results,genofile,obj_nullmod
 
 				Score_test <- Individual_Score_Test_sp_denseGRM(as.matrix(Geno[,k],ncol=1), P_cond, residuals.phenotype)
 				pvalue_cond_log10 <- c(pvalue_cond_log10,Score_test$pvalue_log/log(10))
-            }
+			}
 		}else
 		{
 			### sparse GRM
-		    if(obj_nullmodel$sparse_kins)
-		    {
+			if(obj_nullmodel$sparse_kins)
+			{
 				Score_test <- Individual_Score_Test(as.matrix(Geno[,k],ncol=1), Sigma_i, Sigma_iX, cov, obj_nullmodel$scaled.residuals)
 				pvalue_cond_log10 <- c(pvalue_cond_log10,Score_test$pvalue_log/log(10))
 			}
 			### dense GRM
 			if(!obj_nullmodel$sparse_kins)
-		    {
+			{
 				P <- obj_nullmodel$P
 				P_scalar <- sqrt(dim(P)[1])
 				P <- P*P_scalar

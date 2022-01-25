@@ -139,16 +139,16 @@ Sliding_Window_Multiple <- function(chr,start_loc,end_loc,sliding_window_length=
 		}
 	}else
 	{
-	  seqResetFilter(genofile)
+		seqResetFilter(genofile)
 		stop(paste0("Number of rare variant in the set is less than 2!"))
 	}
 
 	if(!is.null(results))
 	{
-	  colnames(results) <- colnames(results, do.NULL = FALSE, prefix = "col")
-      colnames(results)[1:4] <- c("Chr","Start Loc","End Loc","#SNV")
-      colnames(results)[(dim(results)[2]-1):dim(results)[2]] <- c("ACAT-O","STAAR-O")
-    }
+		colnames(results) <- colnames(results, do.NULL = FALSE, prefix = "col")
+		colnames(results)[1:4] <- c("Chr","Start Loc","End Loc","#SNV")
+		colnames(results)[(dim(results)[2]-1):dim(results)[2]] <- c("ACAT-O","STAAR-O")
+	}
 
 	seqResetFilter(genofile)
 

@@ -65,51 +65,48 @@ fit_nullmodel <- function(fixed, data = parent.frame(), kins, use_sparse = NULL,
                           taumin = 1e-5, taumax = 1e5, tauregion = 10,
                           verbose = FALSE, ...){
 
-	if(is.null(kins))
-	{
+	if(is.null(kins)){
 		print("kins is null, fit glm")
 		obj_nullmodel <- glmmkin(fixed = fixed, data = data, kins = kins, id = id,
-                             random.slope = random.slope, groups = groups,
-                             family = family, method = method,
-                             method.optim = method.optim, maxiter = maxiter,
-                             tol = tol, taumin = taumin, taumax = taumax,
-                             tauregion = tauregion, verbose = verbose, ...)
+		                         random.slope = random.slope, groups = groups,
+		                         family = family, method = method,
+		                         method.optim = method.optim, maxiter = maxiter,
+		                         tol = tol, taumin = taumin, taumax = taumax,
+		                         tauregion = tauregion, verbose = verbose, ...)
 		obj_nullmodel$sparse_kins <- TRUE
-	}
-	else if(class(kins) != "matrix" && !(!is.null(attr(class(kins), "package")) && attr(class(kins), "package") == "Matrix")){
+	}else if(class(kins) != "matrix" && !(!is.null(attr(class(kins), "package")) && attr(class(kins), "package") == "Matrix")){
 		stop("kins is not a matrix!")
-	}
-	else if(!is.null(attr(class(kins), "package")) && attr(class(kins), "package") == "Matrix"){
+	}else if(!is.null(attr(class(kins), "package")) && attr(class(kins), "package") == "Matrix"){
 		print("kins is a sparse matrix.")
 		obj_nullmodel <- glmmkin(fixed = fixed, data = data, kins = kins, id = id,
-                             random.slope = random.slope, groups = groups,
-                             family = family, method = method,
-                             method.optim = method.optim, maxiter = maxiter,
-                             tol = tol, taumin = taumin, taumax = taumax,
-                             tauregion = tauregion, verbose = verbose, ...)
-    obj_nullmodel$sparse_kins <- TRUE
+		                         random.slope = random.slope, groups = groups,
+		                         family = family, method = method,
+		                         method.optim = method.optim, maxiter = maxiter,
+		                         tol = tol, taumin = taumin, taumax = taumax,
+		                         tauregion = tauregion, verbose = verbose, ...)
+    	obj_nullmodel$sparse_kins <- TRUE
 	}else if(!is.null(use_sparse) && use_sparse){
 		print(paste0("kins is a dense matrix, transforming it into a sparse matrix using cutoff ", kins_cutoff,"."))
 		kins_sp <- makeSparseMatrix(kins, thresh = kins_cutoff)
 		if(class(kins_sp) == "dsyMatrix" || kins_cutoff <= min(kins)){
 			stop(paste0("kins is still a dense matrix using cutoff ", kins_cutoff,". Please try a larger kins_cutoff or use_sparse = FALSE"))
 		}
-    rm(kins)
+		rm(kins)
 		obj_nullmodel <- glmmkin(fixed = fixed, data = data, kins = kins_sp, id = id,
-                             random.slope = random.slope, groups = groups,
-                             family = family, method = method,
-                             method.optim = method.optim, maxiter = maxiter,
-                             tol = tol, taumin = taumin, taumax = taumax,
-                             tauregion = tauregion, verbose = verbose, ...)
+		                         random.slope = random.slope, groups = groups,
+		                         family = family, method = method,
+		                         method.optim = method.optim, maxiter = maxiter,
+		                         tol = tol, taumin = taumin, taumax = taumax,
+		                         tauregion = tauregion, verbose = verbose, ...)
 		obj_nullmodel$sparse_kins <- TRUE
 	}else{
-    print("kins is a dense matrix.")
+		print("kins is a dense matrix.")
 		obj_nullmodel <- glmmkin(fixed = fixed, data = data, kins = kins, id = id,
-                             random.slope = random.slope, groups = groups,
-                             family = family, method = method,
-                             method.optim = method.optim, maxiter = maxiter,
-                             tol = tol, taumin = taumin, taumax = taumax,
-                             tauregion = tauregion, verbose = verbose, ...)
+		                         random.slope = random.slope, groups = groups,
+		                         family = family, method = method,
+		                         method.optim = method.optim, maxiter = maxiter,
+		                         tol = tol, taumin = taumin, taumax = taumax,
+		                         tauregion = tauregion, verbose = verbose, ...)
 		obj_nullmodel$sparse_kins <- FALSE
 	}
 	obj_nullmodel$relatedness <- TRUE

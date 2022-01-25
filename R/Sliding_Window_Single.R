@@ -31,7 +31,7 @@ Sliding_Window_Single <- function(chr,start_loc,end_loc,genofile,obj_nullmodel,r
 	position <- as.numeric(seqGetData(genofile, "position"))
 
 	is.in <- (SNVlist)&(position>=start_loc)&(position<=end_loc)
-    seqSetFilter(genofile,variant.id=variant.id[is.in],sample.id=phenotype.id)
+	seqSetFilter(genofile,variant.id=variant.id[is.in],sample.id=phenotype.id)
 
 	## genotype id
 	id.genotype <- seqGetData(genofile,"sample.id")
@@ -103,27 +103,27 @@ Sliding_Window_Single <- function(chr,start_loc,end_loc,genofile,obj_nullmodel,r
 		try(pvalues <- STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff))
 
 		if(class(pvalues)=="list")
-        {
+		{
 		  results_temp <- c(chr,start_loc,end_loc)
 
-          results_temp <- c(results_temp,pvalues$num_variant,pvalues$results_STAAR_S_1_25,pvalues$results_STAAR_S_1_1,
-                            pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_A_1_25,
-                            pvalues$results_STAAR_A_1_1,pvalues$results_ACAT_O,pvalues$results_STAAR_O)
-          results <- c()
-          results <- rbind(results,results_temp)
-        }
+		  results_temp <- c(results_temp,pvalues$num_variant,pvalues$results_STAAR_S_1_25,pvalues$results_STAAR_S_1_1,
+		                    pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_A_1_25,
+		                    pvalues$results_STAAR_A_1_1,pvalues$results_ACAT_O,pvalues$results_STAAR_O)
+		  results <- c()
+		  results <- rbind(results,results_temp)
+		}
 	}else
 	{
-	  seqResetFilter(genofile)
+		seqResetFilter(genofile)
 		stop(paste0("Number of rare variant in the set is less than 2!"))
 	}
 
 	if(!is.null(results))
 	{
-	  colnames(results) <- colnames(results, do.NULL = FALSE, prefix = "col")
-      colnames(results)[1:4] <- c("Chr","Start Loc","End Loc","#SNV")
-      colnames(results)[(dim(results)[2]-1):dim(results)[2]] <- c("ACAT-O","STAAR-O")
-    }
+		colnames(results) <- colnames(results, do.NULL = FALSE, prefix = "col")
+		colnames(results)[1:4] <- c("Chr","Start Loc","End Loc","#SNV")
+		colnames(results)[(dim(results)[2]-1):dim(results)[2]] <- c("ACAT-O","STAAR-O")
+	}
 
 	seqResetFilter(genofile)
 

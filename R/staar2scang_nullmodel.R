@@ -18,47 +18,47 @@
 
 staar2scang_nullmodel <- function(obj_nullmodel){
 
-  obj_nullmodel$times <- 2000
-  if(is.null(obj_nullmodel$Sigma_i)){
-  P_eigen <- eigen(obj_nullmodel$P)
-	P_eigen$values[abs(P_eigen$values) < 1e-12] <- 0
-	Omega <- sqrt(P_eigen$values)*t(P_eigen$vectors)
+	obj_nullmodel$times <- 2000
+	if(is.null(obj_nullmodel$Sigma_i)){
+		P_eigen <- eigen(obj_nullmodel$P)
+		P_eigen$values[abs(P_eigen$values) < 1e-12] <- 0
+		Omega <- sqrt(P_eigen$values)*t(P_eigen$vectors)
 
-	set.seed(19880615+666)
-	y <- matrix(rnorm(obj_nullmodel$times*dim(Omega)[1]),obj_nullmodel$times,dim(Omega)[1])
-	obj_nullmodel$pseudo_residuals <- y%*%Omega
-	obj_nullmodel$pseudo_residuals <- as.matrix(obj_nullmodel$pseudo_residuals)
-  }else
-  {
-	Sigma_i <- obj_nullmodel$Sigma_i
-	Sigma_iX <- as.matrix(obj_nullmodel$Sigma_iX)
-	cov <- obj_nullmodel$cov
+		set.seed(19880615+666)
+		y <- matrix(rnorm(obj_nullmodel$times*dim(Omega)[1]),obj_nullmodel$times,dim(Omega)[1])
+		obj_nullmodel$pseudo_residuals <- y%*%Omega
+		obj_nullmodel$pseudo_residuals <- as.matrix(obj_nullmodel$pseudo_residuals)
+	}else
+	{
+		Sigma_i <- obj_nullmodel$Sigma_i
+		Sigma_iX <- as.matrix(obj_nullmodel$Sigma_iX)
+		cov <- obj_nullmodel$cov
 
-	R <- Matrix::chol(Sigma_i)
-	S <- Matrix::chol(cov)
-	R_inverse <- Matrix::solve(R)
+		R <- Matrix::chol(Sigma_i)
+		S <- Matrix::chol(cov)
+		R_inverse <- Matrix::solve(R)
 
-	K <- Matrix::crossprod(t(S),Matrix::crossprod(Sigma_iX,R_inverse))
-	KS <- svd_c(as.matrix(Matrix::t(K)))
-	rm(K)
-	rm(R_inverse)
+		K <- Matrix::crossprod(t(S),Matrix::crossprod(Sigma_iX,R_inverse))
+		KS <- svd_c(as.matrix(Matrix::t(K)))
+		rm(K)
+		rm(R_inverse)
 
-	eigen_diff <- rep(1,dim(Sigma_i)[1]) - c((KS$s)^2,rep(0,dim(Sigma_i)[1]-length(KS$s)))
-	eigen_diff[abs(eigen_diff)<1e-10] <- 0
-	eigen_diff <- sqrt(eigen_diff)
+		eigen_diff <- rep(1,dim(Sigma_i)[1]) - c((KS$s)^2,rep(0,dim(Sigma_i)[1]-length(KS$s)))
+		eigen_diff[abs(eigen_diff)<1e-10] <- 0
+		eigen_diff <- sqrt(eigen_diff)
 
-	### residuals
-	set.seed(19880615+666)
-	y <- matrix(rnorm(obj_nullmodel$times*dim(KS$U)[2]),obj_nullmodel$times,dim(KS$U)[2])
-	y <- y%*%diag(eigen_diff)
-	ytU <- tcrossprod(y,KS$U)
+		### residuals
+		set.seed(19880615+666)
+		y <- matrix(rnorm(obj_nullmodel$times*dim(KS$U)[2]),obj_nullmodel$times,dim(KS$U)[2])
+		y <- y%*%diag(eigen_diff)
+		ytU <- tcrossprod(y,KS$U)
 
-	rm(y)
+		rm(y)
 
-	obj_nullmodel$pseudo_residuals <- ytU%*%R
-	obj_nullmodel$pseudo_residuals <- as.matrix(obj_nullmodel$pseudo_residuals)
-  }
+		obj_nullmodel$pseudo_residuals <- ytU%*%R
+		obj_nullmodel$pseudo_residuals <- as.matrix(obj_nullmodel$pseudo_residuals)
+	}
 
-  return(obj_nullmodel)
+	return(obj_nullmodel)
 }
 

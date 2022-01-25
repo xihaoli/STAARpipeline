@@ -17,7 +17,7 @@
 #' or the output from \code{fitNullModel} function in the \code{GENESIS} package and transformed using the \code{\link{genesis2staar_nullmodel}} function.
 #' @param known_loci the data frame of variants to be adjusted for in conditional analysis and should
 #' contain 4 columns in the following order: chromosome (CHR), position (POS), reference allele (REF),
-#' and alternative allele (ALT).
+#' and alternative allele (ALT) (default = NULL).
 #' @param rare_maf_cutoff the cutoff of maximum minor allele frequency in
 #' defining rare variants (default = 0.01).
 #' @param rv_num_cutoff the cutoff of minimum number of variants of analyzing
@@ -45,7 +45,7 @@
 #' @export
 
 Gene_Centric_Coding_cond <- function(chr,gene_name,category=c("plof","plof_ds","missense","disruptive_missense","synonymous"),
-                                     genofile,obj_nullmodel,known_loci,rare_maf_cutoff=0.01,rv_num_cutoff=2,
+                                     genofile,obj_nullmodel,known_loci=NULL,rare_maf_cutoff=0.01,rv_num_cutoff=2,
                                      method_cond=c("optimal","naive"),
                                      QC_label="annotation/filter",variant_type=c("SNV","Indel","variant"),geno_missing_imputation=c("mean","minor"),
                                      Annotation_dir="annotation/info/FunctionalAnnotation",Annotation_name_catalog,
@@ -58,6 +58,10 @@ Gene_Centric_Coding_cond <- function(chr,gene_name,category=c("plof","plof_ds","
 	geno_missing_imputation <- match.arg(geno_missing_imputation)
 
 	genes <- genes_info[genes_info[,2]==chr,]
+	if(is.null(known_loci))
+	{
+		known_loci <- data.frame(chr=logical(0),pos=logical(0),ref=character(0),alt=character(0))
+	}
 
 	if(category=="plof")
 	{

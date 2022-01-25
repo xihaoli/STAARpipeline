@@ -39,7 +39,7 @@ Gene_Centric_Noncoding <- function(chr,gene_name,category=c("all_categories","do
                                    Use_annotation_weights=c(TRUE,FALSE),Annotation_name=NULL){
 
 	## evaluate choices
-  category <- match.arg(category)
+	category <- match.arg(category)
 	variant_type <- match.arg(variant_type)
 	geno_missing_imputation <- match.arg(geno_missing_imputation)
 

@@ -64,7 +64,7 @@ List matrix_flip_minor(arma::mat G) {
 		}
 	}
 	
-	//Recalculate AF
+	// Recalculate AF
 	for(i = 0; i < p; i++)
 	{
 		AF(i) = 0;

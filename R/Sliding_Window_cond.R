@@ -16,7 +16,7 @@
 #' or the output from \code{fitNullModel} function in the \code{GENESIS} package and transformed using the \code{\link{genesis2staar_nullmodel}} function.
 #' @param known_loci the data frame of variants to be adjusted for in conditional analysis and should
 #' contain 4 columns in the following order: chromosome (CHR), position (POS), reference allele (REF),
-#' and alternative allele (ALT).
+#' and alternative allele (ALT) (default = NULL).
 #' @param rare_maf_cutoff the cutoff of maximum minor allele frequency in
 #' defining rare variants (default = 0.01).
 #' @param rv_num_cutoff the cutoff of minimum number of variants of analyzing
@@ -44,20 +44,24 @@
 #' @export
 
 Sliding_Window_cond <- function(chr,start_loc,end_loc,genofile,obj_nullmodel,
-                                known_loci,rare_maf_cutoff=0.01,rv_num_cutoff=2,
+                                known_loci=NULL,rare_maf_cutoff=0.01,rv_num_cutoff=2,
                                 method_cond=c("optimal","naive"),
                                 QC_label="annotation/filter",variant_type=c("SNV","Indel","variant"),geno_missing_imputation=c("mean","minor"),
                                 Annotation_dir="annotation/info/FunctionalAnnotation",Annotation_name_catalog,
                                 Use_annotation_weights=c(TRUE,FALSE),Annotation_name=NULL){
 
 	## evaluate choices
-  method_cond <- match.arg(method_cond)
+	method_cond <- match.arg(method_cond)
 	variant_type <- match.arg(variant_type)
 	geno_missing_imputation <- match.arg(geno_missing_imputation)
 
 	phenotype.id <- as.character(obj_nullmodel$id_include)
 
 	### known SNV Info
+	if(is.null(known_loci))
+	{
+		known_loci <- data.frame(chr=logical(0),pos=logical(0),ref=character(0),alt=character(0))
+	}
 	known_loci_chr <- known_loci[known_loci[,1]==chr,]
 	known_loci_chr <- known_loci_chr[order(known_loci_chr[,2]),]
 
@@ -262,16 +266,16 @@ Sliding_Window_cond <- function(chr,start_loc,end_loc,genofile,obj_nullmodel,
 		}
 	}else
 	{
-	  seqResetFilter(genofile)
+		seqResetFilter(genofile)
 		stop(paste0("Number of rare variant in the set is less than 2!"))
 	}
 
 	if(!is.null(results))
 	{
-	  colnames(results) <- colnames(results, do.NULL = FALSE, prefix = "col")
-      colnames(results)[1:4] <- c("Chr","Start Loc","End Loc","#SNV")
-      colnames(results)[(dim(results)[2]-1):dim(results)[2]] <- c("ACAT-O","STAAR-O")
-    }
+		colnames(results) <- colnames(results, do.NULL = FALSE, prefix = "col")
+		colnames(results)[1:4] <- c("Chr","Start Loc","End Loc","#SNV")
+		colnames(results)[(dim(results)[2]-1):dim(results)[2]] <- c("ACAT-O","STAAR-O")
+	}
 
 	seqResetFilter(genofile)
 

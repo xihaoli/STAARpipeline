@@ -41,7 +41,7 @@ Sliding_Window <- function(chr,start_loc,end_loc,sliding_window_length=2000,type
                            Use_annotation_weights=c(TRUE,FALSE),Annotation_name=NULL){
 
 	## evaluate choices
-  type <- match.arg(type)
+	type <- match.arg(type)
 	variant_type <- match.arg(variant_type)
 	geno_missing_imputation <- match.arg(geno_missing_imputation)
 

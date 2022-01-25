@@ -144,7 +144,7 @@ synonymous_cond <- function(chr,gene_name,genofile,obj_nullmodel,genes,known_loc
 		if(class(pvalues)=="list")
 		{
 			results_temp <- as.vector(genes[kk,])
-			results_temp[3] <- "plof_ds_cond"
+			results_temp[3] <- "synonymous_cond"
 			results_temp[2] <- chr
 			results_temp[1] <- as.character(genes[kk,1])
 			results_temp[4] <- pvalues$num_variant

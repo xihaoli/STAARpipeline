@@ -55,7 +55,7 @@ and taking the residuals (default = \code{optimal}).}
 
 \item{QC_label}{channel name of the QC label in the GDS/aGDS file (default = "annotation/filter").}
 
-\item{variant_type}{variants include in the analysis. Choices include "variant", "SNV", or "Indel" (default = "SNV").}
+\item{variant_type}{type of variant included in the analysis. Choices include "SNV", "Indel", or "variant" (default = "SNV").}
 
 \item{geno_missing_imputation}{method of handling missing genotypes. Either "mean" or "minor" (default = "mean").}
 
@@ -65,7 +65,7 @@ and taking the residuals (default = \code{optimal}).}
 
 \item{Use_annotation_weights}{use annotations as weights or not (default = TRUE).}
 
-\item{Annotation_name}{annotations used in STAAR.}
+\item{Annotation_name}{annotations used in STAAR (default = NULL).}
 }
 \value{
 a data frame containing the conditional STAAR p-values (including STAAR-O) corresponding to the noncoding functional category of the given gene.

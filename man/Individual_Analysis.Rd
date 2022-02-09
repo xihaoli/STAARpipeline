@@ -36,7 +36,7 @@ defining individual variants (default = 20).}
 
 \item{QC_label}{channel name of the QC label in the GDS/aGDS file (default = "annotation/filter").}
 
-\item{variant_type}{variants include in the analysis. Choices include "variant", "SNV", or "Indel" (default = "variant").}
+\item{variant_type}{type of variant included in the analysis. Choices include "variant", "SNV", or "Indel" (default = "variant").}
 
 \item{geno_missing_imputation}{method of handling missing genotypes. Either "mean" or "minor" (default = "mean").}
 }

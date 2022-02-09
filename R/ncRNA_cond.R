@@ -26,12 +26,12 @@
 #' \code{naive} refers to regressing residuals from the null model on \code{known_loci}
 #' and taking the residuals (default = \code{optimal}).
 #' @param QC_label channel name of the QC label in the GDS/aGDS file (default = "annotation/filter").
-#' @param variant_type variants include in the analysis. Choices include "variant", "SNV", or "Indel" (default = "SNV").
+#' @param variant_type type of variant included in the analysis. Choices include "SNV", "Indel", or "variant" (default = "SNV").
 #' @param geno_missing_imputation method of handling missing genotypes. Either "mean" or "minor" (default = "mean").
 #' @param Annotation_dir channel name of the annotations in the aGDS file (default = "annotation/info/FunctionalAnnotation").
 #' @param Annotation_name_catalog a data frame containing the name and the corresponding channel name in the aGDS file.
 #' @param Use_annotation_weights use annotations as weights or not (default = TRUE).
-#' @param Annotation_name annotations used in STAAR.
+#' @param Annotation_name annotations used in STAAR (default = NULL).
 #' @return a data frame of conditional STAAR p-values (including STAAR-O) corresponding to the ncRNA category of the given ncRNA gene.
 #' @references Li, X., Li, Z., et al. (2020). Dynamic incorporation of multiple
 #' in silico functional annotations empowers rare variant association analysis of

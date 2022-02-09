@@ -19,12 +19,13 @@
 #' @param rv_num_cutoff the cutoff of minimum number of variants of analyzing
 #' a given variant-set (default = 2).
 #' @param QC_label channel name of the QC label in the GDS/aGDS file (default = "annotation/filter").
-#' @param variant_type variants include in the analysis. Choices include "variant", "SNV", or "Indel" (default = "SNV").
+#' @param variant_type type of variant included in the analysis. Choices include "SNV", "Indel", or "variant" (default = "SNV").
 #' @param geno_missing_imputation method of handling missing genotypes. Either "mean" or "minor" (default = "mean").
 #' @param Annotation_dir channel name of the annotations in the aGDS file (default = "annotation/info/FunctionalAnnotation").
 #' @param Annotation_name_catalog a data frame containing the name and the corresponding channel name in the aGDS file.
 #' @param Use_annotation_weights use annotations as weights or not (default = TRUE).
-#' @param Annotation_name annotations used in STAAR.
+#' @param Annotation_name annotations used in STAAR (default = NULL).
+#' @param silent logical: should the report of error messages be suppressed (default = FALSE).
 #' @return a list of data frames containing the STAAR p-values (including STAAR-O) corresponding to each noncoding functional category of the given gene.
 #' @references Li, X., Li, Z., et al. (2020). Dynamic incorporation of multiple
 #' in silico functional annotations empowers rare variant association analysis of
@@ -36,7 +37,7 @@ Gene_Centric_Noncoding <- function(chr,gene_name,category=c("all_categories","do
                                    genofile,obj_nullmodel,rare_maf_cutoff=0.01,rv_num_cutoff=2,
                                    QC_label="annotation/filter",variant_type=c("SNV","Indel","variant"),geno_missing_imputation=c("mean","minor"),
                                    Annotation_dir="annotation/info/FunctionalAnnotation",Annotation_name_catalog,
-                                   Use_annotation_weights=c(TRUE,FALSE),Annotation_name=NULL){
+                                   Use_annotation_weights=c(TRUE,FALSE),Annotation_name=NULL,silent=FALSE){
 
 	## evaluate choices
 	category <- match.arg(category)
@@ -45,42 +46,42 @@ Gene_Centric_Noncoding <- function(chr,gene_name,category=c("all_categories","do
 
 	if(category=="all_categories")
 	{
-		results <- noncoding(chr,gene_name,genofile,obj_nullmodel,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,Use_annotation_weights=Use_annotation_weights,Annotation_name=Annotation_name)
+		results <- noncoding(chr,gene_name,genofile,obj_nullmodel,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,Use_annotation_weights=Use_annotation_weights,Annotation_name=Annotation_name,silent=silent)
 	}
 
 	if(category=="downstream")
 	{
-		results <- downstream(chr,gene_name,genofile,obj_nullmodel,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,Use_annotation_weights=Use_annotation_weights,Annotation_name=Annotation_name)
+		results <- downstream(chr,gene_name,genofile,obj_nullmodel,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,Use_annotation_weights=Use_annotation_weights,Annotation_name=Annotation_name,silent=silent)
 	}
 
 	if(category=="upstream")
 	{
-		results <- upstream(chr,gene_name,genofile,obj_nullmodel,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,Use_annotation_weights=Use_annotation_weights,Annotation_name=Annotation_name)
+		results <- upstream(chr,gene_name,genofile,obj_nullmodel,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,Use_annotation_weights=Use_annotation_weights,Annotation_name=Annotation_name,silent=silent)
 	}
 
 	if(category=="UTR")
 	{
-		results <- UTR(chr,gene_name,genofile,obj_nullmodel,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,Use_annotation_weights=Use_annotation_weights,Annotation_name=Annotation_name)
+		results <- UTR(chr,gene_name,genofile,obj_nullmodel,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,Use_annotation_weights=Use_annotation_weights,Annotation_name=Annotation_name,silent=silent)
 	}
 
 	if(category=="promoter_CAGE")
 	{
-		results <- promoter_CAGE(chr,gene_name,genofile,obj_nullmodel,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,Use_annotation_weights=Use_annotation_weights,Annotation_name=Annotation_name)
+		results <- promoter_CAGE(chr,gene_name,genofile,obj_nullmodel,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,Use_annotation_weights=Use_annotation_weights,Annotation_name=Annotation_name,silent=silent)
 	}
 
 	if(category=="promoter_DHS")
 	{
-		results <- promoter_DHS(chr,gene_name,genofile,obj_nullmodel,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,Use_annotation_weights=Use_annotation_weights,Annotation_name=Annotation_name)
+		results <- promoter_DHS(chr,gene_name,genofile,obj_nullmodel,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,Use_annotation_weights=Use_annotation_weights,Annotation_name=Annotation_name,silent=silent)
 	}
 
 	if(category=="enhancer_CAGE")
 	{
-		results <- enhancer_CAGE(chr,gene_name,genofile,obj_nullmodel,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,Use_annotation_weights=Use_annotation_weights,Annotation_name=Annotation_name)
+		results <- enhancer_CAGE(chr,gene_name,genofile,obj_nullmodel,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,Use_annotation_weights=Use_annotation_weights,Annotation_name=Annotation_name,silent=silent)
 	}
 
 	if(category=="enhancer_DHS")
 	{
-		results <- enhancer_DHS(chr,gene_name,genofile,obj_nullmodel,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,Use_annotation_weights=Use_annotation_weights,Annotation_name=Annotation_name)
+		results <- enhancer_DHS(chr,gene_name,genofile,obj_nullmodel,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,Use_annotation_weights=Use_annotation_weights,Annotation_name=Annotation_name,silent=silent)
 	}
 
 	return(results)

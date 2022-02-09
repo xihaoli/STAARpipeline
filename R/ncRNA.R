@@ -17,12 +17,13 @@
 #' @param rv_num_cutoff the cutoff of minimum number of variants of analyzing
 #' a given variant-set (default = 2).
 #' @param QC_label channel name of the QC label in the GDS/aGDS file (default = "annotation/filter").
-#' @param variant_type variants include in the analysis. Choices include "variant", "SNV", or "Indel" (default = "SNV").
+#' @param variant_type type of variant included in the analysis. Choices include "SNV", "Indel", or "variant" (default = "SNV").
 #' @param geno_missing_imputation method of handling missing genotypes. Either "mean" or "minor" (default = "mean").
 #' @param Annotation_dir channel name of the annotations in the aGDS file (default = "annotation/info/FunctionalAnnotation").
 #' @param Annotation_name_catalog a data frame containing the name and the corresponding channel name in the aGDS file.
 #' @param Use_annotation_weights use annotations as weights or not (default = TRUE).
-#' @param Annotation_name annotations used in STAAR.
+#' @param Annotation_name annotations used in STAAR (default = NULL).
+#' @param silent logical: should the report of error messages be suppressed (default = FALSE).
 #' @return a data frame of STAAR p-values (including STAAR-O) corresponding to the exonic and splicing category of the given ncRNA gene.
 #' @references Li, X., Li, Z., et al. (2020). Dynamic incorporation of multiple
 #' in silico functional annotations empowers rare variant association analysis of
@@ -34,7 +35,7 @@ ncRNA <- function(chr,gene_name,genofile,obj_nullmodel,
                   rare_maf_cutoff=0.01,rv_num_cutoff=2,
                   QC_label="annotation/filter",variant_type=c("SNV","Indel","variant"),geno_missing_imputation=c("mean","minor"),
                   Annotation_dir="annotation/info/FunctionalAnnotation",Annotation_name_catalog,
-                  Use_annotation_weights=c(TRUE,FALSE),Annotation_name=NULL){
+                  Use_annotation_weights=c(TRUE,FALSE),Annotation_name=NULL,silent=FALSE){
 
 	## evaluate choices
 	variant_type <- match.arg(variant_type)
@@ -170,7 +171,7 @@ ncRNA <- function(chr,gene_name,genofile,obj_nullmodel,
 	}
 
 	pvalues <- 0
-	try(pvalues <- STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff))
+	try(pvalues <- STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff),silent=silent)
 
 	results <- c()
 	if(class(pvalues)=="list")

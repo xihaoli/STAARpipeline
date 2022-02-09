@@ -21,12 +21,13 @@
 #' @param rv_num_cutoff the cutoff of minimum number of variants of analyzing
 #' a given variant-set (default = 2).
 #' @param QC_label channel name of the QC label in the GDS/aGDS file (default = "annotation/filter").
-#' @param variant_type variants include in the analysis. Choices include "variant", "SNV", or "Indel" (default = "SNV").
+#' @param variant_type type of variant included in the analysis. Choices include "SNV", "Indel", or "variant" (default = "SNV").
 #' @param geno_missing_imputation method of handling missing genotypes. Either "mean" or "minor" (default = "mean").
 #' @param Annotation_dir channel name of the annotations in the aGDS file (default = "annotation/info/FunctionalAnnotation").
 #' @param Annotation_name_catalog a data frame containing the name and the corresponding channel name in the aGDS file.
 #' @param Use_annotation_weights use annotations as weights or not (default = TRUE).
-#' @param Annotation_name annotations used in STAAR.
+#' @param Annotation_name annotations used in STAAR (default = NULL).
+#' @param silent logical: should the report of error messages be suppressed (default = FALSE).
 #' @return a data frame containing the STAAR p-values (including STAAR-O) corresponding to each sliding window in the given genetic region.
 #' @references Li, X., Li, Z., et al. (2020). Dynamic incorporation of multiple
 #' in silico functional annotations empowers rare variant association analysis of
@@ -38,7 +39,7 @@ Sliding_Window <- function(chr,start_loc,end_loc,sliding_window_length=2000,type
                            genofile,obj_nullmodel,rare_maf_cutoff=0.01,rv_num_cutoff=2,
                            QC_label="annotation/filter",variant_type=c("SNV","Indel","variant"),geno_missing_imputation=c("mean","minor"),
                            Annotation_dir="annotation/info/FunctionalAnnotation",Annotation_name_catalog,
-                           Use_annotation_weights=c(TRUE,FALSE),Annotation_name=NULL){
+                           Use_annotation_weights=c(TRUE,FALSE),Annotation_name=NULL,silent=FALSE){
 
 	## evaluate choices
 	type <- match.arg(type)
@@ -47,13 +48,13 @@ Sliding_Window <- function(chr,start_loc,end_loc,sliding_window_length=2000,type
 
 	if(type=="single")
 	{
-		results <- Sliding_Window_Single(chr=chr,start_loc=start_loc,end_loc=end_loc,genofile=genofile,obj_nullmodel=obj_nullmodel,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,Use_annotation_weights=Use_annotation_weights,Annotation_name=Annotation_name)
+		results <- Sliding_Window_Single(chr=chr,start_loc=start_loc,end_loc=end_loc,genofile=genofile,obj_nullmodel=obj_nullmodel,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,Use_annotation_weights=Use_annotation_weights,Annotation_name=Annotation_name,silent=silent)
 
 	}
 
 	if(type=="multiple")
 	{
-		results <- Sliding_Window_Multiple(chr=chr,start_loc=start_loc,end_loc=end_loc,sliding_window_length=sliding_window_length,genofile=genofile,obj_nullmodel=obj_nullmodel,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,Use_annotation_weights=Use_annotation_weights,Annotation_name=Annotation_name)
+		results <- Sliding_Window_Multiple(chr=chr,start_loc=start_loc,end_loc=end_loc,sliding_window_length=sliding_window_length,genofile=genofile,obj_nullmodel=obj_nullmodel,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,Use_annotation_weights=Use_annotation_weights,Annotation_name=Annotation_name,silent=silent)
 	}
 
 	return(results)

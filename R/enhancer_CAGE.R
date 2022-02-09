@@ -2,7 +2,7 @@ enhancer_CAGE <- function(chr,gene_name,genofile,obj_nullmodel,
                           rare_maf_cutoff=0.01,rv_num_cutoff=2,
                           QC_label="annotation/filter",variant_type=c("SNV","Indel","variant"),geno_missing_imputation=c("mean","minor"),
                           Annotation_dir="annotation/info/FunctionalAnnotation",Annotation_name_catalog,
-                          Use_annotation_weights=c(TRUE,FALSE),Annotation_name=NULL){
+                          Use_annotation_weights=c(TRUE,FALSE),Annotation_name=NULL,silent=FALSE){
 
 	## evaluate choices
 	variant_type <- match.arg(variant_type)
@@ -31,7 +31,7 @@ enhancer_CAGE <- function(chr,gene_name,genofile,obj_nullmodel,
 	enhancervpos <- as.numeric(seqGetData(genofile,"position"))
 	enhancervref <- as.character(seqGetData(genofile,"$ref"))
 	enhancervalt <- as.character(seqGetData(genofile,"$alt"))
-	dfHancerVarGene <- data.frame(enhancervchr,enhancervpos,enhancervref,enhancervalt,enhancer2GENE)
+	dfHancerCAGEVarGene <- data.frame(enhancervchr,enhancervpos,enhancervref,enhancervalt,enhancer2GENE)
 
 	rm(varid)
 	gc()
@@ -56,18 +56,18 @@ enhancer_CAGE <- function(chr,gene_name,genofile,obj_nullmodel,
 	variant.id <- seqGetData(genofile, "variant.id")
 	variant.id.SNV <- variant.id[SNVlist]
 
-	dfHancerVarGene.SNV <- dfHancerVarGene[SNVlist,]
-	dfHancerVarGene.SNV$enhancervpos <- as.character(dfHancerVarGene.SNV$enhancervpos)
-	dfHancerVarGene.SNV$enhancervref <- as.character(dfHancerVarGene.SNV$enhancervref)
-	dfHancerVarGene.SNV$enhancervalt <- as.character(dfHancerVarGene.SNV$enhancervalt)
+	dfHancerCAGEVarGene.SNV <- dfHancerCAGEVarGene[SNVlist,]
+	dfHancerCAGEVarGene.SNV$enhancervpos <- as.character(dfHancerCAGEVarGene.SNV$enhancervpos)
+	dfHancerCAGEVarGene.SNV$enhancervref <- as.character(dfHancerCAGEVarGene.SNV$enhancervref)
+	dfHancerCAGEVarGene.SNV$enhancervalt <- as.character(dfHancerCAGEVarGene.SNV$enhancervalt)
 
 	seqResetFilter(genofile)
 
-	rm(dfHancerVarGene)
+	rm(dfHancerCAGEVarGene)
 	gc()
 
 	### Gene
-	is.in <- which(dfHancerVarGene.SNV[,5]==gene_name)
+	is.in <- which(dfHancerCAGEVarGene.SNV[,5]==gene_name)
 	variant.is.in <- variant.id.SNV[is.in]
 
 	seqSetFilter(genofile,variant.id=variant.is.in,sample.id=phenotype.id)
@@ -137,13 +137,12 @@ enhancer_CAGE <- function(chr,gene_name,genofile,obj_nullmodel,
 	}
 
 	pvalues <- 0
-	try(pvalues <- STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff))
-
+	try(pvalues <- STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff),silent=silent)
 
 	results <- c()
 	if(class(pvalues)=="list")
 	{
-		results_temp <- dfHancerVarGene.SNV[1,1:4]
+		results_temp <- dfHancerCAGEVarGene.SNV[1,1:4]
 		results_temp[3] <- "enhancer_CAGE"
 		results_temp[2] <- chr
 		results_temp[1] <- as.character(gene_name)

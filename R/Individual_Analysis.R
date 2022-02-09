@@ -13,7 +13,7 @@
 #' defining individual variants (default = 20).
 #' @param subset_variants_num the number of variants to run per subset for each time (default = 5e3).
 #' @param QC_label channel name of the QC label in the GDS/aGDS file (default = "annotation/filter").
-#' @param variant_type variants include in the analysis. Choices include "variant", "SNV", or "Indel" (default = "variant").
+#' @param variant_type type of variant included in the analysis. Choices include "variant", "SNV", or "Indel" (default = "variant").
 #' @param geno_missing_imputation method of handling missing genotypes. Either "mean" or "minor" (default = "mean").
 #' @return a data frame containing the score test p-value and effect size for each individual variant in the given genetic region.
 #' @references Chen, H., et al. (2016). Control for population structure and relatedness for binary traits

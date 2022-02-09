@@ -19,7 +19,8 @@ Gene_Centric_Noncoding(
   Annotation_dir = "annotation/info/FunctionalAnnotation",
   Annotation_name_catalog,
   Use_annotation_weights = c(TRUE, FALSE),
-  Annotation_name = NULL
+  Annotation_name = NULL,
+  silent = FALSE
 )
 }
 \arguments{
@@ -43,7 +44,7 @@ a given variant-set (default = 2).}
 
 \item{QC_label}{channel name of the QC label in the GDS/aGDS file (default = "annotation/filter").}
 
-\item{variant_type}{variants include in the analysis. Choices include "variant", "SNV", or "Indel" (default = "SNV").}
+\item{variant_type}{type of variant included in the analysis. Choices include "SNV", "Indel", or "variant" (default = "SNV").}
 
 \item{geno_missing_imputation}{method of handling missing genotypes. Either "mean" or "minor" (default = "mean").}
 
@@ -53,7 +54,9 @@ a given variant-set (default = 2).}
 
 \item{Use_annotation_weights}{use annotations as weights or not (default = TRUE).}
 
-\item{Annotation_name}{annotations used in STAAR.}
+\item{Annotation_name}{annotations used in STAAR (default = NULL).}
+
+\item{silent}{logical: should the report of error messages be suppressed (default = FALSE).}
 }
 \value{
 a list of data frames containing the STAAR p-values (including STAAR-O) corresponding to each noncoding functional category of the given gene.

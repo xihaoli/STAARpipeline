@@ -1,7 +1,7 @@
 Sliding_Window_Single <- function(chr,start_loc,end_loc,genofile,obj_nullmodel,rare_maf_cutoff=0.01,rv_num_cutoff=2,
                                   QC_label="annotation/filter",variant_type=c("SNV","Indel","variant"),geno_missing_imputation=c("mean","minor"),
                                   Annotation_dir="annotation/info/FunctionalAnnotation",Annotation_name_catalog,
-                                  Use_annotation_weights=c(TRUE,FALSE),Annotation_name=NULL){
+                                  Use_annotation_weights=c(TRUE,FALSE),Annotation_name=NULL,silent=FALSE){
 
 	## evaluate choices
 	variant_type <- match.arg(variant_type)
@@ -100,7 +100,7 @@ Sliding_Window_Single <- function(chr,start_loc,end_loc,genofile,obj_nullmodel,r
 		}
 
 		pvalues <- 0
-		try(pvalues <- STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff))
+		try(pvalues <- STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff),silent=silent)
 
 		if(class(pvalues)=="list")
 		{

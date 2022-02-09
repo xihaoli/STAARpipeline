@@ -28,12 +28,13 @@
 #' and when f=1, we keep every susceptive region as detected regions (default = 0).
 #' @param alpha family-wise/genome-wide significance level (default = 0.1).
 #' @param QC_label channel name of the QC label in the GDS/aGDS file (default = "annotation/filter").
-#' @param variant_type variants include in the analysis. Choices include "variant", "SNV", or "Indel" (default = "SNV").
+#' @param variant_type type of variant included in the analysis. Choices include "SNV", "Indel", or "variant" (default = "SNV").
 #' @param geno_missing_imputation method of handling missing genotypes. Either "mean" or "minor" (default = "mean").
 #' @param Annotation_dir channel name of the annotations in the aGDS file (default = "annotation/info/FunctionalAnnotation").
 #' @param Annotation_name_catalog a data frame containing the name and the corresponding channel name in the aGDS file.
 #' @param Use_annotation_weights use annotations as weights or not (default = TRUE).
-#' @param Annotation_name annotations used in SCANG-STAAR.
+#' @param Annotation_name annotations used in SCANG-STAAR (default = NULL).
+#' @param silent logical: should the report of error messages be suppressed (default = FALSE).
 #' @return The function returns a list with the following members:
 #' @return \code{SCANG_O_res}: A matrix that summarizes the significant region detected by SCANG-STAAR-O,
 #' including the negative log transformation of SCANG-STAAR-O p-value ("-logp"), chromosome ("chr"), start position ("start_pos"), end position ("end_pos"),
@@ -66,7 +67,7 @@ Dynamic_Window_SCANG <- function(chr,start_loc,end_loc,genofile,obj_nullmodel,
                                  p_filter=1e-8,f=0,alpha=0.1,
                                  QC_label="annotation/filter",variant_type=c("SNV","Indel","variant"),geno_missing_imputation=c("mean","minor"),
                                  Annotation_dir="annotation/info/FunctionalAnnotation",Annotation_name_catalog,
-                                 Use_annotation_weights=c(TRUE,FALSE),Annotation_name=NULL){
+                                 Use_annotation_weights=c(TRUE,FALSE),Annotation_name=NULL,silent=FALSE){
 
 	## evaluate choices
 	variant_type <- match.arg(variant_type)
@@ -225,7 +226,7 @@ Dynamic_Window_SCANG <- function(chr,start_loc,end_loc,genofile,obj_nullmodel,
 
 		a <- Sys.time()
 		res <- 0
-		try(res <- SCANG(genotype=Geno,obj_nullmodel=obj_nullmodel,annotation_phred=Anno.Int.PHRED.sub,Lmin=Lmin,Lmax=Lmax,steplength=10,alpha=alpha,rare_maf_cutoff=rare_maf_cutoff,filter=p_filter,f=f))
+		try(res <- SCANG(genotype=Geno,obj_nullmodel=obj_nullmodel,annotation_phred=Anno.Int.PHRED.sub,Lmin=Lmin,Lmax=Lmax,steplength=10,alpha=alpha,rare_maf_cutoff=rare_maf_cutoff,filter=p_filter,f=f),silent=silent)
 		b <- Sys.time()
 		b - a
 

@@ -23,7 +23,7 @@ devtools::install_github("xihaoli/STAARpipeline",ref="main")
 ## Docker Image
 A [docker image for STAARpipeline](https://hub.docker.com/repository/docker/zilinli/staarpipeline), including R (version 3.6.1) built with Intel MKL and all STAAR-related packages (STAAR, SCANG, STAARpipeline, STAARpipelineSummary) pre-installed, is located in the Docker Hub. The docker image can be pulled using
 ```
-docker pull zilinli/staarpipeline_v0.9.6
+docker pull zilinli/staarpipeline:0.9.6
 ```
 ## Usage
 Please see the <a href="docs/STAARpipeline_manual.pdf">**STAARpipeline** user manual</a> for detailed usage of STAARpipeline package. Please see the <a href="https://github.com/xihaoli/STAARpipeline-Tutorial">**STAARpipeline** tutorial</a> for a detailed example of analyzing sequencing data using STAARpipeline.

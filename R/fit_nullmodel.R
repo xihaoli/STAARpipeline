@@ -111,6 +111,5 @@ fit_nullmodel <- function(fixed, data = parent.frame(), kins, use_sparse = NULL,
 	}
 	obj_nullmodel$relatedness <- TRUE
 	return(obj_nullmodel)
-
 }
 

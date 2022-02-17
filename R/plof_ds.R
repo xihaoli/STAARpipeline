@@ -9,6 +9,7 @@ plof_ds <- function(chr,gene_name,genofile,obj_nullmodel,genes,
 	geno_missing_imputation <- match.arg(geno_missing_imputation)
 
 	phenotype.id <- as.character(obj_nullmodel$id_include)
+
 	## get SNV id, position, REF, ALT (whole genome)
 	filter <- seqGetData(genofile, QC_label)
 	if(variant_type=="variant")

@@ -17,7 +17,7 @@ promoter_CAGE_cond <- function(chr,gene_name,genofile,obj_nullmodel,known_loci,
 	txdb <- TxDb.Hsapiens.UCSC.hg38.knownGene
 	promGobj <- promoters(genes(txdb), upstream = 3000, downstream = 3000)
 
-	#Subsetting Promoters that within +/-3kb of TSS and have CAGE signals
+	# Subsetting promoters that within +/-3kb of TSS and have CAGE signals
 	CAGEAnno <- seqGetData(genofile, paste0(Annotation_dir,Annotation_name_catalog$dir[which(Annotation_name_catalog$name=="CAGE")]))
 	CAGEBvt <- CAGEAnno!=""
 	CAGEidx <- which(CAGEBvt,useNames=TRUE)
@@ -25,7 +25,7 @@ promoter_CAGE_cond <- function(chr,gene_name,genofile,obj_nullmodel,known_loci,
 	seqSetFilter(genofile,promGobj,intersect=TRUE)
 	CAGEpromgene <- seqGetData(genofile, paste0(Annotation_dir,Annotation_name_catalog$dir[which(Annotation_name_catalog$name=="GENCODE.Info")]))
 	CAGEGene <- unlist(lapply(strsplit(CAGEpromgene,"\\(|\\,|;|-"),`[[`,1))
-	##obtain variants info
+	# Obtain variants info
 	CAGEvchr <- as.numeric(seqGetData(genofile,"chromosome"))
 	CAGEvpos <- as.numeric(seqGetData(genofile,"position"))
 	CAGEvref <- as.character(seqGetData(genofile,"$ref"))

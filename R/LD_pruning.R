@@ -25,7 +25,7 @@
 #' @return a data frame containing the list of LD-pruned variants in the given chromosome.
 #' @export
 
-LD_pruning <- function(chr,genofile,obj_nullmodel,variants_list,maf_cutoff=0.01,cond_p_thresh = 1e-04,
+LD_pruning <- function(chr,genofile,obj_nullmodel,variants_list,maf_cutoff=0.01,cond_p_thresh=1e-04,
                        method_cond=c("optimal","naive"),QC_label="annotation/filter",
                        variant_type=c("variant","SNV","Indel"),geno_missing_imputation=c("mean","minor")){
 

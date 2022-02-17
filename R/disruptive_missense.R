@@ -8,8 +8,8 @@ disruptive_missense <- function(chr,gene_name,genofile,obj_nullmodel,genes,
 	variant_type <- match.arg(variant_type)
 	geno_missing_imputation <- match.arg(geno_missing_imputation)
 
-
 	phenotype.id <- as.character(obj_nullmodel$id_include)
+
 	## get SNV id, position, REF, ALT (whole genome)
 	filter <- seqGetData(genofile, QC_label)
 	if(variant_type=="variant")

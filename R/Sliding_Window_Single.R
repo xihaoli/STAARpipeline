@@ -8,6 +8,7 @@ Sliding_Window_Single <- function(chr,start_loc,end_loc,genofile,obj_nullmodel,r
 	geno_missing_imputation <- match.arg(geno_missing_imputation)
 
 	phenotype.id <- as.character(obj_nullmodel$id_include)
+
 	## get SNV id
 	filter <- seqGetData(genofile, QC_label)
 	if(variant_type=="variant")

@@ -15,6 +15,7 @@ Sliding_Window_Multiple <- function(chr,start_loc,end_loc,sliding_window_length=
 	end_loc <- start_loc + (sliding_window_num+1)*(sliding_window_length/2) - 1
 
 	phenotype.id <- as.character(obj_nullmodel$id_include)
+
 	## get SNV id
 	filter <- seqGetData(genofile, QC_label)
 	if(variant_type=="variant")
@@ -39,7 +40,7 @@ Sliding_Window_Multiple <- function(chr,start_loc,end_loc,sliding_window_length=
 	position_SNV <- position[SNVlist]
 
 	is.in <- (SNVlist)&(position>=start_loc)&(position<=end_loc)
-    seqSetFilter(genofile,variant.id=variant.id[is.in],sample.id=phenotype.id)
+	seqSetFilter(genofile,variant.id=variant.id[is.in],sample.id=phenotype.id)
 
 	## genotype id
 	id.genotype <- seqGetData(genofile,"sample.id")

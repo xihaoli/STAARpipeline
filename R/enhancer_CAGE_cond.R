@@ -15,7 +15,7 @@ enhancer_CAGE_cond <- function(chr,gene_name,genofile,obj_nullmodel,known_loci,
 	## Enhancer
 	varid <- seqGetData(genofile, "variant.id")
 
-	#Now extract the GeneHancer with CAGE Signal Overlay
+	# Now extract the GeneHancer with CAGE Signal Overlay
 	genehancerAnno <- seqGetData(genofile, paste0(Annotation_dir,Annotation_name_catalog$dir[which(Annotation_name_catalog$name=="GeneHancer")]))
 	genehancer <- genehancerAnno!=""
 
@@ -25,7 +25,7 @@ enhancer_CAGE_cond <- function(chr,gene_name,genofile,obj_nullmodel,known_loci,
 	CAGEGeneHanceridx <- which(CAGEGeneHancervt,useNames=TRUE)
 	seqSetFilter(genofile,variant.id=varid[CAGEGeneHanceridx])
 
-	# variants that covered by whole GeneHancer without CAGE overlap.
+	# Variants that covered by whole GeneHancer without CAGE overlap
 	genehancerSet <- seqGetData(genofile, paste0(Annotation_dir,Annotation_name_catalog$dir[which(Annotation_name_catalog$name=="GeneHancer")]))
 	enhancerGene <- unlist(lapply(strsplit(genehancerSet,"="),`[[`,4))
 	enhancer2GENE <- unlist(lapply(strsplit(enhancerGene,";"),`[[`,1))

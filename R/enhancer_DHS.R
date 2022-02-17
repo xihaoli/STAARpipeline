@@ -13,7 +13,7 @@ enhancer_DHS <- function(chr,gene_name,genofile,obj_nullmodel,
 	## Enhancer
 	varid <- seqGetData(genofile, "variant.id")
 
-	#Now extract the GeneHancer with rOCRs Signal Overlay
+	# Now extract the GeneHancer with rOCRs Signal Overlay
 	genehancerAnno <- seqGetData(genofile, paste0(Annotation_dir,Annotation_name_catalog$dir[which(Annotation_name_catalog$name=="GeneHancer")]))
 	genehancer <- genehancerAnno!=""
 
@@ -22,8 +22,8 @@ enhancer_DHS <- function(chr,gene_name,genofile,obj_nullmodel,
 	rOCRsGeneHancervt <- rOCRsAnno!=""&genehancerAnno!=""
 	rOCRsGeneHanceridx <- which(rOCRsGeneHancervt,useNames=TRUE)
 	seqSetFilter(genofile,variant.id=varid[rOCRsGeneHanceridx])
-	# variants that covered by whole GeneHancer without rOCRs overlap.
 
+	# Variants that covered by whole GeneHancer without rOCRs overlap
 	genehancerSet <- seqGetData(genofile, paste0(Annotation_dir,Annotation_name_catalog$dir[which(Annotation_name_catalog$name=="GeneHancer")]))
 	enhancerGene <- unlist(lapply(strsplit(genehancerSet,"="),`[[`,4))
 	enhancer2GENE <- unlist(lapply(strsplit(enhancerGene,";"),`[[`,1))

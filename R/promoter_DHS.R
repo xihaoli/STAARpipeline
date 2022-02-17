@@ -15,16 +15,15 @@ promoter_DHS <- function(chr,gene_name,genofile,obj_nullmodel,
 	txdb <- TxDb.Hsapiens.UCSC.hg38.knownGene
 	promGobj <- promoters(genes(txdb), upstream = 3000, downstream = 3000)
 
-	# Subsetting Promoters that within +/-3kb of TSS and have rOCRs signals
+	# Subsetting promoters that within +/-3kb of TSS and have rOCRs signals
 	rOCRsAnno <- seqGetData(genofile, paste0(Annotation_dir,Annotation_name_catalog$dir[which(Annotation_name_catalog$name=="DHS")]))
 	rOCRsBvt <- rOCRsAnno!=""
 	rOCRsidx <- which(rOCRsBvt,useNames=TRUE)
 	seqSetFilter(genofile,variant.id=varid[rOCRsidx])
-
 	seqSetFilter(genofile,promGobj,intersect=TRUE)
 	rOCRspromgene <- seqGetData(genofile, paste0(Annotation_dir,Annotation_name_catalog$dir[which(Annotation_name_catalog$name=="GENCODE.Info")]))
 	rOCRsGene <- unlist(lapply(strsplit(rOCRspromgene,"\\(|\\,|;|-"),`[[`,1))
-	## obtain variants info
+	# Obtain variants info
 	rOCRsvchr <- as.numeric(seqGetData(genofile,"chromosome"))
 	rOCRsvpos <- as.numeric(seqGetData(genofile,"position"))
 	rOCRsvref <- as.character(seqGetData(genofile,"$ref"))

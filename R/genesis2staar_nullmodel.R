@@ -38,6 +38,15 @@ genesis2staar_nullmodel <- function(obj_nullmodel_genesis){
   obj_nullmodel_staar$sparse_kins <- TRUE
 
   obj_nullmodel_staar$relatedness <- TRUE
+
+  if (is.null(obj_nullmodel_staar$id_include)) {
+    obj_nullmodel_staar$id_include <- rownames(obj_nullmodel_genesis$model.matrix)
+  }
+
+  if (is.null(obj_nullmodel_staar$scaled.residuals)) {
+    obj_nullmodel_staar$scaled.residuals <- as.vector(obj_nullmodel_genesis$fit$resid.PY)
+  }
+
   return(obj_nullmodel_staar)
 }
 

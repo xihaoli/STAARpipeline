@@ -65,7 +65,7 @@ and taking the residuals (default = \code{optimal}).}
 
 \item{Use_annotation_weights}{use annotations as weights or not (default = TRUE).}
 
-\item{Annotation_name}{annotations used in STAAR (default = NULL).}
+\item{Annotation_name}{a vector of annotation names used in STAAR (default = NULL).}
 }
 \value{
 a data frame containing the conditional STAAR p-values (including STAAR-O) corresponding to the noncoding functional category of the given gene.

@@ -70,7 +70,7 @@ and when f=1, we keep every susceptive region as detected regions (default = 0).
 
 \item{Use_annotation_weights}{use annotations as weights or not (default = TRUE).}
 
-\item{Annotation_name}{annotations used in SCANG-STAAR (default = NULL).}
+\item{Annotation_name}{a vector of annotation names used in SCANG-STAAR (default = NULL).}
 
 \item{silent}{logical: should the report of error messages be suppressed (default = FALSE).}
 }

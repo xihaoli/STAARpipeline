@@ -49,7 +49,7 @@ a given variant-set (default = 2).}
 
 \item{Use_annotation_weights}{use annotations as weights or not (default = TRUE).}
 
-\item{Annotation_name}{annotations used in STAAR (default = NULL).}
+\item{Annotation_name}{a vector of annotation names used in STAAR (default = NULL).}
 
 \item{silent}{logical: should the report of error messages be suppressed (default = FALSE).}
 }

@@ -33,7 +33,7 @@
 #' @param Annotation_dir channel name of the annotations in the aGDS file (default = "annotation/info/FunctionalAnnotation").
 #' @param Annotation_name_catalog a data frame containing the name and the corresponding channel name in the aGDS file.
 #' @param Use_annotation_weights use annotations as weights or not (default = TRUE).
-#' @param Annotation_name annotations used in SCANG-STAAR (default = NULL).
+#' @param Annotation_name a vector of annotation names used in SCANG-STAAR (default = NULL).
 #' @param silent logical: should the report of error messages be suppressed (default = FALSE).
 #' @return The function returns a list with the following members:
 #' @return \code{SCANG_O_res}: A matrix that summarizes the significant region detected by SCANG-STAAR-O,

@@ -24,7 +24,7 @@
 #' @param Annotation_dir channel name of the annotations in the aGDS file (default = "annotation/info/FunctionalAnnotation").
 #' @param Annotation_name_catalog a data frame containing the name and the corresponding channel name in the aGDS file.
 #' @param Use_annotation_weights use annotations as weights or not (default = TRUE).
-#' @param Annotation_name annotations used in STAAR (default = NULL).
+#' @param Annotation_name a vector of annotation names used in STAAR (default = NULL).
 #' @param silent logical: should the report of error messages be suppressed (default = FALSE).
 #' @return a list of data frames containing the STAAR p-values (including STAAR-O) corresponding to each noncoding functional category of the given gene.
 #' @references Li, X., Li, Z., et al. (2020). Dynamic incorporation of multiple

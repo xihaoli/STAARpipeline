@@ -14,7 +14,8 @@ LD_pruning(
   method_cond = c("optimal", "naive"),
   QC_label = "annotation/filter",
   variant_type = c("variant", "SNV", "Indel"),
-  geno_missing_imputation = c("mean", "minor")
+  geno_missing_imputation = c("mean", "minor"),
+  geno_position_ascending = TRUE
 )
 }
 \arguments{
@@ -46,6 +47,8 @@ and taking the residuals (default = \code{optimal}).}
 \item{variant_type}{type of variant included in the analysis. Choices include "variant", "SNV", or "Indel" (default = "variant").}
 
 \item{geno_missing_imputation}{method of handling missing genotypes. Either "mean" or "minor" (default = "mean").}
+
+\item{geno_position_ascending}{logical: are the variant positions in ascending order in the GDS/aGDS file (default = TRUE).}
 }
 \value{
 a data frame containing the list of LD-pruned variants in the given chromosome.

@@ -22,12 +22,14 @@
 #' @param QC_label channel name of the QC label in the GDS/aGDS file (default = "annotation/filter").
 #' @param variant_type type of variant included in the analysis. Choices include "variant", "SNV", or "Indel" (default = "variant").
 #' @param geno_missing_imputation method of handling missing genotypes. Either "mean" or "minor" (default = "mean").
+#' @param geno_position_ascending logical: are the variant positions in ascending order in the GDS/aGDS file (default = TRUE).
 #' @return a data frame containing the list of LD-pruned variants in the given chromosome.
 #' @export
 
 LD_pruning <- function(chr,genofile,obj_nullmodel,variants_list,maf_cutoff=0.01,cond_p_thresh=1e-04,
                        method_cond=c("optimal","naive"),QC_label="annotation/filter",
-                       variant_type=c("variant","SNV","Indel"),geno_missing_imputation=c("mean","minor")){
+                       variant_type=c("variant","SNV","Indel"),geno_missing_imputation=c("mean","minor"),
+                       geno_position_ascending=TRUE){
 
 	## evaluate choices
 	method_cond <- match.arg(method_cond)
@@ -155,7 +157,8 @@ LD_pruning <- function(chr,genofile,obj_nullmodel,variants_list,maf_cutoff=0.01,
 		while(check==1)
 		{
 			pvalue_log_cond <- Individual_Analysis_cond(chr=chr,individual_results=variants_list_chr[,1:4],genofile,obj_nullmodel,known_loci=known_loci_output,
-										variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,method_cond=method_cond)
+			                                            variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,method_cond=method_cond,
+			                                            geno_position_ascending=geno_position_ascending)
 
 			if(sum(pvalue_log_cond$pvalue_cond < cond_p_thresh)<1)
 			{

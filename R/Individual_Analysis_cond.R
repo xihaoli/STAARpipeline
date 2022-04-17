@@ -20,6 +20,7 @@
 #' @param QC_label channel name of the QC label in the GDS/aGDS file (default = "annotation/filter").
 #' @param variant_type type of variant included in the analysis. Choices include "variant", "SNV", or "Indel" (default = "variant").
 #' @param geno_missing_imputation method of handling missing genotypes. Either "mean" or "minor" (default = "mean").
+#' @param geno_position_ascending logical: are the variant positions in ascending order in the GDS/aGDS file (default = TRUE).
 #' @return a data frame containing the conditional score test p-value and effect size for each significant individual variant in the given set.
 #' @references Chen, H., et al. (2016). Control for population structure and relatedness for binary traits
 #' in genetic association studies via logistic mixed models. \emph{The American Journal of Human Genetics}, \emph{98}(4), 653-666.
@@ -31,7 +32,8 @@
 
 Individual_Analysis_cond <- function(chr,individual_results,genofile,obj_nullmodel,known_loci=NULL,
                                      method_cond=c("optimal","naive"),
-                                     QC_label="annotation/filter",variant_type=c("variant","SNV","Indel"),geno_missing_imputation=c("mean","minor")){
+                                     QC_label="annotation/filter",variant_type=c("variant","SNV","Indel"),geno_missing_imputation=c("mean","minor"),
+                                     geno_position_ascending=TRUE){
 
 	## evaluate choices
 	variant_type <- match.arg(variant_type)
@@ -99,6 +101,17 @@ Individual_Analysis_cond <- function(chr,individual_results,genofile,obj_nullmod
 
 		Geno_adjusted <- seqGetData(genofile, "$dosage")
 		Geno_adjusted <- Geno_adjusted[id.genotype.match,,drop=FALSE]
+
+		if(!geno_position_ascending)
+		{
+			position_adjusted <- as.numeric(seqGetData(genofile, "position"))
+			REF_adjusted <- as.character(seqGetData(genofile, "$ref"))
+			ALT_adjusted <- as.character(seqGetData(genofile, "$alt"))
+			Chr_Info_adjusted <- data.frame(CHR=chr,POS=position_adjusted,REF=REF_adjusted,ALT=ALT_adjusted,index=seq(1:length(position_adjusted)))
+
+			known_loci_chr_adjusted <- dplyr::left_join(known_loci_chr,Chr_Info_adjusted,by=c("CHR"="CHR","POS"="POS","REF"="REF","ALT"="ALT"))
+			Geno_adjusted <- Geno_adjusted[,known_loci_chr_adjusted$index,drop=FALSE]
+		}
 
 		## impute missing
 		if(!is.null(dim(Geno_adjusted)))

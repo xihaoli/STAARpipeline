@@ -44,7 +44,7 @@ staar2scang_nullmodel <- function(obj_nullmodel){
 		rm(R_inverse)
 
 		eigen_diff <- rep(1,dim(Sigma_i)[1]) - c((KS$s)^2,rep(0,dim(Sigma_i)[1]-length(KS$s)))
-		eigen_diff[abs(eigen_diff)<1e-10] <- 0
+		eigen_diff[eigen_diff<1e-10] <- 0
 		eigen_diff <- sqrt(eigen_diff)
 
 		### residuals

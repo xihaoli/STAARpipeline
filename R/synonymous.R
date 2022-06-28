@@ -46,7 +46,7 @@ synonymous <- function(chr,gene_name,genofile,obj_nullmodel,genes,
 
 	### synonymous
 	## Gencode_Exonic
-	GENCODE.EXONIC.Category  <- seqGetData(genofile, paste0(Annotation_dir,Annotation_name_catalog$dir[which(Annotation_name_catalog$name=="GENCODE.EXONIC.Category")]))
+	GENCODE.EXONIC.Category <- seqGetData(genofile, paste0(Annotation_dir,Annotation_name_catalog$dir[which(Annotation_name_catalog$name=="GENCODE.EXONIC.Category")]))
 
 	variant.id.gene <- seqGetData(genofile, "variant.id")
 	lof.in.synonymous <- (GENCODE.EXONIC.Category=="synonymous SNV")
@@ -83,6 +83,7 @@ synonymous <- function(chr,gene_name,genofile,obj_nullmodel,genes,
 		}
 	}
 
+	## Annotation
 	Anno.Int.PHRED.sub <- NULL
 	Anno.Int.PHRED.sub.name <- NULL
 
@@ -136,7 +137,6 @@ synonymous <- function(chr,gene_name,genofile,obj_nullmodel,genes,
 
 		results <- rbind(results,results_temp)
 	}
-
 
 	if(!is.null(results))
 	{

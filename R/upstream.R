@@ -100,7 +100,6 @@ upstream <- function(chr,gene_name,genofile,obj_nullmodel,
 		}
 	}
 
-
 	## Annotation
 	Anno.Int.PHRED.sub <- NULL
 	Anno.Int.PHRED.sub.name <- NULL
@@ -164,6 +163,7 @@ upstream <- function(chr,gene_name,genofile,obj_nullmodel,
 	}
 
 	seqResetFilter(genofile)
+
 	return(results)
 }
 

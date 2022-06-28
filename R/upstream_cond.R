@@ -246,7 +246,6 @@ upstream_cond <- function(chr,gene_name,genofile,obj_nullmodel,known_loci,
 		pvalues <- 0
 		try(pvalues <- STAAR_cond(Geno,Geno_adjusted,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,method_cond=method_cond))
 
-
 		if(class(pvalues)=="list")
 		{
 			results_temp <- rep(NA,4)
@@ -273,6 +272,7 @@ upstream_cond <- function(chr,gene_name,genofile,obj_nullmodel,known_loci,
 	}
 
 	seqResetFilter(genofile)
+
 	return(results)
 }
 

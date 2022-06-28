@@ -28,11 +28,11 @@
 #' @param QC_label channel name of the QC label in the GDS/aGDS file (default = "annotation/filter").
 #' @param variant_type type of variant included in the analysis. Choices include "SNV", "Indel", or "variant" (default = "SNV").
 #' @param geno_missing_imputation method of handling missing genotypes. Either "mean" or "minor" (default = "mean").
-#' @param Annotation_dir channel name of the annotations in the aGDS file (default = "annotation/info/FunctionalAnnotation").
+#' @param Annotation_dir channel name of the annotations in the aGDS file \cr (default = "annotation/info/FunctionalAnnotation").
 #' @param Annotation_name_catalog a data frame containing the name and the corresponding channel name in the aGDS file.
 #' @param Use_annotation_weights use annotations as weights or not (default = TRUE).
 #' @param Annotation_name a vector of annotation names used in STAAR (default = NULL).
-#' @return a data frame of conditional STAAR p-values (including STAAR-O) corresponding to the ncRNA category of the given ncRNA gene.
+#' @return a data frame containing the conditional STAAR p-values (including STAAR-O) corresponding to the ncRNA category of the given ncRNA gene.
 #' @references Li, X., Li, Z., et al. (2020). Dynamic incorporation of multiple
 #' in silico functional annotations empowers rare variant association analysis of
 #' large whole-genome sequencing studies at scale. \emph{Nature Genetics}, \emph{52}(9), 969-983.
@@ -343,6 +343,7 @@ ncRNA_cond <- function(chr,gene_name,genofile,obj_nullmodel,known_loci=NULL,
 	}
 
 	seqResetFilter(genofile)
+
 	return(results)
 }
 

@@ -52,7 +52,7 @@ synonymous_cond <- function(chr,gene_name,genofile,obj_nullmodel,genes,known_loc
 
 	### synonymous
 	## Gencode_Exonic
-	GENCODE.EXONIC.Category  <- seqGetData(genofile, paste0(Annotation_dir,Annotation_name_catalog$dir[which(Annotation_name_catalog$name=="GENCODE.EXONIC.Category")]))
+	GENCODE.EXONIC.Category <- seqGetData(genofile, paste0(Annotation_dir,Annotation_name_catalog$dir[which(Annotation_name_catalog$name=="GENCODE.EXONIC.Category")]))
 
 	variant.id.gene <- seqGetData(genofile, "variant.id")
 	lof.in.synonymous <- (GENCODE.EXONIC.Category=="synonymous SNV")
@@ -88,7 +88,6 @@ synonymous_cond <- function(chr,gene_name,genofile,obj_nullmodel,genes,known_loc
 			}
 		}
 	}
-
 
 	## Genotype Info
 	REF_region <- as.character(seqGetData(genofile, "$ref"))
@@ -252,8 +251,8 @@ synonymous_cond <- function(chr,gene_name,genofile,obj_nullmodel,genes,known_loc
 		colnames(results)[(dim(results)[2]-1):dim(results)[2]] <- c("ACAT-O","STAAR-O")
 	}
 
-
 	seqResetFilter(genofile)
+
 	return(results)
 }
 

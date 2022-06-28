@@ -48,12 +48,11 @@ coding <- function(chr,gene_name,genofile,obj_nullmodel,genes,
 	seqSetFilter(genofile,variant.id=variant.id.gene,sample.id=phenotype.id)
 
 	## Gencode_Exonic
-	GENCODE.EXONIC.Category  <- seqGetData(genofile, paste0(Annotation_dir,Annotation_name_catalog$dir[which(Annotation_name_catalog$name=="GENCODE.EXONIC.Category")]))
+	GENCODE.EXONIC.Category <- seqGetData(genofile, paste0(Annotation_dir,Annotation_name_catalog$dir[which(Annotation_name_catalog$name=="GENCODE.EXONIC.Category")]))
 	## Gencode
 	GENCODE.Category <- seqGetData(genofile, paste0(Annotation_dir,Annotation_name_catalog$dir[which(Annotation_name_catalog$name=="GENCODE.Category")]))
 	## Meta.SVM.Pred
 	MetaSVM_pred <- seqGetData(genofile, paste0(Annotation_dir,Annotation_name_catalog$dir[which(Annotation_name_catalog$name=="MetaSVM")]))
-
 
 	################################################
 	#           Coding
@@ -65,12 +64,11 @@ coding <- function(chr,gene_name,genofile,obj_nullmodel,genes,
 	seqSetFilter(genofile,variant.id=variant.id.gene,sample.id=phenotype.id)
 
 	## Gencode_Exonic
-	GENCODE.EXONIC.Category  <- seqGetData(genofile, paste0(Annotation_dir,Annotation_name_catalog$dir[which(Annotation_name_catalog$name=="GENCODE.EXONIC.Category")]))
+	GENCODE.EXONIC.Category <- seqGetData(genofile, paste0(Annotation_dir,Annotation_name_catalog$dir[which(Annotation_name_catalog$name=="GENCODE.EXONIC.Category")]))
 	## Gencode
 	GENCODE.Category <- seqGetData(genofile, paste0(Annotation_dir,Annotation_name_catalog$dir[which(Annotation_name_catalog$name=="GENCODE.Category")]))
 	## Meta.SVM.Pred
 	MetaSVM_pred <- seqGetData(genofile, paste0(Annotation_dir,Annotation_name_catalog$dir[which(Annotation_name_catalog$name=="MetaSVM")]))
-
 
 	## Annotation
 	Anno.Int.PHRED.sub <- NULL
@@ -106,7 +104,6 @@ coding <- function(chr,gene_name,genofile,obj_nullmodel,genes,
 			colnames(Anno.Int.PHRED.sub) <- Anno.Int.PHRED.sub.name
 		}
 	}
-
 
 	################################################
 	#                  plof_ds
@@ -146,6 +143,7 @@ coding <- function(chr,gene_name,genofile,obj_nullmodel,genes,
 		}
 	}
 
+	## Annotation
 	Anno.Int.PHRED.sub.category <- Anno.Int.PHRED.sub[lof.in.plof,]
 
 	pvalues <- 0
@@ -213,6 +211,7 @@ coding <- function(chr,gene_name,genofile,obj_nullmodel,genes,
 		}
 	}
 
+	## Annotation
 	Anno.Int.PHRED.sub.category <- Anno.Int.PHRED.sub[lof.in.plof,]
 
 	pvalues <- 0
@@ -241,7 +240,6 @@ coding <- function(chr,gene_name,genofile,obj_nullmodel,genes,
 		colnames(results_plof)[1:4] <- c("Gene name","Chr","Category","#SNV")
 		colnames(results_plof)[(dim(results_plof)[2]-1):dim(results_plof)[2]] <- c("ACAT-O","STAAR-O")
 	}
-
 
 	#############################################
 	#             synonymous
@@ -280,6 +278,7 @@ coding <- function(chr,gene_name,genofile,obj_nullmodel,genes,
 		}
 	}
 
+	## Annotation
 	Anno.Int.PHRED.sub.category <- Anno.Int.PHRED.sub[lof.in.synonymous,]
 
 	pvalues <- 0
@@ -301,7 +300,6 @@ coding <- function(chr,gene_name,genofile,obj_nullmodel,genes,
 
 		results_synonymous <- rbind(results_synonymous,results_temp)
 	}
-
 
 	if(!is.null(results_synonymous))
 	{

@@ -32,7 +32,7 @@ UTR <- function(chr,gene_name,genofile,obj_nullmodel,
 	rm(filter)
 	gc()
 
-	## downstream SNVs
+	## UTR SNVs
 	GENCODE.Category <- seqGetData(genofile, paste0(Annotation_dir,Annotation_name_catalog$dir[which(Annotation_name_catalog$name=="GENCODE.Category")]))
 	is.in <- ((GENCODE.Category=="UTR3")|(GENCODE.Category=="UTR5")|(GENCODE.Category=="UTR5;UTR3"))&(SNVlist)
 	variant.id.UTR <- variant.id[is.in]
@@ -159,6 +159,7 @@ UTR <- function(chr,gene_name,genofile,obj_nullmodel,
 	}
 
 	seqResetFilter(genofile)
+
 	return(results)
 }
 

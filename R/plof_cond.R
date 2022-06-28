@@ -52,7 +52,7 @@ plof_cond <- function(chr,gene_name,genofile,obj_nullmodel,genes,known_loci,
 
 	## plof
 	## Gencode_Exonic
-	GENCODE.EXONIC.Category  <- seqGetData(genofile, paste0(Annotation_dir,Annotation_name_catalog$dir[which(Annotation_name_catalog$name=="GENCODE.EXONIC.Category")]))
+	GENCODE.EXONIC.Category <- seqGetData(genofile, paste0(Annotation_dir,Annotation_name_catalog$dir[which(Annotation_name_catalog$name=="GENCODE.EXONIC.Category")]))
 	## Gencode
 	GENCODE.Category <- seqGetData(genofile, paste0(Annotation_dir,Annotation_name_catalog$dir[which(Annotation_name_catalog$name=="GENCODE.Category")]))
 
@@ -91,13 +91,13 @@ plof_cond <- function(chr,gene_name,genofile,obj_nullmodel,genes,known_loci,
 		}
 	}
 
-
 	## Genotype Info
 	REF_region <- as.character(seqGetData(genofile, "$ref"))
 	ALT_region <- as.character(seqGetData(genofile, "$alt"))
 
 	position_region <- as.numeric(seqGetData(genofile, "position"))
 
+	## Annotation
 	Anno.Int.PHRED.sub <- NULL
 	Anno.Int.PHRED.sub.name <- NULL
 
@@ -252,8 +252,8 @@ plof_cond <- function(chr,gene_name,genofile,obj_nullmodel,genes,known_loci,
 		colnames(results)[(dim(results)[2]-1):dim(results)[2]] <- c("ACAT-O","STAAR-O")
 	}
 
-
 	seqResetFilter(genofile)
+
 	return(results)
 }
 

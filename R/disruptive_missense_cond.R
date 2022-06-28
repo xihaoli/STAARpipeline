@@ -49,9 +49,9 @@ disruptive_missense_cond <- function(chr,gene_name,genofile,obj_nullmodel,genes,
 
 	seqSetFilter(genofile,variant.id=variant.id.gene,sample.id=phenotype.id)
 
-	## plof_ds
+	## disruptive_missense
 	## Gencode_Exonic
-	GENCODE.EXONIC.Category  <- seqGetData(genofile, paste0(Annotation_dir,Annotation_name_catalog$dir[which(Annotation_name_catalog$name=="GENCODE.EXONIC.Category")]))
+	GENCODE.EXONIC.Category <- seqGetData(genofile, paste0(Annotation_dir,Annotation_name_catalog$dir[which(Annotation_name_catalog$name=="GENCODE.EXONIC.Category")]))
 	## Meta.SVM.Pred
 	MetaSVM_pred <- seqGetData(genofile, paste0(Annotation_dir,Annotation_name_catalog$dir[which(Annotation_name_catalog$name=="MetaSVM")]))
 
@@ -96,6 +96,7 @@ disruptive_missense_cond <- function(chr,gene_name,genofile,obj_nullmodel,genes,
 
 	position_region <- as.numeric(seqGetData(genofile, "position"))
 
+	## Annotation
 	Anno.Int.PHRED.sub <- NULL
 	Anno.Int.PHRED.sub.name <- NULL
 
@@ -250,8 +251,8 @@ disruptive_missense_cond <- function(chr,gene_name,genofile,obj_nullmodel,genes,
 		colnames(results)[(dim(results)[2]-1):dim(results)[2]] <- c("ACAT-O","STAAR-O")
 	}
 
-
 	seqResetFilter(genofile)
+
 	return(results)
 }
 

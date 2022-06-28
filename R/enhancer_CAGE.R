@@ -156,7 +156,6 @@ enhancer_CAGE <- function(chr,gene_name,genofile,obj_nullmodel,
 		results <- rbind(results,results_temp)
 	}
 
-
 	if(!is.null(results))
 	{
 		colnames(results) <- colnames(results, do.NULL = FALSE, prefix = "col")
@@ -165,6 +164,7 @@ enhancer_CAGE <- function(chr,gene_name,genofile,obj_nullmodel,
 	}
 
 	seqResetFilter(genofile)
+
 	return(results)
 }
 

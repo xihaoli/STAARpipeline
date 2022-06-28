@@ -46,7 +46,7 @@ plof <- function(chr,gene_name,genofile,obj_nullmodel,genes,
 
 	## plof
 	## Gencode_Exonic
-	GENCODE.EXONIC.Category  <- seqGetData(genofile, paste0(Annotation_dir,Annotation_name_catalog$dir[which(Annotation_name_catalog$name=="GENCODE.EXONIC.Category")]))
+	GENCODE.EXONIC.Category <- seqGetData(genofile, paste0(Annotation_dir,Annotation_name_catalog$dir[which(Annotation_name_catalog$name=="GENCODE.EXONIC.Category")]))
 	## Gencode
 	GENCODE.Category <- seqGetData(genofile, paste0(Annotation_dir,Annotation_name_catalog$dir[which(Annotation_name_catalog$name=="GENCODE.Category")]))
 
@@ -85,6 +85,7 @@ plof <- function(chr,gene_name,genofile,obj_nullmodel,genes,
 		}
 	}
 
+	## Annotation
 	Anno.Int.PHRED.sub <- NULL
 	Anno.Int.PHRED.sub.name <- NULL
 
@@ -118,7 +119,6 @@ plof <- function(chr,gene_name,genofile,obj_nullmodel,genes,
 			colnames(Anno.Int.PHRED.sub) <- Anno.Int.PHRED.sub.name
 		}
 	}
-
 
 	pvalues <- 0
 	try(pvalues <- STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff),silent=silent)

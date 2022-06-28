@@ -57,7 +57,7 @@ and taking the residuals (default = \code{optimal}).}
 
 \item{geno_missing_imputation}{method of handling missing genotypes. Either "mean" or "minor" (default = "mean").}
 
-\item{Annotation_dir}{channel name of the annotations in the aGDS file  (default = "annotation/info/FunctionalAnnotation").}
+\item{Annotation_dir}{channel name of the annotations in the aGDS file \cr (default = "annotation/info/FunctionalAnnotation").}
 
 \item{Annotation_name_catalog}{a data frame containing the name and the corresponding channel name in the aGDS file.}
 

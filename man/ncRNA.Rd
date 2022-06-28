@@ -43,7 +43,7 @@ a given variant-set (default = 2).}
 
 \item{geno_missing_imputation}{method of handling missing genotypes. Either "mean" or "minor" (default = "mean").}
 
-\item{Annotation_dir}{channel name of the annotations in the aGDS file (default = "annotation/info/FunctionalAnnotation").}
+\item{Annotation_dir}{channel name of the annotations in the aGDS file \cr (default = "annotation/info/FunctionalAnnotation").}
 
 \item{Annotation_name_catalog}{a data frame containing the name and the corresponding channel name in the aGDS file.}
 
@@ -54,7 +54,7 @@ a given variant-set (default = 2).}
 \item{silent}{logical: should the report of error messages be suppressed (default = FALSE).}
 }
 \value{
-a data frame of STAAR p-values (including STAAR-O) corresponding to the exonic and splicing category of the given ncRNA gene.
+a data frame containing the STAAR p-values (including STAAR-O) corresponding to the exonic and splicing category of the given ncRNA gene.
 }
 \description{
 The \code{ncRNA} function takes in chromosome, gene name,

@@ -162,6 +162,7 @@ promoter_DHS <- function(chr,gene_name,genofile,obj_nullmodel,
 	}
 
 	seqResetFilter(genofile)
+
 	return(results)
 }
 

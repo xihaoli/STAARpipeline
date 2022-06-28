@@ -55,7 +55,7 @@ missense_cond <- function(chr,gene_name,genofile,obj_nullmodel,genes,known_loci,
 	seqSetFilter(genofile,variant.id=variant.id.gene,sample.id=phenotype.id)
 
 	## Gencode_Exonic
-	GENCODE.EXONIC.Category  <- seqGetData(genofile, paste0(Annotation_dir,Annotation_name_catalog$dir[which(Annotation_name_catalog$name=="GENCODE.EXONIC.Category")]))
+	GENCODE.EXONIC.Category <- seqGetData(genofile, paste0(Annotation_dir,Annotation_name_catalog$dir[which(Annotation_name_catalog$name=="GENCODE.EXONIC.Category")]))
 
 	variant.id.gene <- seqGetData(genofile, "variant.id")
 	lof.in.missense <- (GENCODE.EXONIC.Category=="nonsynonymous SNV")
@@ -255,7 +255,7 @@ missense_cond <- function(chr,gene_name,genofile,obj_nullmodel,genes,known_loci,
 	seqSetFilter(genofile,variant.id=variant.id.gene,sample.id=phenotype.id)
 
 	## Gencode_Exonic
-	GENCODE.EXONIC.Category  <- seqGetData(genofile, paste0(Annotation_dir,Annotation_name_catalog$dir[which(Annotation_name_catalog$name=="GENCODE.EXONIC.Category")]))
+	GENCODE.EXONIC.Category <- seqGetData(genofile, paste0(Annotation_dir,Annotation_name_catalog$dir[which(Annotation_name_catalog$name=="GENCODE.EXONIC.Category")]))
 	## Meta.SVM.Pred
 	MetaSVM_pred <- seqGetData(genofile, paste0(Annotation_dir,Annotation_name_catalog$dir[which(Annotation_name_catalog$name=="MetaSVM")]))
 
@@ -300,6 +300,7 @@ missense_cond <- function(chr,gene_name,genofile,obj_nullmodel,genes,known_loci,
 
 	position_region <- as.numeric(seqGetData(genofile, "position"))
 
+	## Annotation
 	Anno.Int.PHRED.sub <- NULL
 	Anno.Int.PHRED.sub.name <- NULL
 
@@ -477,8 +478,8 @@ missense_cond <- function(chr,gene_name,genofile,obj_nullmodel,genes,known_loci,
 		results <- rbind(results,results_m)
 	}
 
-
 	seqResetFilter(genofile)
+
 	return(results)
 }
 

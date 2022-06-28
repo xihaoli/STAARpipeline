@@ -36,7 +36,7 @@ noncoding <- function(chr,gene_name,genofile,obj_nullmodel,
 
 	########################################
 	#   Downstream
-	## downstream SNVs
+
 	GENCODE.Category <- seqGetData(genofile, paste0(Annotation_dir,Annotation_name_catalog$dir[which(Annotation_name_catalog$name=="GENCODE.Category")]))
 	is.in <- (GENCODE.Category=="downstream")&(SNVlist)
 	variant.id.downstream <- variant.id[is.in]
@@ -424,7 +424,6 @@ noncoding <- function(chr,gene_name,genofile,obj_nullmodel,
 
 	seqResetFilter(genofile)
 
-
 	#############################################
 	#   Promoter-CAGE
 
@@ -577,7 +576,6 @@ noncoding <- function(chr,gene_name,genofile,obj_nullmodel,
 
 	seqResetFilter(genofile)
 
-
 	##################################################
 	#       Promoter-DHS
 
@@ -717,7 +715,6 @@ noncoding <- function(chr,gene_name,genofile,obj_nullmodel,
 		results_promoter_DHS <- rbind(results_promoter_DHS ,results_temp)
 	}
 
-
 	if(!is.null(results_promoter_DHS))
 	{
 		colnames(results_promoter_DHS) <- colnames(results_promoter_DHS, do.NULL = FALSE, prefix = "col")
@@ -726,7 +723,6 @@ noncoding <- function(chr,gene_name,genofile,obj_nullmodel,
 	}
 
 	seqResetFilter(genofile)
-
 
 	###########################################
 	#        Enhancer-CAGE
@@ -870,7 +866,6 @@ noncoding <- function(chr,gene_name,genofile,obj_nullmodel,
 
 		results_enhancer_CAGE <- rbind(results_enhancer_CAGE,results_temp)
 	}
-
 
 	if(!is.null(results_enhancer_CAGE))
 	{
@@ -1032,20 +1027,15 @@ noncoding <- function(chr,gene_name,genofile,obj_nullmodel,
 
 	seqResetFilter(genofile)
 
-
-
-
-
 	############################################
 	#           results
 
 	results_noncoding <- list(upstream=results_upstream,downstream=results_downstream,UTR=results_UTR,
-	promoter_CAGE=results_promoter_CAGE,promoter_DHS=results_promoter_DHS,
-	enhancer_CAGE=results_enhancer_CAGE,enhancer_DHS=results_enhancer_DHS)
-
-	return(results_noncoding)
+	                          promoter_CAGE=results_promoter_CAGE,promoter_DHS=results_promoter_DHS,
+	                          enhancer_CAGE=results_enhancer_CAGE,enhancer_DHS=results_enhancer_DHS)
 
 	seqResetFilter(genofile)
 
+	return(results_noncoding)
 }
 

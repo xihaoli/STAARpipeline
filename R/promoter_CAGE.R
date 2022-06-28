@@ -161,6 +161,7 @@ promoter_CAGE <- function(chr,gene_name,genofile,obj_nullmodel,
 	}
 
 	seqResetFilter(genofile)
+
 	return(results)
 }
 

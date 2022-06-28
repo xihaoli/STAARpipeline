@@ -54,7 +54,7 @@ and taking the residuals (default = \code{optimal}).}
 
 \item{geno_missing_imputation}{method of handling missing genotypes. Either "mean" or "minor" (default = "mean").}
 
-\item{Annotation_dir}{channel name of the annotations in the aGDS file (default = "annotation/info/FunctionalAnnotation").}
+\item{Annotation_dir}{channel name of the annotations in the aGDS file \cr (default = "annotation/info/FunctionalAnnotation").}
 
 \item{Annotation_name_catalog}{a data frame containing the name and the corresponding channel name in the aGDS file.}
 
@@ -63,7 +63,7 @@ and taking the residuals (default = \code{optimal}).}
 \item{Annotation_name}{a vector of annotation names used in STAAR (default = NULL).}
 }
 \value{
-a data frame of conditional STAAR p-values (including STAAR-O) corresponding to the ncRNA category of the given ncRNA gene.
+a data frame containing the conditional STAAR p-values (including STAAR-O) corresponding to the ncRNA category of the given ncRNA gene.
 }
 \description{
 The \code{ncRNA_cond} function takes in chromosome, gene name,

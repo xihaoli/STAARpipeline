@@ -249,7 +249,6 @@ Individual_Analysis_cond <- function(chr,individual_results,genofile,obj_nullmod
 	pvalue_cond <- 10^(-pvalue_cond_log10)
 	individual_results_cond <- cbind(individual_results_cond,pvalue_cond,pvalue_cond_log10)
 
-
 	individual_results <- individual_results[,-dim(individual_results)[2]]
 	individual_results <- left_join(individual_results,individual_results_cond,by=c("CHR"="CHR","POS"="POS","REF"="REF","ALT"="ALT"))
 

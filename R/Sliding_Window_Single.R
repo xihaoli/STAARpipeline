@@ -105,13 +105,13 @@ Sliding_Window_Single <- function(chr,start_loc,end_loc,genofile,obj_nullmodel,r
 
 		if(class(pvalues)=="list")
 		{
-		  results_temp <- c(chr,start_loc,end_loc)
+			results_temp <- c(chr,start_loc,end_loc)
 
-		  results_temp <- c(results_temp,pvalues$num_variant,pvalues$results_STAAR_S_1_25,pvalues$results_STAAR_S_1_1,
-		                    pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_A_1_25,
-		                    pvalues$results_STAAR_A_1_1,pvalues$results_ACAT_O,pvalues$results_STAAR_O)
-		  results <- c()
-		  results <- rbind(results,results_temp)
+			results_temp <- c(results_temp,pvalues$num_variant,pvalues$results_STAAR_S_1_25,pvalues$results_STAAR_S_1_1,
+			                  pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_A_1_25,
+			                  pvalues$results_STAAR_A_1_1,pvalues$results_ACAT_O,pvalues$results_STAAR_O)
+			results <- c()
+			results <- rbind(results,results_temp)
 		}
 	}else
 	{

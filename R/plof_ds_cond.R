@@ -52,7 +52,7 @@ plof_ds_cond <- function(chr,gene_name,genofile,obj_nullmodel,genes,known_loci,
 
 	## plof_ds
 	## Gencode_Exonic
-	GENCODE.EXONIC.Category  <- seqGetData(genofile, paste0(Annotation_dir,Annotation_name_catalog$dir[which(Annotation_name_catalog$name=="GENCODE.EXONIC.Category")]))
+	GENCODE.EXONIC.Category <- seqGetData(genofile, paste0(Annotation_dir,Annotation_name_catalog$dir[which(Annotation_name_catalog$name=="GENCODE.EXONIC.Category")]))
 	## Gencode
 	GENCODE.Category <- seqGetData(genofile, paste0(Annotation_dir,Annotation_name_catalog$dir[which(Annotation_name_catalog$name=="GENCODE.Category")]))
 	## Meta.SVM.Pred
@@ -255,8 +255,8 @@ plof_ds_cond <- function(chr,gene_name,genofile,obj_nullmodel,genes,known_loci,
 		colnames(results)[(dim(results)[2]-1):dim(results)[2]] <- c("ACAT-O","STAAR-O")
 	}
 
-
 	seqResetFilter(genofile)
+
 	return(results)
 }
 

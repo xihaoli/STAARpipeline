@@ -26,8 +26,8 @@ Individual_Analysis(
 
 \item{genofile}{an object of opened annotated GDS (aGDS) file.}
 
-\item{obj_nullmodel}{an object from fitting the null model, which is either the output from \code{fit_nullmodel} function,
-or the output from \code{fitNullModel} function in the \code{GENESIS} package and transformed using the \code{genesis2staar_nullmodel} function.}
+\item{obj_nullmodel}{an object from fitting the null model, which is either the output from \code{\link{fit_nullmodel}} function,
+or the output from \code{fitNullModel} function in the \code{GENESIS} package and transformed using the \code{\link{genesis2staar_nullmodel}} function.}
 
 \item{mac_cutoff}{the cutoff of minimum minor allele count in
 defining individual variants (default = 20).}

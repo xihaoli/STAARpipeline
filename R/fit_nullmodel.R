@@ -74,7 +74,7 @@ fit_nullmodel <- function(fixed, data = parent.frame(), kins, use_sparse = NULL,
 		                         tol = tol, taumin = taumin, taumax = taumax,
 		                         tauregion = tauregion, verbose = verbose, ...)
 		obj_nullmodel$sparse_kins <- TRUE
-	}else if(class(kins) != "matrix" && !(!is.null(attr(class(kins), "package")) && attr(class(kins), "package") == "Matrix")){
+	}else if(class(kins)[1] != "matrix" && !(!is.null(attr(class(kins), "package")) && attr(class(kins), "package") == "Matrix")){
 		stop("kins is not a matrix!")
 	}else if(!is.null(attr(class(kins), "package")) && attr(class(kins), "package") == "Matrix"){
 		print("kins is a sparse matrix.")
@@ -89,7 +89,7 @@ fit_nullmodel <- function(fixed, data = parent.frame(), kins, use_sparse = NULL,
 		print(paste0("kins is a dense matrix, transforming it into a sparse matrix using cutoff ", kins_cutoff,"."))
 		kins_sp <- makeSparseMatrix(kins, thresh = kins_cutoff)
 		if(class(kins_sp) == "dsyMatrix" || kins_cutoff <= min(kins)){
-			stop(paste0("kins is still a dense matrix using cutoff ", kins_cutoff,". Please try a larger kins_cutoff or use_sparse = FALSE"))
+			stop(paste0("kins is still a dense matrix using cutoff ", kins_cutoff,". Please try a larger kins_cutoff or use_sparse = FALSE!"))
 		}
 		rm(kins)
 		obj_nullmodel <- glmmkin(fixed = fixed, data = data, kins = kins_sp, id = id,

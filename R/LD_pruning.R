@@ -85,7 +85,7 @@ LD_pruning <- function(chr,genofile,obj_nullmodel,variants_list,maf_cutoff=0.01,
 	{
 		Geno <- matrix_flip_minor(Geno)
 	}
-    MAF <- Geno$MAF
+	MAF <- Geno$MAF
 
 	position <- as.numeric(seqGetData(genofile, "position"))
 	REF <- as.character(seqGetData(genofile, "$ref"))

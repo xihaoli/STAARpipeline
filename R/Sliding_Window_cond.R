@@ -88,7 +88,7 @@ Sliding_Window_cond <- function(chr,start_loc,end_loc,genofile,obj_nullmodel,
 	variant.id <- seqGetData(genofile, "variant.id")
 
 	is.in <- (SNVlist)&(position>=start_loc)&(position<=end_loc)
-    seqSetFilter(genofile,variant.id=variant.id[is.in],sample.id=phenotype.id)
+	seqSetFilter(genofile,variant.id=variant.id[is.in],sample.id=phenotype.id)
 
 	## genotype id
 	id.genotype <- seqGetData(genofile,"sample.id")

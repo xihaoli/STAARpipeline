@@ -220,7 +220,7 @@ Sliding_Window_cond <- function(chr,start_loc,end_loc,genofile,obj_nullmodel,
 				}
 			}
 
-			if(class(Geno_adjusted)=="numeric")
+			if(class(Geno_adjusted)[1]=="numeric")
 			{
 				Geno_adjusted <- matrix(Geno_adjusted,ncol=1)
 			}
@@ -229,7 +229,7 @@ Sliding_Window_cond <- function(chr,start_loc,end_loc,genofile,obj_nullmodel,
 			MAF <- AF*(AF<0.5) + (1-AF)*(AF>=0.5)
 
 			Geno_adjusted <- Geno_adjusted[,MAF>0]
-			if(class(Geno_adjusted)=="numeric")
+			if(class(Geno_adjusted)[1]=="numeric")
 			{
 				Geno_adjusted <- matrix(Geno_adjusted,ncol=1)
 			}

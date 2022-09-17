@@ -213,7 +213,7 @@ upstream_cond <- function(chr,gene_name,genofile,obj_nullmodel,known_loci,
 			}
 		}
 
-		if(class(Geno_adjusted)=="numeric")
+		if(class(Geno_adjusted)[1]=="numeric")
 		{
 			Geno_adjusted <- matrix(Geno_adjusted,ncol=1)
 		}
@@ -222,7 +222,7 @@ upstream_cond <- function(chr,gene_name,genofile,obj_nullmodel,known_loci,
 		MAF <- AF*(AF<0.5) + (1-AF)*(AF>=0.5)
 
 		Geno_adjusted <- Geno_adjusted[,MAF>0]
-		if(class(Geno_adjusted)=="numeric")
+		if(class(Geno_adjusted)[1]=="numeric")
 		{
 			Geno_adjusted <- matrix(Geno_adjusted,ncol=1)
 		}

@@ -141,8 +141,6 @@ Dynamic_Window_SCANG <- function(chr,start_loc,end_loc,genofile,obj_nullmodel,
 
 	for(kk in 1:sub_seq_num)
 	{
-		# print(kk)
-		
 		is.in <- ((kk-1)*variant_num_per_seq+1):min(kk*variant_num_per_seq + Lmax, length(variant.id))
 
 		seqSetFilter(genofile,variant.id=variant.id[is.in],sample.id=phenotype.id)
@@ -225,20 +223,20 @@ Dynamic_Window_SCANG <- function(chr,start_loc,end_loc,genofile,obj_nullmodel,
 		}
 
 		Anno.Int.PHRED.sub <- Anno.Int.PHRED.sub[is.in.rare,]
-		
+
 		if(dim(Geno)[2] < Lmin)
 		{
 			res <- 0
 		}
-		
+
 		if((dim(Geno)[2] >= Lmin)&(dim(Geno)[2] < Lmax))
 		{
-			Lmax_alternative <- Lmin + floor((dim(Geno)[2] - Lmin)/steplength)*steplength 
-			
+			Lmax_alternative <- Lmin + floor((dim(Geno)[2] - Lmin)/steplength)*steplength
+
 			res <- 0
 			try(res <- SCANG(genotype=Geno,obj_nullmodel=obj_nullmodel,annotation_phred=Anno.Int.PHRED.sub,Lmin=Lmin,Lmax=Lmax_alternative,steplength=steplength,alpha=alpha,rare_maf_cutoff=rare_maf_cutoff,filter=p_filter,f=f),silent=silent)
 		}
-		
+
 		if(dim(Geno)[2] >= Lmax)
 		{
 			res <- 0
@@ -254,7 +252,7 @@ Dynamic_Window_SCANG <- function(chr,start_loc,end_loc,genofile,obj_nullmodel,
 			#          SCANG-O
 			##################################################
 
-			# Thrshold
+			# Threshold
 			emthr <- res$SCANG_O_thres_boot
 			emthr_SCANG_O <- rbind(emthr_SCANG_O,emthr)
 
@@ -300,7 +298,7 @@ Dynamic_Window_SCANG <- function(chr,start_loc,end_loc,genofile,obj_nullmodel,
 			#          SCANG-S
 			###########################################
 
-			# Thrshold
+			# Threshold
 			emthr <- res$SCANG_S_thres_boot
 			emthr_SCANG_S <- rbind(emthr_SCANG_S,emthr)
 
@@ -346,7 +344,7 @@ Dynamic_Window_SCANG <- function(chr,start_loc,end_loc,genofile,obj_nullmodel,
 			#             SCANG-B
 			##############################################
 
-			# Thrshold
+			# Threshold
 			emthr <- res$SCANG_B_thres_boot
 			emthr_SCANG_B <- rbind(emthr_SCANG_B,emthr)
 

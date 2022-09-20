@@ -53,7 +53,6 @@ enhancer_DHS <- function(chr,gene_name,genofile,obj_nullmodel,
 		SNVlist <- (filter == "PASS") & (!isSNV(genofile))
 	}
 
-
 	variant.id <- seqGetData(genofile, "variant.id")
 	variant.id.SNV <- variant.id[SNVlist]
 

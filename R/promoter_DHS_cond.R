@@ -52,7 +52,6 @@ promoter_DHS_cond <- function(chr,gene_name,genofile,obj_nullmodel,known_loci,
 		SNVlist <- (filter == "PASS") & (!isSNV(genofile))
 	}
 
-
 	variant.id <- seqGetData(genofile, "variant.id")
 	variant.id.SNV <- variant.id[SNVlist]
 
@@ -87,12 +86,10 @@ promoter_DHS_cond <- function(chr,gene_name,genofile,obj_nullmodel,known_loci,
 		SNVlist <- (filter == "PASS") & (!isSNV(genofile))
 	}
 
-
 	position <- as.numeric(seqGetData(genofile, "position"))
 	REF <- as.character(seqGetData(genofile, "$ref"))
 	ALT <- as.character(seqGetData(genofile, "$alt"))
 	variant.id <- seqGetData(genofile, "variant.id")
-
 
 	### Gene
 	is.in <- which(dfPromrOCRsVarGene.SNV[,5]==gene_name)

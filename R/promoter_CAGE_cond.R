@@ -91,7 +91,6 @@ promoter_CAGE_cond <- function(chr,gene_name,genofile,obj_nullmodel,known_loci,
 	ALT <- as.character(seqGetData(genofile, "$alt"))
 	variant.id <- seqGetData(genofile, "variant.id")
 
-
 	### Gene
 	is.in <- which(dfPromCAGEVarGene.SNV[,5]==gene_name)
 	variant.is.in <- variant.id.SNV[is.in]

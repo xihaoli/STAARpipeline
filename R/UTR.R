@@ -51,7 +51,6 @@ UTR <- function(chr,gene_name,genofile,obj_nullmodel,
 	rm(GENCODE.Info)
 	gc()
 
-	# Gene <- as.character(sapply(GENCODE.Info.split,function(z) z[seq(1,length(z),2)]))
 	Gene <- as.character(sapply(GENCODE.Info.split,function(z) z[1]))
 
 	rm(GENCODE.Info.split)

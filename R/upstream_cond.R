@@ -71,8 +71,6 @@ upstream_cond <- function(chr,gene_name,genofile,obj_nullmodel,known_loci,
 	known_loci_chr <- known_loci[known_loci[,1]==chr,]
 	known_loci_chr <- known_loci_chr[order(known_loci_chr[,2]),]
 
-	genes_name <- unique(Gene)
-
 	### Gene
 	is.in <- which(Gene==gene_name)
 	variant.is.in <- variant.id.SNV[is.in]

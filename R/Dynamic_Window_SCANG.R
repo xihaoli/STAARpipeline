@@ -48,6 +48,10 @@
 #' results using SCANG-STAAR-S. Details see SCANG-STAAR-O.
 #' @return \code{SCANG_B_res, SCANG_B_top1, SCANG_B_emthr}: Analysis
 #' results using SCANG-STAAR-B. Details see SCANG-STAAR-O.
+#' @references Li, Z., Li, X., et al. (2022). A framework for detecting noncoding
+#' rare-variant associations of large-scale whole-genome sequencing studies.
+#' \emph{Nature Methods}.
+#' (\href{https://doi.org/10.1038/s41592-022-01640-x}{pub})
 #' @references Li, Z., Li, X., et al. (2019). Dynamic scan procedure for
 #' detecting rare-variant association regions in whole-genome sequencing studies.
 #' \emph{The American Journal of Human Genetics}, \emph{104}(5), 802-814.

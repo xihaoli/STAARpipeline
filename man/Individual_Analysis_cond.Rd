@@ -2,7 +2,7 @@
 % Please edit documentation in R/Individual_Analysis_cond.R
 \name{Individual_Analysis_cond}
 \alias{Individual_Analysis_cond}
-\title{Individual-variant conditional analysis using score test for whole-genome sequencing data}
+\title{Individual-variant conditional analysis using score test}
 \usage{
 Individual_Analysis_cond(
   chr,
@@ -20,7 +20,8 @@ Individual_Analysis_cond(
 \arguments{
 \item{chr}{chromosome.}
 
-\item{individual_results}{the data frame of the significant individual variants for conditional analysis using score test.}
+\item{individual_results}{the data frame of (significant) individual variants for conditional analysis using score test.
+The first 4 columns should correspond to chromosome (CHR), position (POS), reference allele (REF), and alternative allele (ALT).}
 
 \item{genofile}{an object of opened annotated GDS (aGDS) file.}
 
@@ -46,13 +47,13 @@ and taking the residuals (default = \code{optimal}).}
 \item{geno_position_ascending}{logical: are the variant positions in ascending order in the GDS/aGDS file (default = TRUE).}
 }
 \value{
-a data frame containing the conditional score test p-value and effect size for each significant individual variant in the given set.
+a data frame containing the conditional score test p-value and the estimated effect size of the minor allele for each (significant) individual variant in \code{individual_results}.
 }
 \description{
-The \code{Individual_Analysis_cond} function takes in chromosome, starting location, ending location,
+The \code{Individual_Analysis_cond} function takes in the data frame of individual variants,
 the object of opened annotated GDS file, the object from fitting the null model,
 and the set of known variants to be adjusted for in conditional analysis to analyze the conditional association between a
-quantitative/dichotomous phenotype and each significant individual variant by using score test.
+quantitative/dichotomous phenotype and each (significant) individual variant by using score test.
 }
 \references{
 Chen, H., et al. (2016). Control for population structure and relatedness for binary traits

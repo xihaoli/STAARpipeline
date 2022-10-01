@@ -1,11 +1,12 @@
-#' Individual-variant conditional analysis using score test for whole-genome sequencing data
+#' Individual-variant conditional analysis using score test
 #'
-#' The \code{Individual_Analysis_cond} function takes in chromosome, starting location, ending location,
+#' The \code{Individual_Analysis_cond} function takes in the data frame of individual variants,
 #' the object of opened annotated GDS file, the object from fitting the null model,
 #' and the set of known variants to be adjusted for in conditional analysis to analyze the conditional association between a
-#' quantitative/dichotomous phenotype and each significant individual variant by using score test.
+#' quantitative/dichotomous phenotype and each (significant) individual variant by using score test.
 #' @param chr chromosome.
-#' @param individual_results the data frame of the significant individual variants for conditional analysis using score test.
+#' @param individual_results the data frame of (significant) individual variants for conditional analysis using score test.
+#' The first 4 columns should correspond to chromosome (CHR), position (POS), reference allele (REF), and alternative allele (ALT).
 #' @param genofile an object of opened annotated GDS (aGDS) file.
 #' @param obj_nullmodel an object from fitting the null model, which is either the output from \code{\link{fit_nullmodel}} function,
 #' or the output from \code{fitNullModel} function in the \code{GENESIS} package and transformed using the \code{\link{genesis2staar_nullmodel}} function.
@@ -21,7 +22,7 @@
 #' @param variant_type type of variant included in the analysis. Choices include "variant", "SNV", or "Indel" (default = "variant").
 #' @param geno_missing_imputation method of handling missing genotypes. Either "mean" or "minor" (default = "mean").
 #' @param geno_position_ascending logical: are the variant positions in ascending order in the GDS/aGDS file (default = TRUE).
-#' @return a data frame containing the conditional score test p-value and effect size for each significant individual variant in the given set.
+#' @return a data frame containing the conditional score test p-value and the estimated effect size of the minor allele for each (significant) individual variant in \code{individual_results}.
 #' @references Chen, H., et al. (2016). Control for population structure and relatedness for binary traits
 #' in genetic association studies via logistic mixed models. \emph{The American Journal of Human Genetics}, \emph{98}(4), 653-666.
 #' (\href{https://doi.org/10.1016/j.ajhg.2016.02.012}{pub})
@@ -36,9 +37,9 @@ Individual_Analysis_cond <- function(chr,individual_results,genofile,obj_nullmod
                                      geno_position_ascending=TRUE){
 
 	## evaluate choices
+	method_cond <- match.arg(method_cond)
 	variant_type <- match.arg(variant_type)
 	geno_missing_imputation <- match.arg(geno_missing_imputation)
-	method_cond <- match.arg(method_cond)
 
 	## Null Model
 	phenotype.id <- as.character(obj_nullmodel$id_include)

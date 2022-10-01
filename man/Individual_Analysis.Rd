@@ -2,7 +2,7 @@
 % Please edit documentation in R/Individual_Analysis.R
 \name{Individual_Analysis}
 \alias{Individual_Analysis}
-\title{Individual-variant analysis using score test for whole-genome sequencing data}
+\title{Individual-variant analysis using score test}
 \usage{
 Individual_Analysis(
   chr,
@@ -41,7 +41,8 @@ defining individual variants (default = 20).}
 \item{geno_missing_imputation}{method of handling missing genotypes. Either "mean" or "minor" (default = "mean").}
 }
 \value{
-a data frame containing the score test p-value and effect size for each individual variant in the given genetic region.
+a data frame containing the score test p-value and the estimated effect size for each individual variant in the given genetic region.
+The first 4 columns correspond to chromosome (CHR), position (POS), reference allele (REF), and alternative allele (ALT).
 }
 \description{
 The \code{Individual_Analysis} function takes in chromosome, starting location, ending location,

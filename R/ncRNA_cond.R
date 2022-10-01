@@ -1,4 +1,4 @@
-#' Gene-centric conditional analysis of noncoding RNA category using STAAR procedure
+#' Gene-centric conditional analysis of long noncoding RNA (ncRNA) category using STAAR procedure
 #'
 #' The \code{ncRNA_cond} function takes in chromosome, gene name,
 #' the object of opened annotated GDS file, the object from fitting the null model,
@@ -33,6 +33,10 @@
 #' @param Use_annotation_weights use annotations as weights or not (default = TRUE).
 #' @param Annotation_name a vector of annotation names used in STAAR (default = NULL).
 #' @return a data frame containing the conditional STAAR p-values (including STAAR-O) corresponding to the ncRNA category of the given ncRNA gene.
+#' @references Li, Z., Li, X., et al. (2022). A framework for detecting noncoding
+#' rare-variant associations of large-scale whole-genome sequencing studies.
+#' \emph{Nature Methods}.
+#' (\href{https://doi.org/10.1038/s41592-022-01640-x}{pub})
 #' @references Li, X., Li, Z., et al. (2020). Dynamic incorporation of multiple
 #' in silico functional annotations empowers rare variant association analysis of
 #' large whole-genome sequencing studies at scale. \emph{Nature Genetics}, \emph{52}(9), 969-983.
@@ -73,9 +77,7 @@ ncRNA_cond <- function(chr,gene_name,genofile,obj_nullmodel,known_loci=NULL,
 		SNVlist <- (filter == "PASS") & (!isSNV(genofile))
 	}
 
-
 	variant.id <- seqGetData(genofile, "variant.id")
-
 
 	rm(filter)
 	gc()

@@ -33,7 +33,6 @@ synonymous_cond <- function(chr,gene_name,genofile,obj_nullmodel,genes,known_loc
 		SNVlist <- (filter == "PASS") & (!isSNV(genofile))
 	}
 
-
 	position <- as.numeric(seqGetData(genofile, "position"))
 	REF <- as.character(seqGetData(genofile, "$ref"))
 	ALT <- as.character(seqGetData(genofile, "$alt"))

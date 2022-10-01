@@ -1,4 +1,4 @@
-#' Individual-variant analysis using score test for whole-genome sequencing data
+#' Individual-variant analysis using score test
 #'
 #' The \code{Individual_Analysis} function takes in chromosome, starting location, ending location,
 #' the object of opened annotated GDS file, and the object from fitting the null model to analyze the association between a
@@ -15,7 +15,8 @@
 #' @param QC_label channel name of the QC label in the GDS/aGDS file (default = "annotation/filter").
 #' @param variant_type type of variant included in the analysis. Choices include "variant", "SNV", or "Indel" (default = "variant").
 #' @param geno_missing_imputation method of handling missing genotypes. Either "mean" or "minor" (default = "mean").
-#' @return a data frame containing the score test p-value and effect size for each individual variant in the given genetic region.
+#' @return a data frame containing the score test p-value and the estimated effect size for each individual variant in the given genetic region.
+#' The first 4 columns correspond to chromosome (CHR), position (POS), reference allele (REF), and alternative allele (ALT).
 #' @references Chen, H., et al. (2016). Control for population structure and relatedness for binary traits
 #' in genetic association studies via logistic mixed models. \emph{The American Journal of Human Genetics}, \emph{98}(4), 653-666.
 #' (\href{https://doi.org/10.1016/j.ajhg.2016.02.012}{pub})

@@ -2,7 +2,7 @@
 % Please edit documentation in R/Gene_Centric_Noncoding.R
 \name{Gene_Centric_Noncoding}
 \alias{Gene_Centric_Noncoding}
-\title{Gene-centric analysis of noncoding functional categories using STAAR procedure for whole-genome sequencing data}
+\title{Gene-centric analysis of noncoding functional categories using STAAR procedure}
 \usage{
 Gene_Centric_Noncoding(
   chr,
@@ -71,6 +71,11 @@ and ACAT-V(1,1) together with p-values of each test weighted by each annotation
 using Cauchy method.
 }
 \references{
+Li, Z., Li, X., et al. (2022). A framework for detecting noncoding
+rare-variant associations of large-scale whole-genome sequencing studies.
+\emph{Nature Methods}.
+(\href{https://doi.org/10.1038/s41592-022-01640-x}{pub})
+
 Li, X., Li, Z., et al. (2020). Dynamic incorporation of multiple
 in silico functional annotations empowers rare variant association analysis of
 large whole-genome sequencing studies at scale. \emph{Nature Genetics}, \emph{52}(9), 969-983.

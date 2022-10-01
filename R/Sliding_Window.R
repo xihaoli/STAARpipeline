@@ -29,6 +29,10 @@
 #' @param Annotation_name a vector of annotation names used in STAAR (default = NULL).
 #' @param silent logical: should the report of error messages be suppressed (default = FALSE).
 #' @return a data frame containing the STAAR p-values (including STAAR-O) corresponding to each sliding window in the given genetic region.
+#' @references Li, Z., Li, X., et al. (2022). A framework for detecting noncoding
+#' rare-variant associations of large-scale whole-genome sequencing studies.
+#' \emph{Nature Methods}.
+#' (\href{https://doi.org/10.1038/s41592-022-01640-x}{pub})
 #' @references Li, X., Li, Z., et al. (2020). Dynamic incorporation of multiple
 #' in silico functional annotations empowers rare variant association analysis of
 #' large whole-genome sequencing studies at scale. \emph{Nature Genetics}, \emph{52}(9), 969-983.

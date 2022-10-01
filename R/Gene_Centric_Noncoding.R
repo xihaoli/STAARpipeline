@@ -1,4 +1,4 @@
-#' Gene-centric analysis of noncoding functional categories using STAAR procedure for whole-genome sequencing data
+#' Gene-centric analysis of noncoding functional categories using STAAR procedure
 #'
 #' The \code{Gene_Centric_Noncoding} function takes in chromosome, gene name, functional category,
 #' the object of opened annotated GDS file, and the object from fitting the null model to analyze the association between a
@@ -27,6 +27,10 @@
 #' @param Annotation_name a vector of annotation names used in STAAR (default = NULL).
 #' @param silent logical: should the report of error messages be suppressed (default = FALSE).
 #' @return a list of data frames containing the STAAR p-values (including STAAR-O) corresponding to each noncoding functional category of the given gene.
+#' @references Li, Z., Li, X., et al. (2022). A framework for detecting noncoding
+#' rare-variant associations of large-scale whole-genome sequencing studies.
+#' \emph{Nature Methods}.
+#' (\href{https://doi.org/10.1038/s41592-022-01640-x}{pub})
 #' @references Li, X., Li, Z., et al. (2020). Dynamic incorporation of multiple
 #' in silico functional annotations empowers rare variant association analysis of
 #' large whole-genome sequencing studies at scale. \emph{Nature Genetics}, \emph{52}(9), 969-983.

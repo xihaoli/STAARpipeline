@@ -106,6 +106,11 @@ the scan statistic of SCANG-STAAR-B is the set-based p-value of STAAR-B, which i
 across multiple annotation-weighted variant-set tests Burden(1,1) and Burden(1,25) using ACAT method.
 }
 \references{
+Li, Z., Li, X., et al. (2022). A framework for detecting noncoding
+rare-variant associations of large-scale whole-genome sequencing studies.
+\emph{Nature Methods}.
+(\href{https://doi.org/10.1038/s41592-022-01640-x}{pub})
+
 Li, Z., Li, X., et al. (2019). Dynamic scan procedure for
 detecting rare-variant association regions in whole-genome sequencing studies.
 \emph{The American Journal of Human Genetics}, \emph{104}(5), 802-814.

@@ -6,9 +6,9 @@ downstream_cond <- function(chr,gene_name,genofile,obj_nullmodel,known_loci,
                             Use_annotation_weights=c(TRUE,FALSE),Annotation_name=NULL){
 
 	## evaluate choices
+	method_cond <- match.arg(method_cond)
 	variant_type <- match.arg(variant_type)
 	geno_missing_imputation <- match.arg(geno_missing_imputation)
-	method_cond <- match.arg(method_cond)
 
 	phenotype.id <- as.character(obj_nullmodel$id_include)
 
@@ -70,8 +70,6 @@ downstream_cond <- function(chr,gene_name,genofile,obj_nullmodel,known_loci,
 	### known SNV Info
 	known_loci_chr <- known_loci[known_loci[,1]==chr,]
 	known_loci_chr <- known_loci_chr[order(known_loci_chr[,2]),]
-
-	genes_name <- unique(Gene)
 
 	### Gene
 	is.in <- which(Gene==gene_name)

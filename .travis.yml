@@ -6,7 +6,7 @@ branches:
 
 language: r
 r:
-  - 4.1.2
+  - 4.2.1
 
 warnings_are_errors: false
 

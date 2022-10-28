@@ -19,7 +19,7 @@ environment:
     PKGTYPE: both
     
   global:
-    USE_RTOOLS: TRUE
+    USE_RTOOLS: true
 
 branches:
   only:

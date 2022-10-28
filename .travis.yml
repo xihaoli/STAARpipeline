@@ -5,8 +5,6 @@ branches:
   - main
 
 language: r
-r:
-  - 4.2.0
 
 warnings_are_errors: false
 

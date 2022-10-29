@@ -17,16 +17,14 @@ environment:
     R_ARCH: x64
     BIOC_USE_DEVEL: FALSE
     PKGTYPE: both
-    
-  global:
-    USE_RTOOLS: true
 
 branches:
   only:
     - main
 
 build_script:
-  - travis-tool.sh install_github hadley/devtools
+  - Rscript -e install.packages('openssl',type='binary',repos='https://cran.rstudio.com')
+  - Rscript -e install.packages('Ragg',type='binary',repos='https://cran.rstudio.com')
   - travis-tool.sh install_bioc_deps
   - travis-tool.sh install_deps
   - travis-tool.sh install_github xihaoli/STAAR

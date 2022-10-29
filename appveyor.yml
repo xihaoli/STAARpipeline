@@ -16,16 +16,13 @@ environment:
   - R_VERSION: stable
     R_ARCH: x64
     BIOC_USE_DEVEL: FALSE
-    PKGTYPE: both
+    PKGTYPE: binary
 
 branches:
   only:
     - main
 
 build_script:
-  - Rscript -e install.packages('openssl',type='binary',repos='https://cran.rstudio.com')
-  - Rscript -e install.packages('ragg',type='binary',repos='https://cran.rstudio.com')
-  - Rscript -e install.packages('digest',type='binary',repos='https://cran.rstudio.com')
   - travis-tool.sh install_bioc_deps
   - travis-tool.sh install_deps
   - travis-tool.sh install_github xihaoli/STAAR

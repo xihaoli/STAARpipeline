@@ -16,7 +16,7 @@ environment:
   - R_VERSION: stable
     R_ARCH: x64
     BIOC_USE_DEVEL: FALSE
-    PKGTYPE: both
+    PKGTYPE: binary
 
 branches:
   only:
@@ -25,6 +25,8 @@ branches:
 build_script:
   - travis-tool.sh install_bioc_deps
   - travis-tool.sh install_deps
+  - travis-tool.sh install_bioc GenomeInfoDbData
+  - travis-tool.sh install_bioc TxDb.Hsapiens.UCSC.hg38.knownGene
   - travis-tool.sh install_github xihaoli/STAAR
   - travis-tool.sh install_github zilinli1988/SCANG
 

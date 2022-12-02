@@ -58,3 +58,9 @@ The \code{LD_pruning} function takes in chromosome, the object of opened annotat
 the object from fitting the null model, and a given list of variants to perform LD pruning
 among these variants in sequential conditional analysis by using score test.
 }
+\references{
+Li, Z., Li, X., et al. (2022). A framework for detecting
+noncoding rare-variant associations of large-scale whole-genome sequencing
+studies. \emph{Nature Methods}, \emph{19}(12), 1599-1611.
+(\href{https://doi.org/10.1038/s41592-022-01640-x}{pub})
+}

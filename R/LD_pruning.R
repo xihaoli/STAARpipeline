@@ -24,6 +24,10 @@
 #' @param geno_missing_imputation method of handling missing genotypes. Either "mean" or "minor" (default = "mean").
 #' @param geno_position_ascending logical: are the variant positions in ascending order in the GDS/aGDS file (default = TRUE).
 #' @return a data frame containing the list of LD-pruned variants in the given chromosome.
+#' @references Li, Z., Li, X., et al. (2022). A framework for detecting
+#' noncoding rare-variant associations of large-scale whole-genome sequencing
+#' studies. \emph{Nature Methods}, \emph{19}(12), 1599-1611.
+#' (\href{https://doi.org/10.1038/s41592-022-01640-x}{pub})
 #' @export
 
 LD_pruning <- function(chr,genofile,obj_nullmodel,variants_list,maf_cutoff=0.01,cond_p_thresh=1e-04,

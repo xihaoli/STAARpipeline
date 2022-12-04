@@ -15,11 +15,15 @@
 #' @param QC_label channel name of the QC label in the GDS/aGDS file (default = "annotation/filter").
 #' @param variant_type type of variant included in the analysis. Choices include "variant", "SNV", or "Indel" (default = "variant").
 #' @param geno_missing_imputation method of handling missing genotypes. Either "mean" or "minor" (default = "mean").
-#' @return a data frame containing the score test p-value and the estimated effect size for each individual variant in the given genetic region.
+#' @return a data frame containing the score test p-value and the estimated effect size of the minor allele for each individual variant in the given genetic region.
 #' The first 4 columns correspond to chromosome (CHR), position (POS), reference allele (REF), and alternative allele (ALT).
 #' @references Chen, H., et al. (2016). Control for population structure and relatedness for binary traits
 #' in genetic association studies via logistic mixed models. \emph{The American Journal of Human Genetics}, \emph{98}(4), 653-666.
 #' (\href{https://doi.org/10.1016/j.ajhg.2016.02.012}{pub})
+#' @references Li, Z., Li, X., et al. (2022). A framework for detecting
+#' noncoding rare-variant associations of large-scale whole-genome sequencing
+#' studies. \emph{Nature Methods}, \emph{19}(12), 1599-1611.
+#' (\href{https://doi.org/10.1038/s41592-022-01640-x}{pub})
 #' @export
 
 Individual_Analysis <- function(chr,start_loc,end_loc,genofile,obj_nullmodel,mac_cutoff=20,subset_variants_num=5e3,

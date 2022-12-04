@@ -29,6 +29,10 @@
 #' @references Sofer, T., et al. (2019). A fully adjusted two-stage procedure for rank-normalization
 #' in genetic association studies. \emph{Genetic Epidemiology}, \emph{43}(3), 263-275.
 #' (\href{https://doi.org/10.1002/gepi.22188}{pub})
+#' @references Li, Z., Li, X., et al. (2022). A framework for detecting
+#' noncoding rare-variant associations of large-scale whole-genome sequencing
+#' studies. \emph{Nature Methods}, \emph{19}(12), 1599-1611.
+#' (\href{https://doi.org/10.1038/s41592-022-01640-x}{pub})
 #' @export
 
 Individual_Analysis_cond <- function(chr,individual_results,genofile,obj_nullmodel,known_loci=NULL,

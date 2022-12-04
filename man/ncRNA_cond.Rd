@@ -63,13 +63,13 @@ and taking the residuals (default = \code{optimal}).}
 \item{Annotation_name}{a vector of annotation names used in STAAR (default = NULL).}
 }
 \value{
-a data frame containing the conditional STAAR p-values (including STAAR-O) corresponding to the ncRNA category of the given ncRNA gene.
+a data frame containing the conditional STAAR p-values (including STAAR-O) corresponding to the exonic and splicing category of the given ncRNA gene.
 }
 \description{
 The \code{ncRNA_cond} function takes in chromosome, gene name,
 the object of opened annotated GDS file, the object from fitting the null model,
 and the set of known variants to be adjusted for in conditional analysis to analyze the conditional association between a
-quantitative/dichotomous phenotype and the noncoding RNA (ncRNA) category of an ncRNA gene by using STAAR procedure.
+quantitative/dichotomous phenotype and the exonic and splicing category of an ncRNA gene by using STAAR procedure.
 For each ncRNA category, the conditional STAAR-O p-value is a p-value from an omnibus test
 that aggregated conditional SKAT(1,25), SKAT(1,1), Burden(1,25), Burden(1,1), ACAT-V(1,25),
 and ACAT-V(1,1) together with conditional p-values of each test weighted by each annotation

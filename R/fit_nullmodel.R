@@ -2,9 +2,9 @@
 #' under the null hypothesis.
 #'
 #' The \code{fit_nullmodel} function is a wrapper of the \code{glmmkin} function from
-#' the \code{GMMAT} package that fits a regression model under the null hypothesis
-#' for related samples, which provides the preliminary step for subsequent
-#' variant-set tests in whole genome sequencing data analysis. See \code{glmmkin} for more details.
+#' the \code{GMMAT} package that fits a regression model under the null hypothesis,
+#' which provides the preliminary step for subsequent variant-set tests in
+#' whole-genome sequencing data analysis. See \code{glmmkin} for more details.
 #' @param fixed an object of class \code{\link{formula}} (or one that can be coerced to that class):
 #' a symbolic description of the fixed effects model to be fitted.
 #' @param data a data frame or list (or object coercible by \code{as.data.frame} to a data frame)
@@ -13,7 +13,8 @@
 #' (e.g. kinship matrix in genetic association studies) or a list of known
 #' positive semi-definite relationship matrices. The rownames and colnames of
 #' these matrices must at least include all samples as specified in the \code{id} column
-#' of the data frame \code{data}. If \code{kins} is NULL, it will fit a generalized linear model for unrelated samples.
+#' of the data frame \code{data}. If \code{kins} is NULL, \code{fit_nullmodel}
+#' will switch to the generalized linear model with no random effects.
 #' @param use_sparse a logical switch of whether the provided dense \code{kins} matrix should be
 #' transformed to a sparse matrix (default = NULL).
 #' @param kins_cutoff the cutoff value for clustering samples to make the output matrix sparse block-diagonal
@@ -66,7 +67,7 @@ fit_nullmodel <- function(fixed, data = parent.frame(), kins, use_sparse = NULL,
                           verbose = FALSE, ...){
 
 	if(is.null(kins)){
-		print("kins is null, fit glm")
+		print("kins is NULL, fit generalized linear model.")
 		obj_nullmodel <- glmmkin(fixed = fixed, data = data, kins = kins, id = id,
 		                         random.slope = random.slope, groups = groups,
 		                         family = family, method = method,

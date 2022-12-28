@@ -37,7 +37,8 @@ containing the variables in the model.}
 (e.g. kinship matrix in genetic association studies) or a list of known
 positive semi-definite relationship matrices. The rownames and colnames of
 these matrices must at least include all samples as specified in the \code{id} column
-of the data frame \code{data}. If \code{kins} is NULL, it will fit a generalized linear model for unrelated samples.}
+of the data frame \code{data}. If \code{kins} is NULL, \code{fit_nullmodel}
+will switch to the generalized linear model with no random effects.}
 
 \item{use_sparse}{a logical switch of whether the provided dense \code{kins} matrix should be
 transformed to a sparse matrix (default = NULL).}
@@ -92,9 +93,9 @@ and whether the \code{kins} matrix is sparse when fitting the null model. See \c
 }
 \description{
 The \code{fit_nullmodel} function is a wrapper of the \code{glmmkin} function from
-the \code{GMMAT} package that fits a regression model under the null hypothesis
-for related samples, which provides the preliminary step for subsequent
-variant-set tests in whole genome sequencing data analysis. See \code{glmmkin} for more details.
+the \code{GMMAT} package that fits a regression model under the null hypothesis,
+which provides the preliminary step for subsequent variant-set tests in
+whole-genome sequencing data analysis. See \code{glmmkin} for more details.
 }
 \references{
 Chen, H., et al. (2016). Control for population structure and relatedness for binary traits

@@ -6,7 +6,9 @@
 #' For each ncRNA category, the STAAR-O p-value is a p-value from an omnibus test
 #' that aggregated SKAT(1,25), SKAT(1,1), Burden(1,25), Burden(1,1), ACAT-V(1,25),
 #' and ACAT-V(1,1) together with p-values of each test weighted by each annotation
-#' using Cauchy method.
+#' using Cauchy method. For multiple phenotype analysis (\code{obj_nullmodel$n.pheno > 1}),
+#' the results correspond to multi-trait association p-values (e.g. MultiSTAAR-O) by leveraging
+#' the correlation structure between multiple phenotypes.
 #' @param chr chromosome.
 #' @param gene_name name of the ncRNA gene to be analyzed using STAAR procedure.
 #' @param genofile an object of opened annotated GDS (aGDS) file.
@@ -46,6 +48,7 @@ ncRNA <- function(chr,gene_name,genofile,obj_nullmodel,
 	geno_missing_imputation <- match.arg(geno_missing_imputation)
 
 	phenotype.id <- as.character(obj_nullmodel$id_include)
+	n_pheno <- obj_nullmodel$n.pheno
 
 	## get SNV id
 	filter <- seqGetData(genofile, QC_label)
@@ -174,7 +177,14 @@ ncRNA <- function(chr,gene_name,genofile,obj_nullmodel,
 	}
 
 	pvalues <- 0
-	try(pvalues <- STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff),silent=silent)
+	if(n_pheno == 1)
+	{
+		try(pvalues <- STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff),silent=silent)
+	}
+	else
+	{
+		try(pvalues <- MultiSTAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff),silent=silent)
+	}
 
 	results <- c()
 	if(class(pvalues)=="list")

@@ -11,12 +11,11 @@ r:
 warnings_are_errors: false
 
 bioc_packages:
-- SeqArray
-- SeqVarTools
 - GenomicFeatures
 - TxDb.Hsapiens.UCSC.hg38.knownGene
 - GENESIS
 
 r_github_packages:
 - xihaoli/STAAR
+- xihaoli/MultiSTAAR
 - zilinli1988/SCANG

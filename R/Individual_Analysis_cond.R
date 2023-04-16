@@ -4,6 +4,9 @@
 #' the object of opened annotated GDS file, the object from fitting the null model,
 #' and the set of known variants to be adjusted for in conditional analysis to analyze the conditional association between a
 #' quantitative/dichotomous phenotype and each (significant) individual variant by using score test.
+#' For multiple phenotype analysis (\code{obj_nullmodel$n.pheno > 1}),
+#' the results correspond to multi-trait conditional score test p-values by leveraging
+#' the correlation structure between multiple phenotypes.
 #' @param chr chromosome.
 #' @param individual_results the data frame of (significant) individual variants for conditional analysis using score test.
 #' The first 4 columns should correspond to chromosome (CHR), position (POS), reference allele (REF), and alternative allele (ALT).
@@ -48,6 +51,7 @@ Individual_Analysis_cond <- function(chr,individual_results,genofile,obj_nullmod
 	## Null Model
 	phenotype.id <- as.character(obj_nullmodel$id_include)
 	samplesize <- length(phenotype.id)
+	n_pheno <- obj_nullmodel$n.pheno
 
 	Sigma_i <- obj_nullmodel$Sigma_i
 	Sigma_iX <- as.matrix(obj_nullmodel$Sigma_iX)
@@ -189,13 +193,24 @@ Individual_Analysis_cond <- function(chr,individual_results,genofile,obj_nullmod
 			}else{
 			  residuals.phenotype.fit <- lm(residuals.phenotype~genotype_adj)
 			}
-			residuals.phenotype <- residuals.phenotype.fit$residuals
+			residuals.phenotype <- as.vector(residuals.phenotype.fit$residuals)
 			X_adj <- model.matrix(residuals.phenotype.fit)
+			if(n_pheno > 1)
+			{
+			  X_adj <- as.matrix(Diagonal(n = n_pheno) %x% X_adj)
+			}
 
 			### sparse GRM
 			if(obj_nullmodel$sparse_kins)
 			{
-				Score_test <- Individual_Score_Test_cond(as.matrix(Geno[,k],ncol=1), Sigma_i, Sigma_iX, cov, X_adj, residuals.phenotype)
+				if(n_pheno == 1)
+				{
+					Score_test <- Individual_Score_Test_cond(as.matrix(Geno[,k],ncol=1), Sigma_i, Sigma_iX, cov, X_adj, residuals.phenotype)
+				}
+				else
+				{
+					Score_test <- Individual_Score_Test_cond_multi(as.matrix(Diagonal(n = n_pheno) %x% Geno[,k]), Sigma_i, Sigma_iX, cov, X_adj, residuals.phenotype, n_pheno)
+				}
 				pvalue_cond_log10 <- c(pvalue_cond_log10,Score_test$pvalue_log/log(10))
 			}
 
@@ -215,8 +230,12 @@ Individual_Analysis_cond <- function(chr,individual_results,genofile,obj_nullmod
 					residuals.phenotype.fit <- lm(residuals.phenotype~genotype_adj)
 				}
 
-				residuals.phenotype <- residuals.phenotype.fit$residuals
+				residuals.phenotype <- as.vector(residuals.phenotype.fit$residuals)
 				X_adj <- model.matrix(residuals.phenotype.fit)
+				if(n_pheno > 1)
+				{
+					X_adj <- as.matrix(Diagonal(n = n_pheno) %x% X_adj)
+				}
 				PX_adj <- P%*%X_adj
 				P_cond <- P - X_adj%*%solve(t(X_adj)%*%X_adj)%*%t(PX_adj) -
 							PX_adj%*%solve(t(X_adj)%*%X_adj)%*%t(X_adj) +
@@ -224,7 +243,14 @@ Individual_Analysis_cond <- function(chr,individual_results,genofile,obj_nullmod
 				rm(P)
 				gc()
 
-				Score_test <- Individual_Score_Test_sp_denseGRM(as.matrix(Geno[,k],ncol=1), P_cond, residuals.phenotype)
+				if(n_pheno == 1)
+				{
+					Score_test <- Individual_Score_Test_denseGRM(as.matrix(Geno[,k],ncol=1), P_cond, residuals.phenotype)
+				}
+				else
+				{
+					Score_test <- Individual_Score_Test_denseGRM_multi(as.matrix(Diagonal(n = n_pheno) %x% Geno[,k]), P_cond, residuals.phenotype, n_pheno)
+				}
 				pvalue_cond_log10 <- c(pvalue_cond_log10,Score_test$pvalue_log/log(10))
 			}
 		}else
@@ -232,7 +258,14 @@ Individual_Analysis_cond <- function(chr,individual_results,genofile,obj_nullmod
 			### sparse GRM
 			if(obj_nullmodel$sparse_kins)
 			{
-				Score_test <- Individual_Score_Test(as.matrix(Geno[,k],ncol=1), Sigma_i, Sigma_iX, cov, obj_nullmodel$scaled.residuals)
+				if(n_pheno == 1)
+				{
+					Score_test <- Individual_Score_Test(as.matrix(Geno[,k],ncol=1), Sigma_i, Sigma_iX, cov, obj_nullmodel$scaled.residuals)
+				}
+				else
+				{
+					Score_test <- Individual_Score_Test_multi(as.matrix(Diagonal(n = n_pheno) %x% Geno[,k]), Sigma_i, Sigma_iX, cov, obj_nullmodel$scaled.residuals, n_pheno)
+				}
 				pvalue_cond_log10 <- c(pvalue_cond_log10,Score_test$pvalue_log/log(10))
 			}
 			### dense GRM
@@ -242,10 +275,17 @@ Individual_Analysis_cond <- function(chr,individual_results,genofile,obj_nullmod
 				P_scalar <- sqrt(dim(P)[1])
 				P <- P*P_scalar
 
-				residuals.phenotype <- obj_nullmodel$scaled.residuals
+				residuals.phenotype <- as.vector(obj_nullmodel$scaled.residuals)
 				residuals.phenotype <- residuals.phenotype*sqrt(P_scalar)
 
-				Score_test <- Individual_Score_Test_denseGRM(as.matrix(Geno[,k],ncol=1), P, residuals.phenotype)
+				if(n_pheno == 1)
+				{
+					Score_test <- Individual_Score_Test_denseGRM(as.matrix(Geno[,k],ncol=1), P, residuals.phenotype)
+				}
+				else
+				{
+					Score_test <- Individual_Score_Test_denseGRM_multi(as.matrix(Diagonal(n = n_pheno) %x% Geno[,k]), P, residuals.phenotype, n_pheno)
+				}
 				pvalue_cond_log10 <- c(pvalue_cond_log10,Score_test$pvalue_log/log(10))
 			}
 		}

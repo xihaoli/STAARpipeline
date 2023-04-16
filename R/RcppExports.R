@@ -9,8 +9,20 @@ Individual_Score_Test_cond <- function(G, Sigma_i, Sigma_iX, cov, X_adj, residua
     .Call(`_STAARpipeline_Individual_Score_Test_cond`, G, Sigma_i, Sigma_iX, cov, X_adj, residuals)
 }
 
+Individual_Score_Test_cond_multi <- function(G, Sigma_i, Sigma_iX, cov, X_adj, residuals, n_pheno = 1L) {
+    .Call(`_STAARpipeline_Individual_Score_Test_cond_multi`, G, Sigma_i, Sigma_iX, cov, X_adj, residuals, n_pheno)
+}
+
 Individual_Score_Test_denseGRM <- function(G, P, residuals) {
     .Call(`_STAARpipeline_Individual_Score_Test_denseGRM`, G, P, residuals)
+}
+
+Individual_Score_Test_denseGRM_multi <- function(G, P, residuals, n_pheno = 1L) {
+    .Call(`_STAARpipeline_Individual_Score_Test_denseGRM_multi`, G, P, residuals, n_pheno)
+}
+
+Individual_Score_Test_multi <- function(G, Sigma_i, Sigma_iX, cov, residuals, n_pheno = 1L) {
+    .Call(`_STAARpipeline_Individual_Score_Test_multi`, G, Sigma_i, Sigma_iX, cov, residuals, n_pheno)
 }
 
 Individual_Score_Test_sp <- function(G, Sigma_i, Sigma_iX, cov, residuals) {
@@ -19,6 +31,14 @@ Individual_Score_Test_sp <- function(G, Sigma_i, Sigma_iX, cov, residuals) {
 
 Individual_Score_Test_sp_denseGRM <- function(G, P, residuals) {
     .Call(`_STAARpipeline_Individual_Score_Test_sp_denseGRM`, G, P, residuals)
+}
+
+Individual_Score_Test_sp_denseGRM_multi <- function(G, P, residuals, n_pheno = 1L) {
+    .Call(`_STAARpipeline_Individual_Score_Test_sp_denseGRM_multi`, G, P, residuals, n_pheno)
+}
+
+Individual_Score_Test_sp_multi <- function(G, Sigma_i, Sigma_iX, cov, residuals, n_pheno = 1L) {
+    .Call(`_STAARpipeline_Individual_Score_Test_sp_multi`, G, Sigma_i, Sigma_iX, cov, residuals, n_pheno)
 }
 
 matrix_flip_mean <- function(G) {

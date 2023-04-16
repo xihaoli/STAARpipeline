@@ -57,6 +57,9 @@ a data frame containing the list of LD-pruned variants in the given chromosome.
 The \code{LD_pruning} function takes in chromosome, the object of opened annotated GDS file,
 the object from fitting the null model, and a given list of variants to perform LD pruning
 among these variants in sequential conditional analysis by using score test.
+For multiple phenotype analysis (\code{obj_nullmodel$n.pheno > 1}),
+the results correspond to multi-trait sequential conditional analysis by leveraging
+the correlation structure between multiple phenotypes.
 }
 \references{
 Li, Z., Li, X., et al. (2022). A framework for detecting

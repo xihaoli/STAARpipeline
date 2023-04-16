@@ -32,12 +32,12 @@ List matrix_flip_mean(arma::mat G) {
 				num = num + 1;
 			}
 		}
-		
+
 		// exclude the setting that all entry of genotype are missing
 		if(num > 0)
 		{
 			AF(i) = AF(i)/2/num;
-		}	
+		}
 	}
 
 	// Genotype Imputation
@@ -68,8 +68,6 @@ List matrix_flip_mean(arma::mat G) {
 			}
 		}
 	}
-
-
 
 	return List::create(Named("Geno") = G, Named("AF") = AF, Named("MAF") = MAF);
 

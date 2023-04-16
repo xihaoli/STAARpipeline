@@ -16,15 +16,15 @@ jobs:
         run: |
           if (!requireNamespace("BiocManager", quietly = TRUE)) install.packages("BiocManager")
         shell: Rscript {0}
-      - name: Install SeqArray, SeqVarTools, GenomicFeatures, TxDb.Hsapiens.UCSC.hg38.knownGene, GENESIS
+      - name: Install GenomicFeatures, TxDb.Hsapiens.UCSC.hg38.knownGene, GENESIS
         run: |
-          BiocManager::install(c("SeqArray", "SeqVarTools", "GenomicFeatures", "TxDb.Hsapiens.UCSC.hg38.knownGene", "GENESIS"))
+          BiocManager::install(c("GenomicFeatures", "TxDb.Hsapiens.UCSC.hg38.knownGene", "GENESIS"))
         shell: Rscript {0}
       - name: Install dependencies
         run: |
           install.packages(c("remotes", "rcmdcheck"))
           remotes::install_deps(dependencies = TRUE)
-          remotes::install_github(c("xihaoli/STAAR", "zilinli1988/SCANG"))
+          remotes::install_github(c("xihaoli/STAAR", "xihaoli/MultiSTAAR", "zilinli1988/SCANG"))
         shell: Rscript {0}
       - name: Check
         run: rcmdcheck::rcmdcheck(args = "--no-manual", error_on = "error")

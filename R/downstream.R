@@ -9,6 +9,7 @@ downstream <- function(chr,gene_name,genofile,obj_nullmodel,
 	geno_missing_imputation <- match.arg(geno_missing_imputation)
 
 	phenotype.id <- as.character(obj_nullmodel$id_include)
+	n_pheno <- obj_nullmodel$n.pheno
 
 	## get SNV id
 	filter <- seqGetData(genofile, QC_label)
@@ -136,7 +137,14 @@ downstream <- function(chr,gene_name,genofile,obj_nullmodel,
 	}
 
 	pvalues <- 0
-	try(pvalues <- STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff),silent=silent)
+	if(n_pheno == 1)
+	{
+		try(pvalues <- STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff),silent=silent)
+	}
+	else
+	{
+		try(pvalues <- MultiSTAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff),silent=silent)
+	}
 
 	results <- c()
 	if(class(pvalues)=="list")

@@ -15,6 +15,7 @@ Sliding_Window_Multiple <- function(chr,start_loc,end_loc,sliding_window_length=
 	end_loc <- start_loc + (sliding_window_num+1)*(sliding_window_length/2) - 1
 
 	phenotype.id <- as.character(obj_nullmodel$id_include)
+	n_pheno <- obj_nullmodel$n.pheno
 
 	## get SNV id
 	filter <- seqGetData(genofile, QC_label)
@@ -127,7 +128,14 @@ Sliding_Window_Multiple <- function(chr,start_loc,end_loc,sliding_window_length=
 
 
 			pvalues <- 0
-			try(pvalues <- STAAR(G,obj_nullmodel,phred_sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff),silent=silent)
+			if(n_pheno == 1)
+			{
+				try(pvalues <- STAAR(G,obj_nullmodel,phred_sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff),silent=silent)
+			}
+			else
+			{
+				try(pvalues <- MultiSTAAR(G,obj_nullmodel,phred_sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff),silent=silent)
+			}
 
 			if(class(pvalues)=="list")
 			{

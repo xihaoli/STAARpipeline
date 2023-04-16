@@ -1,18 +1,18 @@
 Package: STAARpipeline
 Type: Package
-Title: STAAR Pipeline for Analyzing Whole-Genome/Whole-Exome Sequencing Data
-Version: 0.9.6
-Date: 2023-01-01
+Title: STAARpipeline for Analyzing Whole-Genome/Whole-Exome Sequencing Data
+Version: 0.9.7
+Date: 2023-10-31
 Author: Xihao Li [aut, cre], Zilin Li [aut, cre], Sheila M. Gaynor [aut], Han Chen [aut]
-Maintainer: Xihao Li <xihaoli@g.harvard.edu>, Zilin Li <li@hsph.harvard.edu>
-Description: An R package for performing STAAR pipeline in analyzing whole-genome/whole-exome sequencing data.
+Maintainer: Xihao Li <xihaoli@unc.edu>, Zilin Li <lizl@nenu.edu.cn>
+Description: An R package for performing STAARpipeline in analyzing whole-genome/whole-exome sequencing data.
 License: GPL-3
 Copyright: See COPYRIGHTS for details.
-Imports: Rcpp, STAAR, SCANG, dplyr, SeqArray, SeqVarTools, GenomicFeatures, TxDb.Hsapiens.UCSC.hg38.knownGene, GMMAT, GENESIS, Matrix, methods
+Imports: Rcpp, STAAR, MultiSTAAR, SCANG, dplyr, SeqArray, SeqVarTools, GenomicFeatures, TxDb.Hsapiens.UCSC.hg38.knownGene, GMMAT, GENESIS, Matrix, methods
 Encoding: UTF-8
 LazyData: true
 Depends: R (>= 3.2.0)
 LinkingTo: Rcpp, RcppArmadillo
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.3
 Suggests: knitr, rmarkdown
 VignetteBuilder: knitr

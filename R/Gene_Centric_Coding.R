@@ -6,7 +6,9 @@
 #' For each coding functional category, the STAAR-O p-value is a p-value from an omnibus test
 #' that aggregated SKAT(1,25), SKAT(1,1), Burden(1,25), Burden(1,1), ACAT-V(1,25),
 #' and ACAT-V(1,1) together with p-values of each test weighted by each annotation
-#' using Cauchy method.
+#' using Cauchy method. For multiple phenotype analysis (\code{obj_nullmodel$n.pheno > 1}),
+#' the results correspond to multi-trait association p-values (e.g. MultiSTAAR-O) by leveraging
+#' the correlation structure between multiple phenotypes.
 #' @param chr chromosome.
 #' @param gene_name name of the gene to be analyzed using STAAR procedure.
 #' @param category the coding functional category to be analyzed using STAAR procedure. Choices include
@@ -52,32 +54,56 @@ Gene_Centric_Coding <- function(chr,gene_name,category=c("all_categories","plof"
 
 	if(category=="all_categories")
 	{
-	  results <- coding(chr,gene_name,genofile,obj_nullmodel,genes,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,Use_annotation_weights=Use_annotation_weights,Annotation_name=Annotation_name,silent=silent)
+		results <- coding(chr,gene_name,genofile,obj_nullmodel,genes,
+		                  rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,
+		                  QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,
+		                  Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,
+		                  Use_annotation_weights=Use_annotation_weights,Annotation_name=Annotation_name,silent=silent)
 	}
 
 	if(category=="plof")
 	{
-		results <- plof(chr,gene_name,genofile,obj_nullmodel,genes,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,Use_annotation_weights=Use_annotation_weights,Annotation_name=Annotation_name,silent=silent)
+		results <- plof(chr,gene_name,genofile,obj_nullmodel,genes,
+		                rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,
+		                QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,
+		                Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,
+		                Use_annotation_weights=Use_annotation_weights,Annotation_name=Annotation_name,silent=silent)
 	}
 
 	if(category=="plof_ds")
 	{
-		results <- plof_ds(chr,gene_name,genofile,obj_nullmodel,genes,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,Use_annotation_weights=Use_annotation_weights,Annotation_name=Annotation_name,silent=silent)
+		results <- plof_ds(chr,gene_name,genofile,obj_nullmodel,genes,
+		                   rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,
+		                   QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,
+		                   Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,
+		                   Use_annotation_weights=Use_annotation_weights,Annotation_name=Annotation_name,silent=silent)
 	}
 
 	if(category=="missense")
 	{
-		results <- missense(chr,gene_name,genofile,obj_nullmodel,genes,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,Use_annotation_weights=Use_annotation_weights,Annotation_name=Annotation_name,silent=silent)
+		results <- missense(chr,gene_name,genofile,obj_nullmodel,genes,
+		                    rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,
+		                    QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,
+		                    Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,
+		                    Use_annotation_weights=Use_annotation_weights,Annotation_name=Annotation_name,silent=silent)
 	}
 
 	if(category=="disruptive_missense")
 	{
-		results <- disruptive_missense(chr,gene_name,genofile,obj_nullmodel,genes,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,Use_annotation_weights=Use_annotation_weights,Annotation_name=Annotation_name,silent=silent)
+		results <- disruptive_missense(chr,gene_name,genofile,obj_nullmodel,genes,
+		                               rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,
+		                               QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,
+		                               Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,
+		                               Use_annotation_weights=Use_annotation_weights,Annotation_name=Annotation_name,silent=silent)
 	}
 
 	if(category=="synonymous")
 	{
-		results <- synonymous(chr,gene_name,genofile,obj_nullmodel,genes,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,Use_annotation_weights=Use_annotation_weights,Annotation_name=Annotation_name,silent=silent)
+		results <- synonymous(chr,gene_name,genofile,obj_nullmodel,genes,
+		                      rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,
+		                      QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,
+		                      Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,
+		                      Use_annotation_weights=Use_annotation_weights,Annotation_name=Annotation_name,silent=silent)
 	}
 
 	return(results)

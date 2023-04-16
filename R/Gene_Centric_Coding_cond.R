@@ -7,7 +7,9 @@
 #' For each coding functional category, the conditional STAAR-O p-value is a p-value from an omnibus test
 #' that aggregated conditional SKAT(1,25), SKAT(1,1), Burden(1,25), Burden(1,1), ACAT-V(1,25),
 #' and ACAT-V(1,1) together with conditional p-values of each test weighted by each annotation
-#' using Cauchy method.
+#' using Cauchy method. For multiple phenotype analysis (\code{obj_nullmodel$n.pheno > 1}),
+#' the results correspond to multi-trait conditional p-values (e.g. conditional MultiSTAAR-O) by leveraging
+#' the correlation structure between multiple phenotypes.
 #' @param chr chromosome.
 #' @param gene_name name of the gene to be analyzed using STAAR procedure.
 #' @param category the coding functional category to be analyzed using STAAR procedure. Choices include
@@ -69,27 +71,52 @@ Gene_Centric_Coding_cond <- function(chr,gene_name,category=c("plof","plof_ds","
 
 	if(category=="plof")
 	{
-		results <- plof_cond(chr,gene_name,genofile,obj_nullmodel,genes,known_loci,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,method_cond=method_cond,QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,Use_annotation_weights=Use_annotation_weights,Annotation_name=Annotation_name)
+		results <- plof_cond(chr,gene_name,genofile,obj_nullmodel,genes,
+		                     known_loci,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,
+		                     method_cond=method_cond,
+		                     QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,
+		                     Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,
+		                     Use_annotation_weights=Use_annotation_weights,Annotation_name=Annotation_name)
 	}
 
 	if(category=="plof_ds")
 	{
-		results <- plof_ds_cond(chr,gene_name,genofile,obj_nullmodel,genes,known_loci,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,method_cond=method_cond,QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,Use_annotation_weights=Use_annotation_weights,Annotation_name=Annotation_name)
+		results <- plof_ds_cond(chr,gene_name,genofile,obj_nullmodel,genes,
+		                        known_loci,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,
+		                        method_cond=method_cond,
+		                        QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,
+		                        Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,
+		                        Use_annotation_weights=Use_annotation_weights,Annotation_name=Annotation_name)
 	}
 
 	if(category=="missense")
 	{
-		results <- missense_cond(chr,gene_name,genofile,obj_nullmodel,genes,known_loci,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,method_cond=method_cond,QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,Use_annotation_weights=Use_annotation_weights,Annotation_name=Annotation_name)
+		results <- missense_cond(chr,gene_name,genofile,obj_nullmodel,genes,
+		                         known_loci,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,
+		                         method_cond=method_cond,
+		                         QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,
+		                         Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,
+		                         Use_annotation_weights=Use_annotation_weights,Annotation_name=Annotation_name)
 	}
 
 	if(category=="disruptive_missense")
 	{
-		results <- disruptive_missense_cond(chr,gene_name,genofile,obj_nullmodel,genes,known_loci,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,method_cond=method_cond,QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,Use_annotation_weights=Use_annotation_weights,Annotation_name=Annotation_name)
+		results <- disruptive_missense_cond(chr,gene_name,genofile,obj_nullmodel,genes,
+		                                    known_loci,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,
+		                                    method_cond=method_cond,
+		                                    QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,
+		                                    Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,
+		                                    Use_annotation_weights=Use_annotation_weights,Annotation_name=Annotation_name)
 	}
 
 	if(category=="synonymous")
 	{
-		results <- synonymous_cond(chr,gene_name,genofile,obj_nullmodel,genes,known_loci,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,method_cond=method_cond,QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,Use_annotation_weights=Use_annotation_weights,Annotation_name=Annotation_name)
+		results <- synonymous_cond(chr,gene_name,genofile,obj_nullmodel,genes,
+		                           known_loci,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,
+		                           method_cond=method_cond,
+		                           QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,
+		                           Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,
+		                           Use_annotation_weights=Use_annotation_weights,Annotation_name=Annotation_name)
 	}
 
 	return(results)

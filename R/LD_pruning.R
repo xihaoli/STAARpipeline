@@ -3,6 +3,9 @@
 #' The \code{LD_pruning} function takes in chromosome, the object of opened annotated GDS file,
 #' the object from fitting the null model, and a given list of variants to perform LD pruning
 #' among these variants in sequential conditional analysis by using score test.
+#' For multiple phenotype analysis (\code{obj_nullmodel$n.pheno > 1}),
+#' the results correspond to multi-trait sequential conditional analysis by leveraging
+#' the correlation structure between multiple phenotypes.
 #' @param chr chromosome.
 #' @param genofile an object of opened annotated GDS (aGDS) file.
 #' @param obj_nullmodel an object from fitting the null model, which is either the output from \code{\link{fit_nullmodel}} function,
@@ -59,6 +62,7 @@ LD_pruning <- function(chr,genofile,obj_nullmodel,variants_list,maf_cutoff=0.01,
 	variants_list_chr <- dplyr::left_join(variants_list_chr,Gene_info,by=c("POS"="POS","REF"="REF","ALT"="ALT"))
 
 	phenotype.id <- as.character(obj_nullmodel$id_include)
+	n_pheno <- obj_nullmodel$n.pheno
 
 	if(sum(!is.na(variants_list_chr$variant_id))<1)
 	{
@@ -147,8 +151,15 @@ LD_pruning <- function(chr,genofile,obj_nullmodel,variants_list,maf_cutoff=0.01,
 		Sigma_iX <- as.matrix(obj_nullmodel$Sigma_iX)
 		cov <- obj_nullmodel$cov
 
-		residuals.phenotype <- obj_nullmodel$scaled.residuals
-		pvalue_log <- Individual_Score_Test(Geno, Sigma_i, Sigma_iX, cov, residuals.phenotype)$pvalue_log
+		residuals.phenotype <- as.vector(obj_nullmodel$scaled.residuals)
+		if(n_pheno == 1)
+		{
+			pvalue_log <- Individual_Score_Test(Geno, Sigma_i, Sigma_iX, cov, residuals.phenotype)$pvalue_log
+		}
+		else
+		{
+			pvalue_log <- Individual_Score_Test_multi(Geno, Sigma_i, Sigma_iX, cov, residuals.phenotype, n_pheno)$pvalue_log
+		}
 
 		variants_list_chr <- cbind(variants_list_chr,pvalue_log)
 		variants_list_chr <- variants_list_chr[order(-variants_list_chr$pvalue_log),]

@@ -6,7 +6,9 @@
 #' which provides the preliminary step for subsequent variant-set tests in
 #' whole-genome sequencing data analysis. See \code{glmmkin} for more details.
 #' @param fixed an object of class \code{\link{formula}} (or one that can be coerced to that class):
-#' a symbolic description of the fixed effects model to be fitted.
+#' a symbolic description of the fixed effects model to be fitted. For multiple phenotype analysis,
+#' \code{\link{formula}} recognized by \code{\link{lm}}, such as \code{cbind(y1,y2,y3) ~ x1 + x2},
+#' can be used in \code{fixed} as fixed effects.
 #' @param data a data frame or list (or object coercible by \code{as.data.frame} to a data frame)
 #' containing the variables in the model.
 #' @param kins a known positive semi-definite relationship matrix
@@ -87,10 +89,10 @@ fit_nullmodel <- function(fixed, data = parent.frame(), kins, use_sparse = NULL,
 		                         tauregion = tauregion, verbose = verbose, ...)
     	obj_nullmodel$sparse_kins <- TRUE
 	}else if(!is.null(use_sparse) && use_sparse){
-		print(paste0("kins is a dense matrix, transforming it into a sparse matrix using cutoff ", kins_cutoff,"."))
+		print(paste0("kins is a dense matrix, transforming it into a sparse matrix using cutoff ", kins_cutoff, "."))
 		kins_sp <- makeSparseMatrix(kins, thresh = kins_cutoff)
 		if(class(kins_sp) == "dsyMatrix" || kins_cutoff <= min(kins)){
-			stop(paste0("kins is still a dense matrix using cutoff ", kins_cutoff,". Please try a larger kins_cutoff or use_sparse = FALSE!"))
+			stop(paste0("kins is still a dense matrix using cutoff ", kins_cutoff, ". Please try a larger kins_cutoff or use_sparse = FALSE!"))
 		}
 		rm(kins)
 		obj_nullmodel <- glmmkin(fixed = fixed, data = data, kins = kins_sp, id = id,

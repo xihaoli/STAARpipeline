@@ -9,6 +9,7 @@ coding <- function(chr,gene_name,genofile,obj_nullmodel,genes,
 	geno_missing_imputation <- match.arg(geno_missing_imputation)
 
 	phenotype.id <- as.character(obj_nullmodel$id_include)
+	n_pheno <- obj_nullmodel$n.pheno
 
 	## get SNV id, position, REF, ALT (whole genome)
 	filter <- seqGetData(genofile, QC_label)
@@ -147,7 +148,14 @@ coding <- function(chr,gene_name,genofile,obj_nullmodel,genes,
 	Anno.Int.PHRED.sub.category <- Anno.Int.PHRED.sub[lof.in.plof,]
 
 	pvalues <- 0
-	try(pvalues <- STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub.category,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff),silent=silent)
+	if(n_pheno == 1)
+	{
+		try(pvalues <- STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub.category,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff),silent=silent)
+	}
+	else
+	{
+		try(pvalues <- MultiSTAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub.category,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff),silent=silent)
+	}
 
 	results_plof_ds <- c()
 	if(class(pvalues)=="list")
@@ -215,7 +223,14 @@ coding <- function(chr,gene_name,genofile,obj_nullmodel,genes,
 	Anno.Int.PHRED.sub.category <- Anno.Int.PHRED.sub[lof.in.plof,]
 
 	pvalues <- 0
-	try(pvalues <- STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub.category,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff),silent=silent)
+	if(n_pheno == 1)
+	{
+		try(pvalues <- STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub.category,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff),silent=silent)
+	}
+	else
+	{
+		try(pvalues <- MultiSTAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub.category,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff),silent=silent)
+	}
 
 	results_plof <- c()
 	if(class(pvalues)=="list")
@@ -282,7 +297,14 @@ coding <- function(chr,gene_name,genofile,obj_nullmodel,genes,
 	Anno.Int.PHRED.sub.category <- Anno.Int.PHRED.sub[lof.in.synonymous,]
 
 	pvalues <- 0
-	try(pvalues <- STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub.category,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff),silent=silent)
+	if(n_pheno == 1)
+	{
+		try(pvalues <- STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub.category,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff),silent=silent)
+	}
+	else
+	{
+		try(pvalues <- MultiSTAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub.category,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff),silent=silent)
+	}
 
 	results_synonymous <- c()
 	if(class(pvalues)=="list")
@@ -349,7 +371,14 @@ coding <- function(chr,gene_name,genofile,obj_nullmodel,genes,
 	Anno.Int.PHRED.sub.category <- Anno.Int.PHRED.sub[lof.in.missense,]
 
 	pvalues <- 0
-	try(pvalues <- STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub.category,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff),silent=silent)
+	if(n_pheno == 1)
+	{
+		try(pvalues <- STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub.category,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff),silent=silent)
+	}
+	else
+	{
+		try(pvalues <- MultiSTAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub.category,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff),silent=silent)
+	}
 
 	results <- c()
 	if(class(pvalues)=="list")
@@ -409,7 +438,14 @@ coding <- function(chr,gene_name,genofile,obj_nullmodel,genes,
 	Anno.Int.PHRED.sub.category <- Anno.Int.PHRED.sub[lof.in.dmissense,]
 
 	pvalues <- 0
-	try(pvalues <- STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub.category,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff),silent=silent)
+	if(n_pheno == 1)
+	{
+		try(pvalues <- STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub.category,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff),silent=silent)
+	}
+	else
+	{
+		try(pvalues <- MultiSTAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub.category,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff),silent=silent)
+	}
 
 	if(class(pvalues)=="list")
 	{

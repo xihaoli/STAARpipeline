@@ -54,6 +54,9 @@ The \code{Individual_Analysis_cond} function takes in the data frame of individu
 the object of opened annotated GDS file, the object from fitting the null model,
 and the set of known variants to be adjusted for in conditional analysis to analyze the conditional association between a
 quantitative/dichotomous phenotype and each (significant) individual variant by using score test.
+For multiple phenotype analysis (\code{obj_nullmodel$n.pheno > 1}),
+the results correspond to multi-trait conditional score test p-values by leveraging
+the correlation structure between multiple phenotypes.
 }
 \references{
 Chen, H., et al. (2016). Control for population structure and relatedness for binary traits

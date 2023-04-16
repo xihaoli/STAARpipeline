@@ -48,6 +48,9 @@ The first 4 columns correspond to chromosome (CHR), position (POS), reference al
 The \code{Individual_Analysis} function takes in chromosome, starting location, ending location,
 the object of opened annotated GDS file, and the object from fitting the null model to analyze the association between a
 quantitative/dichotomous phenotype and each individual variant in a genetic region by using score test.
+For multiple phenotype analysis (\code{obj_nullmodel$n.pheno > 1}),
+the results correspond to multi-trait score test p-values by leveraging
+the correlation structure between multiple phenotypes.
 }
 \references{
 Chen, H., et al. (2016). Control for population structure and relatedness for binary traits

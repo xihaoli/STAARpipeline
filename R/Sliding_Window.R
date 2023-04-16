@@ -6,7 +6,9 @@
 #' For each sliding window, the STAAR-O p-value is a p-value from an omnibus test
 #' that aggregated SKAT(1,25), SKAT(1,1), Burden(1,25), Burden(1,1), ACAT-V(1,25),
 #' and ACAT-V(1,1) together with p-values of each test weighted by each annotation
-#' using Cauchy method.
+#' using Cauchy method. For multiple phenotype analysis (\code{obj_nullmodel$n.pheno > 1}),
+#' the results correspond to multi-trait association p-values (e.g. MultiSTAAR-O) by leveraging
+#' the correlation structure between multiple phenotypes.
 #' @param chr chromosome.
 #' @param start_loc starting location (position) of the genetic region to be analyzed using STAAR procedure.
 #' @param end_loc ending location (position) of the genetic region to be analyzed using STAAR procedure.
@@ -52,13 +54,24 @@ Sliding_Window <- function(chr,start_loc,end_loc,sliding_window_length=2000,type
 
 	if(type=="single")
 	{
-		results <- Sliding_Window_Single(chr=chr,start_loc=start_loc,end_loc=end_loc,genofile=genofile,obj_nullmodel=obj_nullmodel,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,Use_annotation_weights=Use_annotation_weights,Annotation_name=Annotation_name,silent=silent)
+		results <- Sliding_Window_Single(chr=chr,start_loc=start_loc,end_loc=end_loc,
+		                                 genofile=genofile,obj_nullmodel=obj_nullmodel,
+		                                 rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,
+		                                 QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,
+		                                 Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,
+		                                 Use_annotation_weights=Use_annotation_weights,Annotation_name=Annotation_name,silent=silent)
 
 	}
 
 	if(type=="multiple")
 	{
-		results <- Sliding_Window_Multiple(chr=chr,start_loc=start_loc,end_loc=end_loc,sliding_window_length=sliding_window_length,genofile=genofile,obj_nullmodel=obj_nullmodel,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,Use_annotation_weights=Use_annotation_weights,Annotation_name=Annotation_name,silent=silent)
+		results <- Sliding_Window_Multiple(chr=chr,start_loc=start_loc,end_loc=end_loc,
+		                                   sliding_window_length=sliding_window_length,
+		                                   genofile=genofile,obj_nullmodel=obj_nullmodel,
+		                                   rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,
+		                                   QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,
+		                                   Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,
+		                                   Use_annotation_weights=Use_annotation_weights,Annotation_name=Annotation_name,silent=silent)
 	}
 
 	return(results)

@@ -7,7 +7,9 @@
 #' For each sliding window, the conditional STAAR-O p-value is a p-value from an omnibus test
 #' that aggregated conditional SKAT(1,25), SKAT(1,1), Burden(1,25), Burden(1,1), ACAT-V(1,25),
 #' and ACAT-V(1,1) together with conditional p-values of each test weighted by each annotation
-#' using Cauchy method.
+#' using Cauchy method. For multiple phenotype analysis (\code{obj_nullmodel$n.pheno > 1}),
+#' the results correspond to multi-trait conditional p-values (e.g. conditional MultiSTAAR-O) by leveraging
+#' the correlation structure between multiple phenotypes.
 #' @param chr chromosome.
 #' @param start_loc starting location (position) of the sliding window to be analyzed using STAAR procedure.
 #' @param end_loc ending location (position) of the sliding window to be analyzed using STAAR procedure.
@@ -60,6 +62,7 @@ Sliding_Window_cond <- function(chr,start_loc,end_loc,genofile,obj_nullmodel,
 	geno_missing_imputation <- match.arg(geno_missing_imputation)
 
 	phenotype.id <- as.character(obj_nullmodel$id_include)
+	n_pheno <- obj_nullmodel$n.pheno
 
 	### known SNV Info
 	if(is.null(known_loci))
@@ -173,15 +176,22 @@ Sliding_Window_cond <- function(chr,start_loc,end_loc,genofile,obj_nullmodel,
 		if(dim(known_loci_chr_region)[1]==0)
 		{
 			pvalues <- 0
+		if(n_pheno == 1)
+		{
 			try(pvalues <- STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff))
+		}
+		else
+		{
+			try(pvalues <- MultiSTAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff))
+		}
 
 			if(class(pvalues)=="list")
 			{
 				results_temp <- c(chr,start_loc,end_loc)
 
 				results_temp <- c(results_temp,pvalues$num_variant,pvalues$results_STAAR_S_1_25,pvalues$results_STAAR_S_1_1,
-                            pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_A_1_25,
-                            pvalues$results_STAAR_A_1_1,pvalues$results_ACAT_O,pvalues$results_STAAR_O)
+				                  pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_A_1_25,
+				                  pvalues$results_STAAR_A_1_1,pvalues$results_ACAT_O,pvalues$results_STAAR_O)
 
 				results <- rbind(results,results_temp)
 			}
@@ -254,7 +264,14 @@ Sliding_Window_cond <- function(chr,start_loc,end_loc,genofile,obj_nullmodel,
 			}
 
 			pvalues <- 0
-			try(pvalues <- STAAR_cond(Geno,Geno_adjusted,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,method_cond=method_cond))
+			if(n_pheno == 1)
+			{
+				try(pvalues <- STAAR_cond(Geno,Geno_adjusted,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,method_cond=method_cond))
+			}
+			else
+			{
+				try(pvalues <- MultiSTAAR_cond(Geno,Geno_adjusted,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,method_cond=method_cond))
+			}
 
 			if(class(pvalues)=="list")
 			{

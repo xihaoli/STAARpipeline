@@ -7,7 +7,9 @@
 #' For each ncRNA category, the conditional STAAR-O p-value is a p-value from an omnibus test
 #' that aggregated conditional SKAT(1,25), SKAT(1,1), Burden(1,25), Burden(1,1), ACAT-V(1,25),
 #' and ACAT-V(1,1) together with conditional p-values of each test weighted by each annotation
-#' using Cauchy method.
+#' using Cauchy method. For multiple phenotype analysis (\code{obj_nullmodel$n.pheno > 1}),
+#' the results correspond to multi-trait conditional p-values (e.g. conditional MultiSTAAR-O) by leveraging
+#' the correlation structure between multiple phenotypes.
 #' @param chr chromosome.
 #' @param gene_name name of the ncRNA gene to be analyzed using STAAR procedure.
 #' @param genofile an object of opened annotated GDS (aGDS) file.
@@ -59,6 +61,7 @@ ncRNA_cond <- function(chr,gene_name,genofile,obj_nullmodel,known_loci=NULL,
 	geno_missing_imputation <- match.arg(geno_missing_imputation)
 
 	phenotype.id <- as.character(obj_nullmodel$id_include)
+	n_pheno <- obj_nullmodel$n.pheno
 
 	## get SNV id
 	filter <- seqGetData(genofile, QC_label)
@@ -232,7 +235,14 @@ ncRNA_cond <- function(chr,gene_name,genofile,obj_nullmodel,known_loci=NULL,
 	if(dim(known_loci_chr_region)[1]==0)
 	{
 		pvalues <- 0
-		try(pvalues <- STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff))
+		if(n_pheno == 1)
+		{
+			try(pvalues <- STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff))
+		}
+		else
+		{
+			try(pvalues <- MultiSTAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff))
+		}
 
 		results_temp <- rep(NA,4)
 		results_temp[3] <- "ncRNA_cond"
@@ -316,8 +326,14 @@ ncRNA_cond <- function(chr,gene_name,genofile,obj_nullmodel,known_loci=NULL,
 		}
 
 		pvalues <- 0
-		try(pvalues <- STAAR_cond(Geno,Geno_adjusted,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,method_cond=method_cond))
-
+		if(n_pheno == 1)
+		{
+			try(pvalues <- STAAR_cond(Geno,Geno_adjusted,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,method_cond=method_cond))
+		}
+		else
+		{
+			try(pvalues <- MultiSTAAR_cond(Geno,Geno_adjusted,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,method_cond=method_cond))
+		}
 
 		if(class(pvalues)=="list")
 		{

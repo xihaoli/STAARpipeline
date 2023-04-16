@@ -43,6 +43,8 @@ genesis2staar_nullmodel <- function(obj_nullmodel_genesis){
 
   obj_nullmodel_staar$relatedness <- TRUE
 
+  obj_nullmodel_staar$n.pheno <- 1
+
   if (is.null(obj_nullmodel_staar$id_include)) {
     obj_nullmodel_staar$id_include <- rownames(obj_nullmodel_genesis$model.matrix)
   }

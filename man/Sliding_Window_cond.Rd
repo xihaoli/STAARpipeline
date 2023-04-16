@@ -76,7 +76,9 @@ quantitative/dichotomous phenotype and variants in a genetic region by using STA
 For each sliding window, the conditional STAAR-O p-value is a p-value from an omnibus test
 that aggregated conditional SKAT(1,25), SKAT(1,1), Burden(1,25), Burden(1,1), ACAT-V(1,25),
 and ACAT-V(1,1) together with conditional p-values of each test weighted by each annotation
-using Cauchy method.
+using Cauchy method. For multiple phenotype analysis (\code{obj_nullmodel$n.pheno > 1}),
+the results correspond to multi-trait conditional p-values (e.g. conditional MultiSTAAR-O) by leveraging
+the correlation structure between multiple phenotypes.
 }
 \references{
 Li, Z., Li, X., et al. (2022). A framework for detecting

@@ -28,7 +28,9 @@ fit_nullmodel(
 }
 \arguments{
 \item{fixed}{an object of class \code{\link{formula}} (or one that can be coerced to that class):
-a symbolic description of the fixed effects model to be fitted.}
+a symbolic description of the fixed effects model to be fitted. For multiple phenotype analysis,
+\code{\link{formula}} recognized by \code{\link{lm}}, such as \code{cbind(y1,y2,y3) ~ x1 + x2},
+can be used in \code{fixed} as fixed effects.}
 
 \item{data}{a data frame or list (or object coercible by \code{as.data.frame} to a data frame)
 containing the variables in the model.}

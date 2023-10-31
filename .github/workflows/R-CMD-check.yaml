@@ -12,13 +12,17 @@ jobs:
       - uses: r-lib/actions/setup-r@v2
         with:
           r-version: 4.1.2
+      - name: Install RSQLite
+        run: |
+          install.packages("RSQLite")
+        shell: Rscript {0}
       - name: Install BiocManager
         run: |
           if (!requireNamespace("BiocManager", quietly = TRUE)) install.packages("BiocManager")
         shell: Rscript {0}
-      - name: Install RSQLite
+      - name: Install GenomicFeatures, TxDb.Hsapiens.UCSC.hg38.knownGene, GENESIS
         run: |
-          install.packages("RSQLite")
+          BiocManager::install(c("GenomicFeatures", "TxDb.Hsapiens.UCSC.hg38.knownGene", "GENESIS"))
         shell: Rscript {0}
       - name: Install dependencies
         run: |

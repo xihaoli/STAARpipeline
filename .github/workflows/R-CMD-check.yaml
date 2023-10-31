@@ -16,9 +16,9 @@ jobs:
         run: |
           if (!requireNamespace("BiocManager", quietly = TRUE)) install.packages("BiocManager")
         shell: Rscript {0}
-      - name: Install GenomicFeatures, TxDb.Hsapiens.UCSC.hg38.knownGene, GENESIS
+      - name: Install SeqArray, SeqVarTools, GenomicFeatures, TxDb.Hsapiens.UCSC.hg38.knownGene, GENESIS
         run: |
-          BiocManager::install(c("GenomicFeatures", "TxDb.Hsapiens.UCSC.hg38.knownGene", "GENESIS"))
+          BiocManager::install(c("SeqArray", "SeqVarTools", "GenomicFeatures", "TxDb.Hsapiens.UCSC.hg38.knownGene", "GENESIS"))
         shell: Rscript {0}
       - name: Install dependencies
         run: |

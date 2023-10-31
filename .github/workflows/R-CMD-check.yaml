@@ -16,14 +16,11 @@ jobs:
         run: |
           if (!requireNamespace("BiocManager", quietly = TRUE)) install.packages("BiocManager")
         shell: Rscript {0}
-      - name: Install AnnotationDbi, TxDb.Hsapiens.UCSC.hg38.knownGene, GENESIS
-        run: |
-          BiocManager::install(c("AnnotationDbi", "TxDb.Hsapiens.UCSC.hg38.knownGene", "GENESIS"))
-        shell: Rscript {0}
       - name: Install dependencies
         run: |
           install.packages(c("remotes", "rcmdcheck"))
           remotes::install_deps(dependencies = TRUE)
+          BiocManager::install("TxDb.Hsapiens.UCSC.hg38.knownGene")
           remotes::install_github(c("xihaoli/STAAR", "xihaoli/MultiSTAAR", "zilinli1988/SCANG"))
         shell: Rscript {0}
       - name: Check

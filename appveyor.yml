@@ -28,6 +28,7 @@ build_script:
   - travis-tool.sh install_bioc GenomeInfoDbData
   - travis-tool.sh install_bioc TxDb.Hsapiens.UCSC.hg38.knownGene
   - travis-tool.sh install_github xihaoli/STAAR
+  - travis-tool.sh install_github xihaoli/MultiSTAAR
   - travis-tool.sh install_github zilinli1988/SCANG
 
 test_script:

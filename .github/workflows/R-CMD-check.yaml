@@ -18,7 +18,7 @@ jobs:
         shell: Rscript {0}
       - name: Install GENESIS, GenomicFeatures
         run: |
-          BiocManager::install(c("GENESIS", "GenomicFeatures")
+          BiocManager::install(c("GENESIS", "GenomicFeatures"))
         shell: Rscript {0}
       - name: Install TxDb.Hsapiens.UCSC.hg38.knownGene
         run: |

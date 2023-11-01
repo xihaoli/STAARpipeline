@@ -135,10 +135,9 @@ plof_ds_cond <- function(chr,gene_name,genofile,obj_nullmodel,genes,known_loci,
 		}
 	}
 
-
 	results <- c()
 
-	### known variants needed to be adjusted
+	### no known variants needed to be adjusted
 	known_loci_chr_region <- known_loci_chr[(known_loci_chr[,2]>=sub_start_loc-1E6)&(known_loci_chr[,2]<=sub_end_loc+1E6),]
 	if(dim(known_loci_chr_region)[1]==0)
 	{
@@ -152,7 +151,7 @@ plof_ds_cond <- function(chr,gene_name,genofile,obj_nullmodel,genes,known_loci,
 			try(pvalues <- MultiSTAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff))
 		}
 
-		if(class(pvalues)=="list")
+		if(inherits(pvalues, "list"))
 		{
 			results_temp <- as.vector(genes[kk,])
 			results_temp[3] <- "plof_ds_cond"
@@ -161,7 +160,7 @@ plof_ds_cond <- function(chr,gene_name,genofile,obj_nullmodel,genes,known_loci,
 			results_temp[4] <- pvalues$num_variant
 
 
-			results_temp <- c(results_temp,pvalues$results_STAAR_S_1_25,pvalues$results_STAAR_S_1_1,
+			results_temp <- c(results_temp,pvalues$cMAC,pvalues$results_STAAR_S_1_25,pvalues$results_STAAR_S_1_1,
 			pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_A_1_25,
 			pvalues$results_STAAR_A_1_1,pvalues$results_ACAT_O,pvalues$results_STAAR_O)
 
@@ -245,7 +244,7 @@ plof_ds_cond <- function(chr,gene_name,genofile,obj_nullmodel,genes,known_loci,
 			try(pvalues <- MultiSTAAR_cond(Geno,Geno_adjusted,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,method_cond=method_cond))
 		}
 
-		if(class(pvalues)=="list")
+		if(inherits(pvalues, "list"))
 		{
 			results_temp <- as.vector(genes[kk,])
 			results_temp[3] <- "plof_ds_cond"
@@ -254,7 +253,7 @@ plof_ds_cond <- function(chr,gene_name,genofile,obj_nullmodel,genes,known_loci,
 			results_temp[4] <- pvalues$num_variant
 
 
-			results_temp <- c(results_temp,pvalues$results_STAAR_S_1_25,pvalues$results_STAAR_S_1_1,
+			results_temp <- c(results_temp,pvalues$cMAC,pvalues$results_STAAR_S_1_25,pvalues$results_STAAR_S_1_1,
 			pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_A_1_25,
 			pvalues$results_STAAR_A_1_1,pvalues$results_ACAT_O,pvalues$results_STAAR_O)
 
@@ -266,7 +265,7 @@ plof_ds_cond <- function(chr,gene_name,genofile,obj_nullmodel,genes,known_loci,
 	if(!is.null(results))
 	{
 		colnames(results) <- colnames(results, do.NULL = FALSE, prefix = "col")
-		colnames(results)[1:4] <- c("Gene name","Chr","Category","#SNV")
+		colnames(results)[1:5] <- c("Gene name","Chr","Category","#SNV","cMAC")
 		colnames(results)[(dim(results)[2]-1):dim(results)[2]] <- c("ACAT-O","STAAR-O")
 	}
 

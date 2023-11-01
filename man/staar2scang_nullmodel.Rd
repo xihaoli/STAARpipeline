@@ -11,7 +11,7 @@ staar2scang_nullmodel(obj_nullmodel)
 or the output from \code{fitNullModel} function in the \code{GENESIS} package and transformed using the \code{genesis2staar_nullmodel} function.}
 }
 \value{
-an object from fitting the null model for related samples to be used for SCANG-STAAR procedure,
+An object from fitting the null model for related samples to be used for SCANG-STAAR procedure,
 which is the output from \code{fit_null_glmmkin_SCANG} function for related samples in the \code{SCANG} package.
 }
 \description{

@@ -34,7 +34,7 @@
 #' @param Annotation_name_catalog a data frame containing the name and the corresponding channel name in the aGDS file.
 #' @param Use_annotation_weights use annotations as weights or not (default = TRUE).
 #' @param Annotation_name a vector of annotation names used in STAAR (default = NULL).
-#' @return a data frame containing the conditional STAAR p-values (including STAAR-O) corresponding to the exonic and splicing category of the given ncRNA gene.
+#' @return A data frame containing the conditional STAAR p-values (including STAAR-O) corresponding to the exonic and splicing category of the given ncRNA gene.
 #' @references Li, Z., Li, X., et al. (2022). A framework for detecting
 #' noncoding rare-variant associations of large-scale whole-genome sequencing
 #' studies. \emph{Nature Methods}, \emph{19}(12), 1599-1611.
@@ -251,7 +251,7 @@ ncRNA_cond <- function(chr,gene_name,genofile,obj_nullmodel,known_loci=NULL,
 		results_temp[4] <- pvalues$num_variant
 
 
-		results_temp <- c(results_temp,pvalues$results_STAAR_S_1_25,pvalues$results_STAAR_S_1_1,
+		results_temp <- c(results_temp,pvalues$cMAC,pvalues$results_STAAR_S_1_25,pvalues$results_STAAR_S_1_1,
 		pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_A_1_25,
 		pvalues$results_STAAR_A_1_1,pvalues$results_ACAT_O,pvalues$results_STAAR_O)
 
@@ -335,7 +335,7 @@ ncRNA_cond <- function(chr,gene_name,genofile,obj_nullmodel,known_loci=NULL,
 			try(pvalues <- MultiSTAAR_cond(Geno,Geno_adjusted,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,method_cond=method_cond))
 		}
 
-		if(class(pvalues)=="list")
+		if(inherits(pvalues, "list"))
 		{
 			results_temp <- rep(NA,4)
 			results_temp[3] <- "ncRNA_cond"
@@ -344,7 +344,7 @@ ncRNA_cond <- function(chr,gene_name,genofile,obj_nullmodel,known_loci=NULL,
 			results_temp[4] <- pvalues$num_variant
 
 
-			results_temp <- c(results_temp,pvalues$results_STAAR_S_1_25,pvalues$results_STAAR_S_1_1,
+			results_temp <- c(results_temp,pvalues$cMAC,pvalues$results_STAAR_S_1_25,pvalues$results_STAAR_S_1_1,
 			pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_A_1_25,
 			pvalues$results_STAAR_A_1_1,pvalues$results_ACAT_O,pvalues$results_STAAR_O)
 
@@ -356,7 +356,7 @@ ncRNA_cond <- function(chr,gene_name,genofile,obj_nullmodel,known_loci=NULL,
 	if(!is.null(results))
 	{
 		colnames(results) <- colnames(results, do.NULL = FALSE, prefix = "col")
-		colnames(results)[1:4] <- c("Gene name","Chr","Category","#SNV")
+		colnames(results)[1:5] <- c("Gene name","Chr","Category","#SNV","cMAC")
 		colnames(results)[(dim(results)[2]-1):dim(results)[2]] <- c("ACAT-O","STAAR-O")
 	}
 

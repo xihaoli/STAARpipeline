@@ -196,7 +196,7 @@ enhancer_DHS_cond <- function(chr,gene_name,genofile,obj_nullmodel,known_loci,
 		results_temp[4] <- pvalues$num_variant
 
 
-		results_temp <- c(results_temp,pvalues$results_STAAR_S_1_25,pvalues$results_STAAR_S_1_1,
+		results_temp <- c(results_temp,pvalues$cMAC,pvalues$results_STAAR_S_1_25,pvalues$results_STAAR_S_1_1,
 		pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_A_1_25,
 		pvalues$results_STAAR_A_1_1,pvalues$results_ACAT_O,pvalues$results_STAAR_O)
 
@@ -240,7 +240,6 @@ enhancer_DHS_cond <- function(chr,gene_name,genofile,obj_nullmodel,known_loci,
 			}
 		}
 
-
 		if(class(Geno_adjusted)[1]=="numeric")
 		{
 			Geno_adjusted <- matrix(Geno_adjusted,ncol=1)
@@ -254,7 +253,6 @@ enhancer_DHS_cond <- function(chr,gene_name,genofile,obj_nullmodel,known_loci,
 		{
 			Geno_adjusted <- matrix(Geno_adjusted,ncol=1)
 		}
-
 
 		seqResetFilter(genofile)
 
@@ -281,7 +279,7 @@ enhancer_DHS_cond <- function(chr,gene_name,genofile,obj_nullmodel,known_loci,
 			try(pvalues <- MultiSTAAR_cond(Geno,Geno_adjusted,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,method_cond=method_cond))
 		}
 
-		if(class(pvalues)=="list")
+		if(inherits(pvalues, "list"))
 		{
 			results_temp <- rep(NA,4)
 			results_temp[3] <- "enhancer_DHS_cond"
@@ -290,7 +288,7 @@ enhancer_DHS_cond <- function(chr,gene_name,genofile,obj_nullmodel,known_loci,
 			results_temp[4] <- pvalues$num_variant
 
 
-			results_temp <- c(results_temp,pvalues$results_STAAR_S_1_25,pvalues$results_STAAR_S_1_1,
+			results_temp <- c(results_temp,pvalues$cMAC,pvalues$results_STAAR_S_1_25,pvalues$results_STAAR_S_1_1,
 			pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_A_1_25,
 			pvalues$results_STAAR_A_1_1,pvalues$results_ACAT_O,pvalues$results_STAAR_O)
 
@@ -302,7 +300,7 @@ enhancer_DHS_cond <- function(chr,gene_name,genofile,obj_nullmodel,known_loci,
 	if(!is.null(results))
 	{
 		colnames(results) <- colnames(results, do.NULL = FALSE, prefix = "col")
-		colnames(results)[1:4] <- c("Gene name","Chr","Category","#SNV")
+		colnames(results)[1:5] <- c("Gene name","Chr","Category","#SNV","cMAC")
 		colnames(results)[(dim(results)[2]-1):dim(results)[2]] <- c("ACAT-O","STAAR-O")
 	}
 

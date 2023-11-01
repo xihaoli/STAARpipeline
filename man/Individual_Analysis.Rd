@@ -14,7 +14,11 @@ Individual_Analysis(
   subset_variants_num = 5000,
   QC_label = "annotation/filter",
   variant_type = c("variant", "SNV", "Indel"),
-  geno_missing_imputation = c("mean", "minor")
+  geno_missing_imputation = c("mean", "minor"),
+  tol = .Machine$double.eps^0.25,
+  max_iter = 1000,
+  SPA_p_filter = FALSE,
+  p_filter_cutoff = 0.05
 )
 }
 \arguments{
@@ -39,15 +43,24 @@ defining individual variants (default = 20).}
 \item{variant_type}{type of variant included in the analysis. Choices include "variant", "SNV", or "Indel" (default = "variant").}
 
 \item{geno_missing_imputation}{method of handling missing genotypes. Either "mean" or "minor" (default = "mean").}
+
+\item{tol}{a positive number specifying tolerance, the difference threshold for parameter
+estimates in saddlepoint apporximation algorithm below which iterations should be stopped (default = ".Machine$double.eps^0.25").}
+
+\item{max_iter}{a positive integers pecifying the maximum number of iterations for applying the saddlepoint approximation algorithm (default = "1000").}
+
+\item{SPA_p_filter}{logical: are only the variants with a score-test-based p-value smaller than a pre-specified threshold use the SPA method to recalculate the p-value, only used for imbalanced case-control setting (default = FALSE).}
+
+\item{p_filter_cutoff}{threshold for the p-value recalculation using the SPA method, only used for imbalanced case-control setting (default = 0.05)}
 }
 \value{
-a data frame containing the score test p-value and the estimated effect size of the minor allele for each individual variant in the given genetic region.
+A data frame containing the score test p-value and the estimated effect size of the minor allele for each individual variant in the given genetic region.
 The first 4 columns correspond to chromosome (CHR), position (POS), reference allele (REF), and alternative allele (ALT).
 }
 \description{
 The \code{Individual_Analysis} function takes in chromosome, starting location, ending location,
 the object of opened annotated GDS file, and the object from fitting the null model to analyze the association between a
-quantitative/dichotomous phenotype and each individual variant in a genetic region by using score test.
+quantitative/dichotomous phenotype (including imbalanced case-control design) and each individual variant in a genetic region by using score test.
 For multiple phenotype analysis (\code{obj_nullmodel$n.pheno > 1}),
 the results correspond to multi-trait score test p-values by leveraging
 the correlation structure between multiple phenotypes.

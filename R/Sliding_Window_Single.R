@@ -1,7 +1,8 @@
 Sliding_Window_Single <- function(chr,start_loc,end_loc,genofile,obj_nullmodel,rare_maf_cutoff=0.01,rv_num_cutoff=2,
                                   QC_label="annotation/filter",variant_type=c("SNV","Indel","variant"),geno_missing_imputation=c("mean","minor"),
                                   Annotation_dir="annotation/info/FunctionalAnnotation",Annotation_name_catalog,
-                                  Use_annotation_weights=c(TRUE,FALSE),Annotation_name=NULL,silent=FALSE){
+                                  Use_annotation_weights=c(TRUE,FALSE),Annotation_name=NULL,
+                                  SPA_p_filter=FALSE,p_filter_cutoff=0.05,silent=FALSE){
 
 	## evaluate choices
 	variant_type <- match.arg(variant_type)
@@ -9,6 +10,15 @@ Sliding_Window_Single <- function(chr,start_loc,end_loc,genofile,obj_nullmodel,r
 
 	phenotype.id <- as.character(obj_nullmodel$id_include)
 	n_pheno <- obj_nullmodel$n.pheno
+
+	## SPA status
+	if(!is.null(obj_nullmodel$use_SPA))
+	{
+		use_SPA <- obj_nullmodel$use_SPA
+	}else
+	{
+		use_SPA <- FALSE
+	}
 
 	## get SNV id
 	filter <- seqGetData(genofile, QC_label)
@@ -104,20 +114,33 @@ Sliding_Window_Single <- function(chr,start_loc,end_loc,genofile,obj_nullmodel,r
 		pvalues <- 0
 		if(n_pheno == 1)
 		{
-			try(pvalues <- STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff),silent=silent)
-		}
-		else
+			if(!use_SPA)
+			{
+				try(pvalues <- STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff),silent=silent)
+			}else
+			{
+				try(pvalues <- STAAR_Binary_SPA(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,SPA_p_filter=SPA_p_filter,p_filter_cutoff=p_filter_cutoff),silent=silent)
+			}
+		}else
 		{
 			try(pvalues <- MultiSTAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff),silent=silent)
 		}
 
-		if(class(pvalues)=="list")
+		if(inherits(pvalues, "list"))
 		{
 			results_temp <- c(chr,start_loc,end_loc)
 
-			results_temp <- c(results_temp,pvalues$num_variant,pvalues$results_STAAR_S_1_25,pvalues$results_STAAR_S_1_1,
-			                  pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_A_1_25,
-			                  pvalues$results_STAAR_A_1_1,pvalues$results_ACAT_O,pvalues$results_STAAR_O)
+			if(!use_SPA)
+			{
+				results_temp <- c(results_temp,pvalues$num_variant,pvalues$cMAC,pvalues$results_STAAR_S_1_25,pvalues$results_STAAR_S_1_1,
+				                  pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_A_1_25,
+				                  pvalues$results_STAAR_A_1_1,pvalues$results_ACAT_O,pvalues$results_STAAR_O)
+			}else
+			{
+				results_temp <- c(results_temp,pvalues$num_variant,pvalues$cMAC,
+				                  pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_B)
+			}
+
 			results <- c()
 			results <- rbind(results,results_temp)
 		}
@@ -129,9 +152,17 @@ Sliding_Window_Single <- function(chr,start_loc,end_loc,genofile,obj_nullmodel,r
 
 	if(!is.null(results))
 	{
-		colnames(results) <- colnames(results, do.NULL = FALSE, prefix = "col")
-		colnames(results)[1:4] <- c("Chr","Start Loc","End Loc","#SNV")
-		colnames(results)[(dim(results)[2]-1):dim(results)[2]] <- c("ACAT-O","STAAR-O")
+		if(!use_SPA)
+		{
+			colnames(results) <- colnames(results, do.NULL = FALSE, prefix = "col")
+			colnames(results)[1:5] <- c("Chr","Start Loc","End Loc","#SNV","cMAC")
+			colnames(results)[(dim(results)[2]-1):dim(results)[2]] <- c("ACAT-O","STAAR-O")
+		}else
+		{
+			colnames(results) <- colnames(results, do.NULL = FALSE, prefix = "col")
+			colnames(results)[1:5] <- c("Chr","Start Loc","End Loc","#SNV","cMAC")
+			colnames(results)[dim(results)[2]] <- c("STAAR-B")
+		}
 	}
 
 	seqResetFilter(genofile)

@@ -51,7 +51,7 @@ and taking the residuals (default = \code{optimal}).}
 \item{geno_position_ascending}{logical: are the variant positions in ascending order in the GDS/aGDS file (default = TRUE).}
 }
 \value{
-a data frame containing the list of LD-pruned variants in the given chromosome.
+A data frame containing the list of LD-pruned variants in the given chromosome.
 }
 \description{
 The \code{LD_pruning} function takes in chromosome, the object of opened annotated GDS file,

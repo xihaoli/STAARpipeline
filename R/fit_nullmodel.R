@@ -19,6 +19,7 @@
 #' will switch to the generalized linear model with no random effects.
 #' @param use_sparse a logical switch of whether the provided dense \code{kins} matrix should be
 #' transformed to a sparse matrix (default = NULL).
+#' @param use_SPA a logical switch determines if the null model fitting occurs in an imbalanced case-control setting (default = FALSE).
 #' @param kins_cutoff the cutoff value for clustering samples to make the output matrix sparse block-diagonal
 #' (default = 0.022).
 #' @param id a column in the data frame \code{data}, indicating the id of samples.
@@ -49,7 +50,8 @@
 #' @param verbose a logical switch for printing detailed information (parameter estimates in each iteration)
 #' for testing and debugging purpose (default = FALSE).
 #' @param ... additional arguments that could be passed to \code{\link{glm}}.
-#' @return The function returns an object of the model fit from \code{\link{glmmkin}} (\code{obj_nullmodel})
+#' @return The function returns an object of the model fit from \code{\link{glmmkin}} (\code{obj_nullmodel}),
+#' whether the samples are in imbalanced case-control design (obj_nullmodel$use_SPA)
 #' and whether the \code{kins} matrix is sparse when fitting the null model. See \code{\link{glmmkin}} for more details.
 #' @references Chen, H., et al. (2016). Control for population structure and relatedness for binary traits
 #' in genetic association studies via logistic mixed models. \emph{The American Journal of Human Genetics}, \emph{98}(4), 653-666.
@@ -61,7 +63,7 @@
 #' (\href{https://cloud.r-project.org/web/packages/GMMAT/vignettes/GMMAT.pdf}{web})
 #' @export
 
-fit_nullmodel <- function(fixed, data = parent.frame(), kins, use_sparse = NULL,
+fit_nullmodel <- function(fixed, data = parent.frame(), kins, use_sparse = NULL, use_SPA=FALSE,
                           kins_cutoff = 0.022, id, random.slope = NULL, groups = NULL,
                           family = binomial(link = "logit"), method = "REML",
                           method.optim = "AI", maxiter = 500, tol = 1e-5,
@@ -77,9 +79,20 @@ fit_nullmodel <- function(fixed, data = parent.frame(), kins, use_sparse = NULL,
 		                         tol = tol, taumin = taumin, taumax = taumax,
 		                         tauregion = tauregion, verbose = verbose, ...)
 		obj_nullmodel$sparse_kins <- TRUE
-	}else if(class(kins)[1] != "matrix" && !(!is.null(attr(class(kins), "package")) && attr(class(kins), "package") == "Matrix")){
+
+		if(use_SPA)
+		{
+			# generate XW
+			X <- model.matrix(obj_nullmodel)
+			working <- obj_nullmodel$weights
+
+			obj_nullmodel$XW <- t(X)%*%diag(working)
+			obj_nullmodel$XXWX_inv <- X%*%solve(t(X)%*%diag(working)%*%X)
+		}
+
+	}else if(!inherits(kins, "matrix") && !inherits(kins, "Matrix")){
 		stop("kins is not a matrix!")
-	}else if(!is.null(attr(class(kins), "package")) && attr(class(kins), "package") == "Matrix"){
+	}else if(inherits(kins, "sparseMatrix")){
 		print("kins is a sparse matrix.")
 		obj_nullmodel <- glmmkin(fixed = fixed, data = data, kins = kins, id = id,
 		                         random.slope = random.slope, groups = groups,
@@ -88,10 +101,20 @@ fit_nullmodel <- function(fixed, data = parent.frame(), kins, use_sparse = NULL,
 		                         tol = tol, taumin = taumin, taumax = taumax,
 		                         tauregion = tauregion, verbose = verbose, ...)
     	obj_nullmodel$sparse_kins <- TRUE
+
+		if(use_SPA)
+		{
+			X <- obj_nullmodel$X
+
+			## generate XSigma_iX
+			obj_nullmodel$XSigma_i <- crossprod(X,obj_nullmodel$Sigma_i)
+			obj_nullmodel$XXSigma_iX_inv <- X%*%obj_nullmodel$cov
+		}
+
 	}else if(!is.null(use_sparse) && use_sparse){
 		print(paste0("kins is a dense matrix, transforming it into a sparse matrix using cutoff ", kins_cutoff, "."))
 		kins_sp <- makeSparseMatrix(kins, thresh = kins_cutoff)
-		if(class(kins_sp) == "dsyMatrix" || kins_cutoff <= min(kins)){
+		if(inherits(kins_sp, "dsyMatrix") || kins_cutoff <= min(kins)){
 			stop(paste0("kins is still a dense matrix using cutoff ", kins_cutoff, ". Please try a larger kins_cutoff or use_sparse = FALSE!"))
 		}
 		rm(kins)
@@ -102,6 +125,16 @@ fit_nullmodel <- function(fixed, data = parent.frame(), kins, use_sparse = NULL,
 		                         tol = tol, taumin = taumin, taumax = taumax,
 		                         tauregion = tauregion, verbose = verbose, ...)
 		obj_nullmodel$sparse_kins <- TRUE
+
+		if(use_SPA)
+		{
+			X <- obj_nullmodel$X
+
+			## generate Sigma_i
+			obj_nullmodel$XSigma_i <- crossprod(X,obj_nullmodel$Sigma_i)
+			obj_nullmodel$XXSigma_iX_inv <- X%*%obj_nullmodel$cov
+		}
+
 	}else{
 		print("kins is a dense matrix.")
 		obj_nullmodel <- glmmkin(fixed = fixed, data = data, kins = kins, id = id,
@@ -111,8 +144,19 @@ fit_nullmodel <- function(fixed, data = parent.frame(), kins, use_sparse = NULL,
 		                         tol = tol, taumin = taumin, taumax = taumax,
 		                         tauregion = tauregion, verbose = verbose, ...)
 		obj_nullmodel$sparse_kins <- FALSE
+
+		if(use_SPA)
+		{
+			X <- model.matrix(obj_nullmodel)
+			working <- obj_nullmodel$weights
+
+			obj_nullmodel$XW <- t(X)%*%diag(working)
+			obj_nullmodel$XXWX_inv <- X%*%solve(t(X)%*%diag(working)%*%X)
+		}
 	}
 	obj_nullmodel$relatedness <- TRUE
+	obj_nullmodel$use_SPA <- use_SPA
+
 	return(obj_nullmodel)
 }
 

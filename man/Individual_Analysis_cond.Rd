@@ -47,7 +47,7 @@ and taking the residuals (default = \code{optimal}).}
 \item{geno_position_ascending}{logical: are the variant positions in ascending order in the GDS/aGDS file (default = TRUE).}
 }
 \value{
-a data frame containing the conditional score test p-value and the estimated effect size of the minor allele for each (significant) individual variant in \code{individual_results}.
+A data frame containing the conditional score test p-value and the estimated effect size of the minor allele for each (significant) individual variant in \code{individual_results}.
 }
 \description{
 The \code{Individual_Analysis_cond} function takes in the data frame of individual variants,

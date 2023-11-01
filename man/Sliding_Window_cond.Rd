@@ -66,7 +66,7 @@ and taking the residuals (default = \code{optimal}).}
 \item{Annotation_name}{a vector of annotation names used in STAAR (default = NULL).}
 }
 \value{
-a data frame containing the conditional STAAR p-values (including STAAR-O) corresponding to the sliding window in the given genetic region.
+A data frame containing the conditional STAAR p-values (including STAAR-O) corresponding to the sliding window in the given genetic region.
 }
 \description{
 The \code{Sliding_Window_cond} function takes in chromosome, starting location, ending location,

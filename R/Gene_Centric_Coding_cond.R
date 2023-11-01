@@ -13,7 +13,7 @@
 #' @param chr chromosome.
 #' @param gene_name name of the gene to be analyzed using STAAR procedure.
 #' @param category the coding functional category to be analyzed using STAAR procedure. Choices include
-#' \code{plof}, \code{plof_ds}, \code{missense}, \code{disruptive_missense}, \code{synonymous} (default = \code{plof}).
+#' \code{plof}, \code{plof_ds}, \code{missense}, \code{disruptive_missense}, \code{synonymous}, \code{ptv}, \code{ptv_ds} (default = \code{plof}).
 #' @param genofile an object of opened annotated GDS (aGDS) file.
 #' @param obj_nullmodel an object from fitting the null model, which is either the output from \code{\link{fit_nullmodel}} function,
 #' or the output from \code{fitNullModel} function in the \code{GENESIS} package and transformed using the \code{\link{genesis2staar_nullmodel}} function.
@@ -36,7 +36,7 @@
 #' @param Annotation_name_catalog a data frame containing the name and the corresponding channel name in the aGDS file.
 #' @param Use_annotation_weights use annotations as weights or not (default = TRUE).
 #' @param Annotation_name a vector of annotation names used in STAAR (default = NULL).
-#' @return a data frame containing the conditional STAAR p-values (including STAAR-O) corresponding to each coding functional category of the given gene.
+#' @return A data frame containing the conditional STAAR p-values (including STAAR-O) corresponding to each coding functional category of the given gene.
 #' @references Li, Z., Li, X., et al. (2022). A framework for detecting
 #' noncoding rare-variant associations of large-scale whole-genome sequencing
 #' studies. \emph{Nature Methods}, \emph{19}(12), 1599-1611.
@@ -50,7 +50,7 @@
 #' (\href{https://doi.org/10.1002/gepi.22188}{pub})
 #' @export
 
-Gene_Centric_Coding_cond <- function(chr,gene_name,category=c("plof","plof_ds","missense","disruptive_missense","synonymous"),
+Gene_Centric_Coding_cond <- function(chr,gene_name,category=c("plof","plof_ds","missense","disruptive_missense","synonymous","ptv","ptv_ds"),
                                      genofile,obj_nullmodel,known_loci=NULL,rare_maf_cutoff=0.01,rv_num_cutoff=2,
                                      method_cond=c("optimal","naive"),
                                      QC_label="annotation/filter",variant_type=c("SNV","Indel","variant"),geno_missing_imputation=c("mean","minor"),
@@ -118,6 +118,28 @@ Gene_Centric_Coding_cond <- function(chr,gene_name,category=c("plof","plof_ds","
 		                           Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,
 		                           Use_annotation_weights=Use_annotation_weights,Annotation_name=Annotation_name)
 	}
+
+	if(category=="ptv")
+	{
+		results <- ptv_cond(chr,gene_name,genofile,obj_nullmodel,genes,
+		                    known_loci,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,
+		                    method_cond=method_cond,
+		                    QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,
+		                    Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,
+		                    Use_annotation_weights=Use_annotation_weights,Annotation_name=Annotation_name)
+	}
+
+	if(category=="ptv_ds")
+	{
+		results <- ptv_ds_cond(chr,gene_name,genofile,obj_nullmodel,genes,
+		                       known_loci,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,
+		                       method_cond=method_cond,
+		                       QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,
+		                       Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,
+		                       Use_annotation_weights=Use_annotation_weights,Annotation_name=Annotation_name)
+	}
+
+
 
 	return(results)
 }

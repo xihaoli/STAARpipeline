@@ -36,7 +36,7 @@
 #' @param Annotation_name_catalog a data frame containing the name and the corresponding channel name in the aGDS file.
 #' @param Use_annotation_weights use annotations as weights or not (default = TRUE).
 #' @param Annotation_name a vector of annotation names used in STAAR (default = NULL).
-#' @return a data frame containing the conditional STAAR p-values (including STAAR-O) corresponding to the noncoding functional category of the given gene.
+#' @return A data frame containing the conditional STAAR p-values (including STAAR-O) corresponding to the noncoding functional category of the given gene.
 #' @references Li, Z., Li, X., et al. (2022). A framework for detecting
 #' noncoding rare-variant associations of large-scale whole-genome sequencing
 #' studies. \emph{Nature Methods}, \emph{19}(12), 1599-1611.

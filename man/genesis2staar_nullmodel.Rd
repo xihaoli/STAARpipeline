@@ -4,14 +4,16 @@
 \alias{genesis2staar_nullmodel}
 \title{Transforming the null model object fitted using GENESIS to the null model object to be used for STAAR}
 \usage{
-genesis2staar_nullmodel(obj_nullmodel_genesis)
+genesis2staar_nullmodel(obj_nullmodel_genesis, use_SPA = FALSE)
 }
 \arguments{
 \item{obj_nullmodel_genesis}{an object from fitting the null model, which is the
 output from \code{fitNullModel} function in the \code{GENESIS} package.}
+
+\item{use_SPA}{a logical switch determines if the null model fitting occurs in an imbalanced case-control setting (default = FALSE).}
 }
 \value{
-an object from fitting the null model for related samples to be used for STAAR procedure,
+An object from fitting the null model for related samples to be used for STAAR procedure,
 which is the output from \code{\link{fit_nullmodel}} function.
 }
 \description{

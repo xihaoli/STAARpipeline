@@ -247,7 +247,7 @@ Dynamic_Window_SCANG <- function(chr,start_loc,end_loc,genofile,obj_nullmodel,
 			try(res <- SCANG(genotype=Geno,obj_nullmodel=obj_nullmodel,annotation_phred=Anno.Int.PHRED.sub,Lmin=Lmin,Lmax=Lmax,steplength=steplength,alpha=alpha,rare_maf_cutoff=rare_maf_cutoff,filter=p_filter,f=f),silent=silent)
 		}
 
-		if(class(res)=="list")
+		if(inherits(res, "list"))
 		{
 			position_sub <- position_sub[res$RV_label]
 

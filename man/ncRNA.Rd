@@ -18,6 +18,8 @@ ncRNA(
   Annotation_name_catalog,
   Use_annotation_weights = c(TRUE, FALSE),
   Annotation_name = NULL,
+  SPA_p_filter = FALSE,
+  p_filter_cutoff = 0.05,
   silent = FALSE
 )
 }
@@ -51,19 +53,25 @@ a given variant-set (default = 2).}
 
 \item{Annotation_name}{a vector of annotation names used in STAAR (default = NULL).}
 
+\item{SPA_p_filter}{logical: are only the variants with a normal approximation based p-value smaller than a pre-specified threshold use the SPA method to recalculate the p-value, only used for imbalanced case-control setting (default = FALSE).}
+
+\item{p_filter_cutoff}{threshold for the p-value recalculation using the SPA method, only used for imbalanced case-control setting (default = 0.05).}
+
 \item{silent}{logical: should the report of error messages be suppressed (default = FALSE).}
 }
 \value{
-a data frame containing the STAAR p-values (including STAAR-O) corresponding to the exonic and splicing category of the given ncRNA gene.
+A data frame containing the STAAR p-values (including STAAR-O) corresponding to the exonic and splicing category of the given ncRNA gene.
 }
 \description{
 The \code{ncRNA} function takes in chromosome, gene name,
 the object of opened annotated GDS file, and the object from fitting the null model to analyze the association between a
-quantitative/dichotomous phenotype and the exonic and splicing category of an ncRNA gene by using STAAR procedure.
+quantitative/dichotomous phenotype (including imbalanced case-control design) and the exonic and splicing category of an ncRNA gene by using STAAR procedure.
 For each ncRNA category, the STAAR-O p-value is a p-value from an omnibus test
 that aggregated SKAT(1,25), SKAT(1,1), Burden(1,25), Burden(1,1), ACAT-V(1,25),
 and ACAT-V(1,1) together with p-values of each test weighted by each annotation
-using Cauchy method. For multiple phenotype analysis (\code{obj_nullmodel$n.pheno > 1}),
+using Cauchy method. For imbalance case-control setting, the results correspond to the STAAR-B p-value, which is a p-value from
+an omnibus test that aggregated Burden(1,25) and Burden(1,1) together with p-values of each test weighted by each annotation using Cauchy method.
+For multiple phenotype analysis (\code{obj_nullmodel$n.pheno > 1}),
 the results correspond to multi-trait association p-values (e.g. MultiSTAAR-O) by leveraging
 the correlation structure between multiple phenotypes.
 }

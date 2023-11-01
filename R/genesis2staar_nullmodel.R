@@ -4,7 +4,8 @@
 #' package and transforms it to the object from fitting the null model to be used for STAAR procedure.
 #' @param obj_nullmodel_genesis an object from fitting the null model, which is the
 #' output from \code{fitNullModel} function in the \code{GENESIS} package.
-#' @return an object from fitting the null model for related samples to be used for STAAR procedure,
+#' @param use_SPA a logical switch determines if the null model fitting occurs in an imbalanced case-control setting (default = FALSE).
+#' @return An object from fitting the null model for related samples to be used for STAAR procedure,
 #' which is the output from \code{\link{fit_nullmodel}} function.
 #' @references Gogarten, S.M., Sofer, T., Chen, H., et al. (2019). Genetic association testing using the
 #' GENESIS R/Bioconductor package. \emph{Bioinformatics}, \emph{35}(24), 5346-5348.
@@ -19,7 +20,7 @@
 #' (\href{https://doi.org/10.1038/s41592-022-01640-x}{pub})
 #' @export
 
-genesis2staar_nullmodel <- function(obj_nullmodel_genesis){
+genesis2staar_nullmodel <- function(obj_nullmodel_genesis,use_SPA=FALSE){
 
   if(is.null(obj_nullmodel_genesis$cholSigmaInv)){
     stop("Sparse genetic relatedness matrix (GRM) is required when fitting the null model!")
@@ -52,7 +53,18 @@ genesis2staar_nullmodel <- function(obj_nullmodel_genesis){
   if (is.null(obj_nullmodel_staar$scaled.residuals)) {
     obj_nullmodel_staar$scaled.residuals <- as.vector(obj_nullmodel_genesis$fit$resid.PY)
   }
-
+  
+  obj_nullmodel_staar$use_SPA <- use_SPA
+  
+  if(use_SPA)
+  {
+  X <- obj_nullmodel_staar$X
+  
+  ## generate Sigma_i
+  obj_nullmodel_staar$XSigma_i <- crossprod(X,obj_nullmodel_staar$Sigma_i)
+  obj_nullmodel_staar$XXSigma_iX_inv <- X%*%obj_nullmodel_staar$cov
+  }
+ 
   return(obj_nullmodel_staar)
 }
 

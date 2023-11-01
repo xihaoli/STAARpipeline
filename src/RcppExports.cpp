@@ -29,6 +29,23 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// Individual_Score_Test_SPA
+arma::vec Individual_Score_Test_SPA(arma::mat G, arma::mat XW, arma::mat XXWX_inv, arma::vec residuals, arma::vec muhat, double tol, int max_iter);
+RcppExport SEXP _STAARpipeline_Individual_Score_Test_SPA(SEXP GSEXP, SEXP XWSEXP, SEXP XXWX_invSEXP, SEXP residualsSEXP, SEXP muhatSEXP, SEXP tolSEXP, SEXP max_iterSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type G(GSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type XW(XWSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type XXWX_inv(XXWX_invSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type residuals(residualsSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type muhat(muhatSEXP);
+    Rcpp::traits::input_parameter< double >::type tol(tolSEXP);
+    Rcpp::traits::input_parameter< int >::type max_iter(max_iterSEXP);
+    rcpp_result_gen = Rcpp::wrap(Individual_Score_Test_SPA(G, XW, XXWX_inv, residuals, muhat, tol, max_iter));
+    return rcpp_result_gen;
+END_RCPP
+}
 // Individual_Score_Test_cond
 List Individual_Score_Test_cond(arma::mat G, arma::sp_mat Sigma_i, arma::mat Sigma_iX, arma::mat cov, arma::mat X_adj, arma::vec residuals);
 RcppExport SEXP _STAARpipeline_Individual_Score_Test_cond(SEXP GSEXP, SEXP Sigma_iSEXP, SEXP Sigma_iXSEXP, SEXP covSEXP, SEXP X_adjSEXP, SEXP residualsSEXP) {
@@ -252,6 +269,7 @@ RcppExport SEXP _STAARpipeline_RcppExport_registerCCallable() {
 
 static const R_CallMethodDef CallEntries[] = {
     {"_STAARpipeline_Individual_Score_Test", (DL_FUNC) &_STAARpipeline_Individual_Score_Test, 5},
+    {"_STAARpipeline_Individual_Score_Test_SPA", (DL_FUNC) &_STAARpipeline_Individual_Score_Test_SPA, 7},
     {"_STAARpipeline_Individual_Score_Test_cond", (DL_FUNC) &_STAARpipeline_Individual_Score_Test_cond, 6},
     {"_STAARpipeline_Individual_Score_Test_cond_multi", (DL_FUNC) &_STAARpipeline_Individual_Score_Test_cond_multi, 7},
     {"_STAARpipeline_Individual_Score_Test_denseGRM", (DL_FUNC) &_STAARpipeline_Individual_Score_Test_denseGRM, 3},

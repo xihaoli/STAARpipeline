@@ -35,7 +35,7 @@
 #' @param Annotation_name_catalog a data frame containing the name and the corresponding channel name in the aGDS file.
 #' @param Use_annotation_weights use annotations as weights or not (default = TRUE).
 #' @param Annotation_name a vector of annotation names used in STAAR (default = NULL).
-#' @return a data frame containing the conditional STAAR p-values (including STAAR-O) corresponding to the sliding window in the given genetic region.
+#' @return A data frame containing the conditional STAAR p-values (including STAAR-O) corresponding to the sliding window in the given genetic region.
 #' @references Li, Z., Li, X., et al. (2022). A framework for detecting
 #' noncoding rare-variant associations of large-scale whole-genome sequencing
 #' studies. \emph{Nature Methods}, \emph{19}(12), 1599-1611.
@@ -69,8 +69,8 @@ Sliding_Window_cond <- function(chr,start_loc,end_loc,genofile,obj_nullmodel,
 	{
 		known_loci <- data.frame(chr=logical(0),pos=logical(0),ref=character(0),alt=character(0))
 	}
-	known_loci_chr <- known_loci[known_loci[,1]==chr,]
-	known_loci_chr <- known_loci_chr[order(known_loci_chr[,2]),]
+	known_loci_chr <- known_loci[known_loci[,1]==chr,,drop=FALSE]
+	known_loci_chr <- known_loci_chr[order(known_loci_chr[,2]),,drop=FALSE]
 
 	## get SNV id, position, REF, ALT (whole genome)
 	filter <- seqGetData(genofile, QC_label)
@@ -171,25 +171,24 @@ Sliding_Window_cond <- function(chr,start_loc,end_loc,genofile,obj_nullmodel,
 
 		results <- c()
 
-		### known variants needed to be adjusted
+		### no known variants needed to be adjusted
 		known_loci_chr_region <- known_loci_chr[(known_loci_chr[,2]>=start_loc-1E6)&(known_loci_chr[,2]<=end_loc+1E6),]
 		if(dim(known_loci_chr_region)[1]==0)
 		{
 			pvalues <- 0
-		if(n_pheno == 1)
-		{
-			try(pvalues <- STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff))
-		}
-		else
-		{
-			try(pvalues <- MultiSTAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff))
-		}
+			if(n_pheno == 1)
+			{
+				try(pvalues <- STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff))
+			}else
+			{
+				try(pvalues <- MultiSTAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff))
+			}
 
-			if(class(pvalues)=="list")
+			if(inherits(pvalues, "list"))
 			{
 				results_temp <- c(chr,start_loc,end_loc)
 
-				results_temp <- c(results_temp,pvalues$num_variant,pvalues$results_STAAR_S_1_25,pvalues$results_STAAR_S_1_1,
+				results_temp <- c(results_temp,pvalues$num_variant,pvalues$cMAC,pvalues$results_STAAR_S_1_25,pvalues$results_STAAR_S_1_1,
 				                  pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_A_1_25,
 				                  pvalues$results_STAAR_A_1_1,pvalues$results_ACAT_O,pvalues$results_STAAR_O)
 
@@ -273,11 +272,11 @@ Sliding_Window_cond <- function(chr,start_loc,end_loc,genofile,obj_nullmodel,
 				try(pvalues <- MultiSTAAR_cond(Geno,Geno_adjusted,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,method_cond=method_cond))
 			}
 
-			if(class(pvalues)=="list")
+			if(inherits(pvalues, "list"))
 			{
 				results_temp <- c(chr,start_loc,end_loc)
 
-				results_temp <- c(results_temp,pvalues$num_variant,pvalues$results_STAAR_S_1_25,pvalues$results_STAAR_S_1_1,
+				results_temp <- c(results_temp,pvalues$num_variant,pvalues$cMAC,pvalues$results_STAAR_S_1_25,pvalues$results_STAAR_S_1_1,
 				                  pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_A_1_25,
 				                  pvalues$results_STAAR_A_1_1,pvalues$results_ACAT_O,pvalues$results_STAAR_O)
 
@@ -294,7 +293,7 @@ Sliding_Window_cond <- function(chr,start_loc,end_loc,genofile,obj_nullmodel,
 	if(!is.null(results))
 	{
 		colnames(results) <- colnames(results, do.NULL = FALSE, prefix = "col")
-		colnames(results)[1:4] <- c("Chr","Start Loc","End Loc","#SNV")
+		colnames(results)[1:5] <- c("Chr","Start Loc","End Loc","#SNV","cMAC")
 		colnames(results)[(dim(results)[2]-1):dim(results)[2]] <- c("ACAT-O","STAAR-O")
 	}
 

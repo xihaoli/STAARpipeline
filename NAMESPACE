@@ -9,10 +9,12 @@ useDynLib(STAARpipeline, .registration = TRUE)
 
 # functions
 export(fit_nullmodel,
-       genesis2staar_nullmodel,staar2scang_nullmodel,
-       Individual_Analysis,Individual_Analysis_cond,
-       Gene_Centric_Coding,Gene_Centric_Coding_cond,
-       Gene_Centric_Noncoding,Gene_Centric_Noncoding_cond,
-       ncRNA,ncRNA_cond,
-       Sliding_Window,Sliding_Window_cond,Dynamic_Window_SCANG,
+       genesis2staar_nullmodel,
+       staar2scang_nullmodel,
+       Individual_Analysis,Individual_Analysis_cond,Individual_Analysis_cond_spa,
+       Gene_Centric_Coding,Gene_Centric_Coding_cond,Gene_Centric_Coding_cond_spa,
+       Gene_Centric_Noncoding,Gene_Centric_Noncoding_cond,Gene_Centric_Noncoding_cond_spa,
+       ncRNA,ncRNA_cond,ncRNA_cond_spa,
+       Sliding_Window,Sliding_Window_cond,Sliding_Window_cond_spa,
+       Dynamic_Window_SCANG,
        LD_pruning)

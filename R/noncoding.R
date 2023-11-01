@@ -2,7 +2,8 @@ noncoding <- function(chr,gene_name,genofile,obj_nullmodel,
                       rare_maf_cutoff=0.01,rv_num_cutoff=2,
                       QC_label="annotation/filter",variant_type=c("SNV","Indel","variant"),geno_missing_imputation=c("mean","minor"),
                       Annotation_dir="annotation/info/FunctionalAnnotation",Annotation_name_catalog,
-                      Use_annotation_weights=c(TRUE,FALSE),Annotation_name=NULL,silent=FALSE){
+                      Use_annotation_weights=c(TRUE,FALSE),Annotation_name=NULL,
+                      SPA_p_filter=FALSE,p_filter_cutoff=0.05,silent=FALSE){
 
 	## evaluate choices
 	variant_type <- match.arg(variant_type)
@@ -10,6 +11,15 @@ noncoding <- function(chr,gene_name,genofile,obj_nullmodel,
 
 	phenotype.id <- as.character(obj_nullmodel$id_include)
 	n_pheno <- obj_nullmodel$n.pheno
+
+	## SPA status
+	if(!is.null(obj_nullmodel$use_SPA))
+	{
+		use_SPA <- obj_nullmodel$use_SPA
+	}else
+	{
+		use_SPA <- FALSE
+	}
 
 	#####################################
 	#   Gene Info
@@ -140,15 +150,20 @@ noncoding <- function(chr,gene_name,genofile,obj_nullmodel,
 	pvalues <- 0
 	if(n_pheno == 1)
 	{
-		try(pvalues <- STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff),silent=silent)
-	}
-	else
+		if(!use_SPA)
+		{
+			try(pvalues <- STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff),silent=silent)
+		}else
+		{
+			try(pvalues <- STAAR_Binary_SPA(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,SPA_p_filter=SPA_p_filter,p_filter_cutoff=p_filter_cutoff),silent=silent)
+		}
+	}else
 	{
 		try(pvalues <- MultiSTAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff),silent=silent)
 	}
 
 	results_downstream <- c()
-	if(class(pvalues)=="list")
+	if(inherits(pvalues, "list"))
 	{
 		results_temp <- rep(NA,4)
 		results_temp[3] <- "downstream"
@@ -156,19 +171,33 @@ noncoding <- function(chr,gene_name,genofile,obj_nullmodel,
 		results_temp[1] <- as.character(gene_name)
 		results_temp[4] <- pvalues$num_variant
 
-
-		results_temp <- c(results_temp,pvalues$results_STAAR_S_1_25,pvalues$results_STAAR_S_1_1,
-		pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_A_1_25,
-		pvalues$results_STAAR_A_1_1,pvalues$results_ACAT_O,pvalues$results_STAAR_O)
+		if(!use_SPA)
+		{
+			results_temp <- c(results_temp,pvalues$cMAC,pvalues$results_STAAR_S_1_25,pvalues$results_STAAR_S_1_1,
+			pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_A_1_25,
+			pvalues$results_STAAR_A_1_1,pvalues$results_ACAT_O,pvalues$results_STAAR_O)
+		}else
+		{
+			results_temp <- c(results_temp,pvalues$cMAC,
+			pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_B)
+		}
 
 		results_downstream <- rbind(results_downstream,results_temp)
 	}
 
 	if(!is.null(results_downstream))
 	{
-		colnames(results_downstream) <- colnames(results_downstream, do.NULL = FALSE, prefix = "col")
-		colnames(results_downstream)[1:4] <- c("Gene name","Chr","Category","#SNV")
-		colnames(results_downstream)[(dim(results_downstream)[2]-1):dim(results_downstream)[2]] <- c("ACAT-O","STAAR-O")
+		if(!use_SPA)
+		{
+			colnames(results_downstream) <- colnames(results_downstream, do.NULL = FALSE, prefix = "col")
+			colnames(results_downstream)[1:5] <- c("Gene name","Chr","Category","#SNV","cMAC")
+			colnames(results_downstream)[(dim(results_downstream)[2]-1):dim(results_downstream)[2]] <- c("ACAT-O","STAAR-O")
+		}else
+		{
+			colnames(results_downstream) <- colnames(results_downstream, do.NULL = FALSE, prefix = "col")
+			colnames(results_downstream)[1:5] <- c("Gene name","Chr","Category","#SNV","cMAC")
+			colnames(results_downstream)[dim(results_downstream)[2]] <- c("STAAR-B")
+		}
 	}
 
 	seqResetFilter(genofile)
@@ -277,15 +306,20 @@ noncoding <- function(chr,gene_name,genofile,obj_nullmodel,
 	pvalues <- 0
 	if(n_pheno == 1)
 	{
-		try(pvalues <- STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff),silent=silent)
-	}
-	else
+		if(!use_SPA)
+		{
+			try(pvalues <- STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff),silent=silent)
+		}else
+		{
+			try(pvalues <- STAAR_Binary_SPA(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,SPA_p_filter=SPA_p_filter,p_filter_cutoff=p_filter_cutoff),silent=silent)
+		}
+	}else
 	{
 		try(pvalues <- MultiSTAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff),silent=silent)
 	}
 
 	results_upstream <- c()
-	if(class(pvalues)=="list")
+	if(inherits(pvalues, "list"))
 	{
 		results_temp <- rep(NA,4)
 		results_temp[3] <- "upstream"
@@ -293,19 +327,33 @@ noncoding <- function(chr,gene_name,genofile,obj_nullmodel,
 		results_temp[1] <- as.character(gene_name)
 		results_temp[4] <- pvalues$num_variant
 
-
-		results_temp <- c(results_temp,pvalues$results_STAAR_S_1_25,pvalues$results_STAAR_S_1_1,
-		pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_A_1_25,
-		pvalues$results_STAAR_A_1_1,pvalues$results_ACAT_O,pvalues$results_STAAR_O)
+		if(!use_SPA)
+		{
+			results_temp <- c(results_temp,pvalues$cMAC,pvalues$results_STAAR_S_1_25,pvalues$results_STAAR_S_1_1,
+			pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_A_1_25,
+			pvalues$results_STAAR_A_1_1,pvalues$results_ACAT_O,pvalues$results_STAAR_O)
+		}else
+		{
+			results_temp <- c(results_temp,pvalues$cMAC,
+			pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_B)
+		}
 
 		results_upstream <- rbind(results_upstream,results_temp)
 	}
 
 	if(!is.null(results_upstream))
 	{
-		colnames(results_upstream) <- colnames(results_upstream, do.NULL = FALSE, prefix = "col")
-		colnames(results_upstream)[1:4] <- c("Gene name","Chr","Category","#SNV")
-		colnames(results_upstream)[(dim(results_upstream)[2]-1):dim(results_upstream)[2]] <- c("ACAT-O","STAAR-O")
+		if(!use_SPA)
+		{
+			colnames(results_upstream) <- colnames(results_upstream, do.NULL = FALSE, prefix = "col")
+			colnames(results_upstream)[1:5] <- c("Gene name","Chr","Category","#SNV","cMAC")
+			colnames(results_upstream)[(dim(results_upstream)[2]-1):dim(results_upstream)[2]] <- c("ACAT-O","STAAR-O")
+		}else
+		{
+			colnames(results_upstream) <- colnames(results_upstream, do.NULL = FALSE, prefix = "col")
+			colnames(results_upstream)[1:5] <- c("Gene name","Chr","Category","#SNV","cMAC")
+			colnames(results_upstream)[dim(results_upstream)[2]] <- c("STAAR-B")
+		}
 	}
 
 	seqResetFilter(genofile)
@@ -412,15 +460,20 @@ noncoding <- function(chr,gene_name,genofile,obj_nullmodel,
 	pvalues <- 0
 	if(n_pheno == 1)
 	{
-		try(pvalues <- STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff),silent=silent)
-	}
-	else
+		if(!use_SPA)
+		{
+			try(pvalues <- STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff),silent=silent)
+		}else
+		{
+			try(pvalues <- STAAR_Binary_SPA(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,SPA_p_filter=SPA_p_filter,p_filter_cutoff=p_filter_cutoff),silent=silent)
+		}
+	}else
 	{
 		try(pvalues <- MultiSTAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff),silent=silent)
 	}
 
 	results_UTR <- c()
-	if(class(pvalues)=="list")
+	if(inherits(pvalues, "list"))
 	{
 		results_temp <- rep(NA,4)
 		results_temp[3] <- "UTR"
@@ -428,19 +481,33 @@ noncoding <- function(chr,gene_name,genofile,obj_nullmodel,
 		results_temp[1] <- as.character(gene_name)
 		results_temp[4] <- pvalues$num_variant
 
-
-		results_temp <- c(results_temp,pvalues$results_STAAR_S_1_25,pvalues$results_STAAR_S_1_1,
-		pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_A_1_25,
-		pvalues$results_STAAR_A_1_1,pvalues$results_ACAT_O,pvalues$results_STAAR_O)
+		if(!use_SPA)
+		{
+			results_temp <- c(results_temp,pvalues$cMAC,pvalues$results_STAAR_S_1_25,pvalues$results_STAAR_S_1_1,
+			pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_A_1_25,
+			pvalues$results_STAAR_A_1_1,pvalues$results_ACAT_O,pvalues$results_STAAR_O)
+		}else
+		{
+			results_temp <- c(results_temp,pvalues$cMAC,
+			pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_B)
+		}
 
 		results_UTR <- rbind(results_UTR,results_temp)
 	}
 
 	if(!is.null(results_UTR))
 	{
-		colnames(results_UTR) <- colnames(results_UTR, do.NULL = FALSE, prefix = "col")
-		colnames(results_UTR)[1:4] <- c("Gene name","Chr","Category","#SNV")
-		colnames(results_UTR)[(dim(results_UTR)[2]-1):dim(results_UTR)[2]] <- c("ACAT-O","STAAR-O")
+		if(!use_SPA)
+		{
+			colnames(results_UTR) <- colnames(results_UTR, do.NULL = FALSE, prefix = "col")
+			colnames(results_UTR)[1:5] <- c("Gene name","Chr","Category","#SNV","cMAC")
+			colnames(results_UTR)[(dim(results_UTR)[2]-1):dim(results_UTR)[2]] <- c("ACAT-O","STAAR-O")
+		}else
+		{
+			colnames(results_UTR) <- colnames(results_UTR, do.NULL = FALSE, prefix = "col")
+			colnames(results_UTR)[1:5] <- c("Gene name","Chr","Category","#SNV","cMAC")
+			colnames(results_UTR)[dim(results_UTR)[2]] <- c("STAAR-B")
+		}
 	}
 
 	seqResetFilter(genofile)
@@ -571,15 +638,20 @@ noncoding <- function(chr,gene_name,genofile,obj_nullmodel,
 	pvalues <- 0
 	if(n_pheno == 1)
 	{
-		try(pvalues <- STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff),silent=silent)
-	}
-	else
+		if(!use_SPA)
+		{
+			try(pvalues <- STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff),silent=silent)
+		}else
+		{
+			try(pvalues <- STAAR_Binary_SPA(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,SPA_p_filter=SPA_p_filter,p_filter_cutoff=p_filter_cutoff),silent=silent)
+		}
+	}else
 	{
 		try(pvalues <- MultiSTAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff),silent=silent)
 	}
 
 	results_promoter_CAGE <- c()
-	if(class(pvalues)=="list")
+	if(inherits(pvalues, "list"))
 	{
 		results_temp <- dfPromCAGEVarGene.SNV[1,1:4]
 		results_temp[3] <- "promoter_CAGE"
@@ -587,19 +659,33 @@ noncoding <- function(chr,gene_name,genofile,obj_nullmodel,
 		results_temp[1] <- as.character(gene_name)
 		results_temp[4] <- pvalues$num_variant
 
-
-		results_temp <- c(results_temp,pvalues$results_STAAR_S_1_25,pvalues$results_STAAR_S_1_1,
-		pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_A_1_25,
-		pvalues$results_STAAR_A_1_1,pvalues$results_ACAT_O,pvalues$results_STAAR_O)
+		if(!use_SPA)
+		{
+			results_temp <- c(results_temp,pvalues$cMAC,pvalues$results_STAAR_S_1_25,pvalues$results_STAAR_S_1_1,
+			pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_A_1_25,
+			pvalues$results_STAAR_A_1_1,pvalues$results_ACAT_O,pvalues$results_STAAR_O)
+		}else
+		{
+			results_temp <- c(results_temp,pvalues$cMAC,
+			pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_B)
+		}
 
 		results_promoter_CAGE <- rbind(results_promoter_CAGE,results_temp)
 	}
 
 	if(!is.null(results_promoter_CAGE))
 	{
-		colnames(results_promoter_CAGE) <- colnames(results_promoter_CAGE, do.NULL = FALSE, prefix = "col")
-		colnames(results_promoter_CAGE)[1:4] <- c("Gene name","Chr","Category","#SNV")
-		colnames(results_promoter_CAGE)[(dim(results_promoter_CAGE)[2]-1):dim(results_promoter_CAGE)[2]] <- c("ACAT-O","STAAR-O")
+		if(!use_SPA)
+		{
+			colnames(results_promoter_CAGE) <- colnames(results_promoter_CAGE, do.NULL = FALSE, prefix = "col")
+			colnames(results_promoter_CAGE)[1:5] <- c("Gene name","Chr","Category","#SNV","cMAC")
+			colnames(results_promoter_CAGE)[(dim(results_promoter_CAGE)[2]-1):dim(results_promoter_CAGE)[2]] <- c("ACAT-O","STAAR-O")
+		}else
+		{
+			colnames(results_promoter_CAGE) <- colnames(results_promoter_CAGE, do.NULL = FALSE, prefix = "col")
+			colnames(results_promoter_CAGE)[1:5] <- c("Gene name","Chr","Category","#SNV","cMAC")
+			colnames(results_promoter_CAGE)[dim(results_promoter_CAGE)[2]] <- c("STAAR-B")
+		}
 	}
 
 	seqResetFilter(genofile)
@@ -726,15 +812,20 @@ noncoding <- function(chr,gene_name,genofile,obj_nullmodel,
 	pvalues <- 0
 	if(n_pheno == 1)
 	{
-		try(pvalues <- STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff),silent=silent)
-	}
-	else
+		if(!use_SPA)
+		{
+			try(pvalues <- STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff),silent=silent)
+		}else
+		{
+			try(pvalues <- STAAR_Binary_SPA(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,SPA_p_filter=SPA_p_filter,p_filter_cutoff=p_filter_cutoff),silent=silent)
+		}
+	}else
 	{
 		try(pvalues <- MultiSTAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff),silent=silent)
 	}
 
 	results_promoter_DHS <- c()
-	if(class(pvalues)=="list")
+	if(inherits(pvalues, "list"))
 	{
 		results_temp <- dfPromrOCRsVarGene.SNV[1,1:4]
 		results_temp[3] <- "promoter_DHS"
@@ -742,19 +833,33 @@ noncoding <- function(chr,gene_name,genofile,obj_nullmodel,
 		results_temp[1] <- as.character(gene_name)
 		results_temp[4] <- pvalues$num_variant
 
-
-		results_temp <- c(results_temp,pvalues$results_STAAR_S_1_25,pvalues$results_STAAR_S_1_1,
-		pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_A_1_25,
-		pvalues$results_STAAR_A_1_1,pvalues$results_ACAT_O,pvalues$results_STAAR_O)
+		if(!use_SPA)
+		{
+			results_temp <- c(results_temp,pvalues$cMAC,pvalues$results_STAAR_S_1_25,pvalues$results_STAAR_S_1_1,
+			pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_A_1_25,
+			pvalues$results_STAAR_A_1_1,pvalues$results_ACAT_O,pvalues$results_STAAR_O)
+		}else
+		{
+			results_temp <- c(results_temp,pvalues$cMAC,
+			pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_B)
+		}
 
 		results_promoter_DHS <- rbind(results_promoter_DHS ,results_temp)
 	}
 
 	if(!is.null(results_promoter_DHS))
 	{
-		colnames(results_promoter_DHS) <- colnames(results_promoter_DHS, do.NULL = FALSE, prefix = "col")
-		colnames(results_promoter_DHS)[1:4] <- c("Gene name","Chr","Category","#SNV")
-		colnames(results_promoter_DHS)[(dim(results_promoter_DHS)[2]-1):dim(results_promoter_DHS)[2]] <- c("ACAT-O","STAAR-O")
+		if(!use_SPA)
+		{
+			colnames(results_promoter_DHS) <- colnames(results_promoter_DHS, do.NULL = FALSE, prefix = "col")
+			colnames(results_promoter_DHS)[1:5] <- c("Gene name","Chr","Category","#SNV","cMAC")
+			colnames(results_promoter_DHS)[(dim(results_promoter_DHS)[2]-1):dim(results_promoter_DHS)[2]] <- c("ACAT-O","STAAR-O")
+		}else
+		{
+			colnames(results_promoter_DHS) <- colnames(results_promoter_DHS, do.NULL = FALSE, prefix = "col")
+			colnames(results_promoter_DHS)[1:5] <- c("Gene name","Chr","Category","#SNV","cMAC")
+			colnames(results_promoter_DHS)[dim(results_promoter_DHS)[2]] <- c("STAAR-B")
+		}
 	}
 
 	seqResetFilter(genofile)
@@ -885,15 +990,20 @@ noncoding <- function(chr,gene_name,genofile,obj_nullmodel,
 	pvalues <- 0
 	if(n_pheno == 1)
 	{
-		try(pvalues <- STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff),silent=silent)
-	}
-	else
+		if(!use_SPA)
+		{
+			try(pvalues <- STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff),silent=silent)
+		}else
+		{
+			try(pvalues <- STAAR_Binary_SPA(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,SPA_p_filter=SPA_p_filter,p_filter_cutoff=p_filter_cutoff),silent=silent)
+		}
+	}else
 	{
 		try(pvalues <- MultiSTAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff),silent=silent)
 	}
 
 	results_enhancer_CAGE <- c()
-	if(class(pvalues)=="list")
+	if(inherits(pvalues, "list"))
 	{
 		results_temp <- dfHancerVarGene.SNV[1,1:4]
 		results_temp[3] <- "enhancer_CAGE"
@@ -901,19 +1011,33 @@ noncoding <- function(chr,gene_name,genofile,obj_nullmodel,
 		results_temp[1] <- as.character(gene_name)
 		results_temp[4] <- pvalues$num_variant
 
-
-		results_temp <- c(results_temp,pvalues$results_STAAR_S_1_25,pvalues$results_STAAR_S_1_1,
-		pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_A_1_25,
-		pvalues$results_STAAR_A_1_1,pvalues$results_ACAT_O,pvalues$results_STAAR_O)
+		if(!use_SPA)
+		{
+			results_temp <- c(results_temp,pvalues$cMAC,pvalues$results_STAAR_S_1_25,pvalues$results_STAAR_S_1_1,
+			pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_A_1_25,
+			pvalues$results_STAAR_A_1_1,pvalues$results_ACAT_O,pvalues$results_STAAR_O)
+		}else
+		{
+			results_temp <- c(results_temp,pvalues$cMAC,
+			pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_B)
+		}
 
 		results_enhancer_CAGE <- rbind(results_enhancer_CAGE,results_temp)
 	}
 
 	if(!is.null(results_enhancer_CAGE))
 	{
-		colnames(results_enhancer_CAGE) <- colnames(results_enhancer_CAGE, do.NULL = FALSE, prefix = "col")
-		colnames(results_enhancer_CAGE)[1:4] <- c("Gene name","Chr","Category","#SNV")
-		colnames(results_enhancer_CAGE)[(dim(results_enhancer_CAGE)[2]-1):dim(results_enhancer_CAGE)[2]] <- c("ACAT-O","STAAR-O")
+		if(!use_SPA)
+		{
+			colnames(results_enhancer_CAGE) <- colnames(results_enhancer_CAGE, do.NULL = FALSE, prefix = "col")
+			colnames(results_enhancer_CAGE)[1:5] <- c("Gene name","Chr","Category","#SNV","cMAC")
+			colnames(results_enhancer_CAGE)[(dim(results_enhancer_CAGE)[2]-1):dim(results_enhancer_CAGE)[2]] <- c("ACAT-O","STAAR-O")
+		}else
+		{
+			colnames(results_enhancer_CAGE) <- colnames(results_enhancer_CAGE, do.NULL = FALSE, prefix = "col")
+			colnames(results_enhancer_CAGE)[1:5] <- c("Gene name","Chr","Category","#SNV","cMAC")
+			colnames(results_enhancer_CAGE)[dim(results_enhancer_CAGE)[2]] <- c("STAAR-B")
+		}
 	}
 
 	seqResetFilter(genofile)
@@ -1043,15 +1167,20 @@ noncoding <- function(chr,gene_name,genofile,obj_nullmodel,
 	pvalues <- 0
 	if(n_pheno == 1)
 	{
-		try(pvalues <- STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff),silent=silent)
-	}
-	else
+		if(!use_SPA)
+		{
+			try(pvalues <- STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff),silent=silent)
+		}else
+		{
+			try(pvalues <- STAAR_Binary_SPA(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,SPA_p_filter=SPA_p_filter,p_filter_cutoff=p_filter_cutoff),silent=silent)
+		}
+	}else
 	{
 		try(pvalues <- MultiSTAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff),silent=silent)
 	}
 
 	results_enhancer_DHS <- c()
-	if(class(pvalues)=="list")
+	if(inherits(pvalues, "list"))
 	{
 		results_temp <- dfHancerVarGene.SNV[1,1:4]
 		results_temp[3] <- "enhancer_DHS"
@@ -1059,19 +1188,33 @@ noncoding <- function(chr,gene_name,genofile,obj_nullmodel,
 		results_temp[1] <- as.character(gene_name)
 		results_temp[4] <- pvalues$num_variant
 
-
-		results_temp <- c(results_temp,pvalues$results_STAAR_S_1_25,pvalues$results_STAAR_S_1_1,
-		pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_A_1_25,
-		pvalues$results_STAAR_A_1_1,pvalues$results_ACAT_O,pvalues$results_STAAR_O)
+		if(!use_SPA)
+		{
+			results_temp <- c(results_temp,pvalues$cMAC,pvalues$results_STAAR_S_1_25,pvalues$results_STAAR_S_1_1,
+			pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_A_1_25,
+			pvalues$results_STAAR_A_1_1,pvalues$results_ACAT_O,pvalues$results_STAAR_O)
+		}else
+		{
+			results_temp <- c(results_temp,pvalues$cMAC,
+			pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_B)
+		}
 
 		results_enhancer_DHS <- rbind(results_enhancer_DHS,results_temp)
 	}
 
 	if(!is.null(results_enhancer_DHS))
 	{
-		colnames(results_enhancer_DHS) <- colnames(results_enhancer_DHS, do.NULL = FALSE, prefix = "col")
-		colnames(results_enhancer_DHS)[1:4] <- c("Gene name","Chr","Category","#SNV")
-		colnames(results_enhancer_DHS)[(dim(results_enhancer_DHS)[2]-1):dim(results_enhancer_DHS)[2]] <- c("ACAT-O","STAAR-O")
+		if(!use_SPA)
+		{
+			colnames(results_enhancer_DHS) <- colnames(results_enhancer_DHS, do.NULL = FALSE, prefix = "col")
+			colnames(results_enhancer_DHS)[1:5] <- c("Gene name","Chr","Category","#SNV","cMAC")
+			colnames(results_enhancer_DHS)[(dim(results_enhancer_DHS)[2]-1):dim(results_enhancer_DHS)[2]] <- c("ACAT-O","STAAR-O")
+		}else
+		{
+			colnames(results_enhancer_DHS) <- colnames(results_enhancer_DHS, do.NULL = FALSE, prefix = "col")
+			colnames(results_enhancer_DHS)[1:5] <- c("Gene name","Chr","Category","#SNV","cMAC")
+			colnames(results_enhancer_DHS)[dim(results_enhancer_DHS)[2]] <- c("STAAR-B")
+		}
 	}
 
 	seqResetFilter(genofile)

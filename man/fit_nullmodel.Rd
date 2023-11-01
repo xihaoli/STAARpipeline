@@ -10,6 +10,7 @@ fit_nullmodel(
   data = parent.frame(),
   kins,
   use_sparse = NULL,
+  use_SPA = FALSE,
   kins_cutoff = 0.022,
   id,
   random.slope = NULL,
@@ -44,6 +45,8 @@ will switch to the generalized linear model with no random effects.}
 
 \item{use_sparse}{a logical switch of whether the provided dense \code{kins} matrix should be
 transformed to a sparse matrix (default = NULL).}
+
+\item{use_SPA}{a logical switch determines if the null model fitting occurs in an imbalanced case-control setting (default = FALSE).}
 
 \item{kins_cutoff}{the cutoff value for clustering samples to make the output matrix sparse block-diagonal
 (default = 0.022).}
@@ -90,7 +93,8 @@ for testing and debugging purpose (default = FALSE).}
 \item{...}{additional arguments that could be passed to \code{\link{glm}}.}
 }
 \value{
-The function returns an object of the model fit from \code{\link{glmmkin}} (\code{obj_nullmodel})
+The function returns an object of the model fit from \code{\link{glmmkin}} (\code{obj_nullmodel}),
+whether the samples are in imbalanced case-control design (obj_nullmodel$use_SPA)
 and whether the \code{kins} matrix is sparse when fitting the null model. See \code{\link{glmmkin}} for more details.
 }
 \description{

@@ -63,7 +63,7 @@ and taking the residuals (default = \code{optimal}).}
 \item{Annotation_name}{a vector of annotation names used in STAAR (default = NULL).}
 }
 \value{
-a data frame containing the conditional STAAR p-values (including STAAR-O) corresponding to the exonic and splicing category of the given ncRNA gene.
+A data frame containing the conditional STAAR p-values (including STAAR-O) corresponding to the exonic and splicing category of the given ncRNA gene.
 }
 \description{
 The \code{ncRNA_cond} function takes in chromosome, gene name,

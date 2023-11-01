@@ -7,7 +7,8 @@
 Gene_Centric_Coding_cond(
   chr,
   gene_name,
-  category = c("plof", "plof_ds", "missense", "disruptive_missense", "synonymous"),
+  category = c("plof", "plof_ds", "missense", "disruptive_missense", "synonymous", "ptv",
+    "ptv_ds"),
   genofile,
   obj_nullmodel,
   known_loci = NULL,
@@ -29,7 +30,7 @@ Gene_Centric_Coding_cond(
 \item{gene_name}{name of the gene to be analyzed using STAAR procedure.}
 
 \item{category}{the coding functional category to be analyzed using STAAR procedure. Choices include
-\code{plof}, \code{plof_ds}, \code{missense}, \code{disruptive_missense}, \code{synonymous} (default = \code{plof}).}
+\code{plof}, \code{plof_ds}, \code{missense}, \code{disruptive_missense}, \code{synonymous}, \code{ptv}, \code{ptv_ds} (default = \code{plof}).}
 
 \item{genofile}{an object of opened annotated GDS (aGDS) file.}
 
@@ -67,7 +68,7 @@ and taking the residuals (default = \code{optimal}).}
 \item{Annotation_name}{a vector of annotation names used in STAAR (default = NULL).}
 }
 \value{
-a data frame containing the conditional STAAR p-values (including STAAR-O) corresponding to each coding functional category of the given gene.
+A data frame containing the conditional STAAR p-values (including STAAR-O) corresponding to each coding functional category of the given gene.
 }
 \description{
 The \code{Gene_Centric_Coding_cond} function takes in chromosome, gene name, functional category,

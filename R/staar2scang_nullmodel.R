@@ -4,7 +4,7 @@
 #' and transforms it to the object from fitting the null model to be used for SCANG-STAAR procedure.
 #' @param obj_nullmodel an object from fitting the null model, which is either the output from \code{\link{fit_nullmodel}} function,
 #' or the output from \code{fitNullModel} function in the \code{GENESIS} package and transformed using the \code{genesis2staar_nullmodel} function.
-#' @return an object from fitting the null model for related samples to be used for SCANG-STAAR procedure,
+#' @return An object from fitting the null model for related samples to be used for SCANG-STAAR procedure,
 #' which is the output from \code{fit_null_glmmkin_SCANG} function for related samples in the \code{SCANG} package.
 #' @references Li, Z., Li, X., et al. (2022). A framework for detecting
 #' noncoding rare-variant associations of large-scale whole-genome sequencing

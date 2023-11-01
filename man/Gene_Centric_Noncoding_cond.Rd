@@ -68,7 +68,7 @@ and taking the residuals (default = \code{optimal}).}
 \item{Annotation_name}{a vector of annotation names used in STAAR (default = NULL).}
 }
 \value{
-a data frame containing the conditional STAAR p-values (including STAAR-O) corresponding to the noncoding functional category of the given gene.
+A data frame containing the conditional STAAR p-values (including STAAR-O) corresponding to the noncoding functional category of the given gene.
 }
 \description{
 The \code{Gene_Centric_Noncoding_cond} function takes in chromosome, gene name, functional category,

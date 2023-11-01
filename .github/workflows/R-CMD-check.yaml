@@ -16,10 +16,6 @@ jobs:
         run: |
           if (!requireNamespace("BiocManager", quietly = TRUE)) install.packages("BiocManager")
         shell: Rscript {0}
-      - name: Install GenomicFeatures, GENESIS
-        run: |
-          BiocManager::install(c("GenomicFeatures", "GENESIS"))
-        shell: Rscript {0}
       - name: Install TxDb.Hsapiens.UCSC.hg38.knownGene
         run: |
           BiocManager::install("TxDb.Hsapiens.UCSC.hg38.knownGene")

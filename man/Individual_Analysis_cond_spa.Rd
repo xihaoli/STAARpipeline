@@ -36,9 +36,9 @@ or the output from \code{fitNullModel} function in the \code{GENESIS} package an
 \item{geno_missing_imputation}{method of handling missing genotypes. Either "mean" or "minor" (default = "mean").}
 
 \item{tol}{a positive number specifying tolerance, the difference threshold for parameter
-estimates in saddlepoint apporximation algorithm below which iterations should be stopped (default = ".Machine$double.eps^0.25").}
+estimates in saddlepoint approximation algorithm below which iterations should be stopped (default = ".Machine$double.eps^0.25").}
 
-\item{max_iter}{a positive integers pecifying the maximum number of iterations for applying the saddlepoint approximation algorithm (default = "1000").}
+\item{max_iter}{a positive integer specifying the maximum number of iterations for applying the saddlepoint approximation algorithm (default = "1000").}
 
 \item{SPA_p_filter}{logical: are only the variants with a score-test-based p-value smaller than a pre-specified threshold use the SPA method to recalculate the p-value (default = FALSE).}
 

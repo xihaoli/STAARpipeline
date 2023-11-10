@@ -19,8 +19,8 @@
 #' @param variant_type type of variant included in the analysis. Choices include "variant", "SNV", or "Indel" (default = "variant").
 #' @param geno_missing_imputation method of handling missing genotypes. Either "mean" or "minor" (default = "mean").
 #' @param tol a positive number specifying tolerance, the difference threshold for parameter
-#' estimates in saddlepoint apporximation algorithm below which iterations should be stopped (default = ".Machine$double.eps^0.25").
-#' @param max_iter a positive integers pecifying the maximum number of iterations for applying the saddlepoint approximation algorithm (default = "1000").
+#' estimates in saddlepoint approximation algorithm below which iterations should be stopped (default = ".Machine$double.eps^0.25").
+#' @param max_iter a positive integer specifying the maximum number of iterations for applying the saddlepoint approximation algorithm (default = "1000").
 #' @param SPA_p_filter logical: are only the variants with a score-test-based p-value smaller than a pre-specified threshold use the SPA method to recalculate the p-value, only used for imbalanced case-control setting (default = FALSE).
 #' @param p_filter_cutoff threshold for the p-value recalculation using the SPA method, only used for imbalanced case-control setting (default = 0.05)
 #' @return A data frame containing the score test p-value and the estimated effect size of the minor allele for each individual variant in the given genetic region.
@@ -226,7 +226,7 @@ Individual_Analysis <- function(chr,start_loc,end_loc,genofile,obj_nullmodel,mac
 				gc()
 
 				pvalue <- Individual_Score_Test_SPA(Geno_common,XW,XXWX_inv,residuals.phenotype,muhat,tol,max_iter)
-	
+
 				results_temp <- data.frame(CHR=CHR_common,POS=position_common,REF=REF_common,ALT=ALT_common,ALT_AF=ALT_AF_common,MAF=MAF_common,N=N_common,
 				                           pvalue=pvalue)
 
@@ -295,19 +295,19 @@ Individual_Analysis <- function(chr,start_loc,end_loc,genofile,obj_nullmodel,mac
 				if(use_SPA)
 				{
 					results_temp <- data.frame(CHR=CHR_common,POS=position_common,REF=REF_common,ALT=ALT_common,ALT_AF=ALT_AF_common,MAF=MAF_common,N=N_common,
-				                           pvalue=pvalue)
+					                           pvalue=pvalue)
 				}else
 				{
 					if(n_pheno == 1)
 					{
 						results_temp <- data.frame(CHR=CHR_common,POS=position_common,REF=REF_common,ALT=ALT_common,ALT_AF=ALT_AF_common,MAF=MAF_common,N=N_common,
-				                           pvalue=exp(-Score_test$pvalue_log),pvalue_log10=Score_test$pvalue_log/log(10),
-				                           Score=Score_test$Score,Score_se=Score_test$Score_se,
-				                           Est=Score_test$Est,Est_se=Score_test$Est_se)
+						                           pvalue=exp(-Score_test$pvalue_log),pvalue_log10=Score_test$pvalue_log/log(10),
+						                           Score=Score_test$Score,Score_se=Score_test$Score_se,
+						                           Est=Score_test$Est,Est_se=Score_test$Est_se)
 					}else
 					{
 						results_temp <- data.frame(CHR=CHR_common,POS=position_common,REF=REF_common,ALT=ALT_common,ALT_AF=ALT_AF_common,MAF=MAF_common,N=N_common,
-				                           pvalue=exp(-Score_test$pvalue_log),pvalue_log10=Score_test$pvalue_log/log(10))
+						                           pvalue=exp(-Score_test$pvalue_log),pvalue_log10=Score_test$pvalue_log/log(10))
 						results_temp <- cbind(results_temp,matrix(Score_test$Score,ncol=n_pheno))
 						colnames(results_temp)[10:(10+n_pheno-1)] <- paste0("Score",seq_len(n_pheno))
 					}
@@ -415,21 +415,21 @@ Individual_Analysis <- function(chr,start_loc,end_loc,genofile,obj_nullmodel,mac
 				if(use_SPA)
 				{
 					results_temp <- data.frame(CHR=CHR_rare,POS=position_rare,REF=REF_rare,ALT=ALT_rare,ALT_AF=ALT_AF_rare,MAF=MAF_rare,N=N_rare,
-				                           pvalue=pvalue)
+					                           pvalue=pvalue)
 
 				}else
 				{
 					if(n_pheno == 1)
 					{
 						results_temp <- data.frame(CHR=CHR_rare,POS=position_rare,REF=REF_rare,ALT=ALT_rare,ALT_AF=ALT_AF_rare,MAF=MAF_rare,N=N_rare,
-				                           pvalue=exp(-Score_test$pvalue_log),pvalue_log10=Score_test$pvalue_log/log(10),
-				                           Score=Score_test$Score,Score_se=Score_test$Score_se,
-				                           Est=Score_test$Est,Est_se=Score_test$Est_se)
+						                           pvalue=exp(-Score_test$pvalue_log),pvalue_log10=Score_test$pvalue_log/log(10),
+						                           Score=Score_test$Score,Score_se=Score_test$Score_se,
+						                           Est=Score_test$Est,Est_se=Score_test$Est_se)
 					}
 					else
 					{
 						results_temp <- data.frame(CHR=CHR_rare,POS=position_rare,REF=REF_rare,ALT=ALT_rare,ALT_AF=ALT_AF_rare,MAF=MAF_rare,N=N_rare,
-				                           pvalue=exp(-Score_test$pvalue_log),pvalue_log10=Score_test$pvalue_log/log(10))
+						                           pvalue=exp(-Score_test$pvalue_log),pvalue_log10=Score_test$pvalue_log/log(10))
 						results_temp <- cbind(results_temp,matrix(Score_test$Score,ncol=n_pheno))
 						colnames(results_temp)[10:(10+n_pheno-1)] <- paste0("Score",seq_len(n_pheno))
 					}

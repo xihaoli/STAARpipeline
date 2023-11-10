@@ -94,7 +94,7 @@ for testing and debugging purpose (default = FALSE).}
 }
 \value{
 The function returns an object of the model fit from \code{\link{glmmkin}} (\code{obj_nullmodel}),
-whether the samples are in imbalanced case-control design (obj_nullmodel$use_SPA)
+whether the samples are under imbalanced case-control design (obj_nullmodel$use_SPA)
 and whether the \code{kins} matrix is sparse when fitting the null model. See \code{\link{glmmkin}} for more details.
 }
 \description{
@@ -112,6 +112,6 @@ Chen, H., et al. (2019). Efficient variant set mixed model association tests for
 binary traits in large-scale whole-genome sequencing studies. \emph{The American Journal of Human Genetics}, \emph{104}(2), 260-274.
 (\href{https://doi.org/10.1016/j.ajhg.2018.12.012}{pub})
 
-Chen, H. (2021). GMMAT: Generalized linear Mixed Model Association Tests Version 1.3.2.
+Chen, H. (2023). GMMAT: Generalized linear Mixed Model Association Tests Version 1.4.2.
 (\href{https://cloud.r-project.org/web/packages/GMMAT/vignettes/GMMAT.pdf}{web})
 }

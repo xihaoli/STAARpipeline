@@ -16,8 +16,8 @@
 #' @param variant_type type of variant included in the analysis. Choices include "variant", "SNV", or "Indel" (default = "variant").
 #' @param geno_missing_imputation method of handling missing genotypes. Either "mean" or "minor" (default = "mean").
 #' @param tol a positive number specifying tolerance, the difference threshold for parameter
-#' estimates in saddlepoint apporximation algorithm below which iterations should be stopped (default = ".Machine$double.eps^0.25").
-#' @param max_iter a positive integers pecifying the maximum number of iterations for applying the saddlepoint approximation algorithm (default = "1000").
+#' estimates in saddlepoint approximation algorithm below which iterations should be stopped (default = ".Machine$double.eps^0.25").
+#' @param max_iter a positive integer specifying the maximum number of iterations for applying the saddlepoint approximation algorithm (default = "1000").
 #' @param SPA_p_filter logical: are only the variants with a score-test-based p-value smaller than a pre-specified threshold use the SPA method to recalculate the p-value (default = FALSE).
 #' @param p_filter_cutoff threshold for the p-value recalculation using the SPA method (default = 0.05)
 #' @return A data frame containing the score test p-value and the estimated effect size of the minor allele for each individual variant in the given genetic region.

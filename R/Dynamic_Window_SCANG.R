@@ -486,8 +486,8 @@ Dynamic_Window_SCANG <- function(chr,start_loc,end_loc,genofile,obj_nullmodel,
 	}
 
 	results <- list(SCANG_B_top1 = resmost_SCANG_B, SCANG_B_emthr = emthr_SCANG_B, SCANG_B_sig = res_sig_SCANG_B,
-	SCANG_S_top1 = resmost_SCANG_S, SCANG_S_emthr = emthr_SCANG_S, SCANG_S_sig = res_sig_SCANG_S,
-	SCANG_O_top1 = resmost_SCANG_O, SCANG_O_emthr = emthr_SCANG_O, SCANG_O_sig = res_sig_SCANG_O)
+	                SCANG_S_top1 = resmost_SCANG_S, SCANG_S_emthr = emthr_SCANG_S, SCANG_S_sig = res_sig_SCANG_S,
+	                SCANG_O_top1 = resmost_SCANG_O, SCANG_O_emthr = emthr_SCANG_O, SCANG_O_sig = res_sig_SCANG_O)
 
 	return(results)
 }

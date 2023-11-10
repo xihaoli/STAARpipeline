@@ -1,9 +1,9 @@
 UTR_cond_spa <- function(chr,gene_name,genofile,obj_nullmodel,known_loci,
-                rare_maf_cutoff=0.01,rv_num_cutoff=2,
-                QC_label="annotation/filter",variant_type=c("SNV","Indel","variant"),geno_missing_imputation=c("mean","minor"),
-                Annotation_dir="annotation/info/FunctionalAnnotation",Annotation_name_catalog,
-                Use_annotation_weights=c(TRUE,FALSE),Annotation_name=NULL,
-                SPA_p_filter=FALSE,p_filter_cutoff=0.05,silent=FALSE){
+                         rare_maf_cutoff=0.01,rv_num_cutoff=2,
+                         QC_label="annotation/filter",variant_type=c("SNV","Indel","variant"),geno_missing_imputation=c("mean","minor"),
+                         Annotation_dir="annotation/info/FunctionalAnnotation",Annotation_name_catalog,
+                         Use_annotation_weights=c(TRUE,FALSE),Annotation_name=NULL,
+                         SPA_p_filter=FALSE,p_filter_cutoff=0.05,silent=FALSE){
 
 	## evaluate choices
 	variant_type <- match.arg(variant_type)
@@ -172,7 +172,7 @@ UTR_cond_spa <- function(chr,gene_name,genofile,obj_nullmodel,known_loci,
 		results_temp[4] <- pvalues$num_variant
 
 		results_temp <- c(results_temp,pvalues$cMAC,
-		pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_B)
+		                  pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_B)
 
 		results <- rbind(results,results_temp)
 	}

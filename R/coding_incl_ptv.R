@@ -1,9 +1,9 @@
 coding_incl_ptv <- function(chr,gene_name,genofile,obj_nullmodel,genes,
-                   rare_maf_cutoff=0.01,rv_num_cutoff=2,
-                   QC_label="annotation/filter",variant_type=c("SNV","Indel","variant"),geno_missing_imputation=c("mean","minor"),
-                   Annotation_dir="annotation/info/FunctionalAnnotation",Annotation_name_catalog,
-                   Use_annotation_weights=c(TRUE,FALSE),Annotation_name=NULL,
-                   SPA_p_filter=FALSE,p_filter_cutoff=0.05,silent=FALSE){
+                            rare_maf_cutoff=0.01,rv_num_cutoff=2,
+                            QC_label="annotation/filter",variant_type=c("SNV","Indel","variant"),geno_missing_imputation=c("mean","minor"),
+                            Annotation_dir="annotation/info/FunctionalAnnotation",Annotation_name_catalog,
+                            Use_annotation_weights=c(TRUE,FALSE),Annotation_name=NULL,
+                            SPA_p_filter=FALSE,p_filter_cutoff=0.05,silent=FALSE){
 
 	## evaluate choices
 	variant_type <- match.arg(variant_type)
@@ -183,12 +183,12 @@ coding_incl_ptv <- function(chr,gene_name,genofile,obj_nullmodel,genes,
 		if(!use_SPA)
 		{
 			results_temp <- c(results_temp,pvalues$cMAC,pvalues$results_STAAR_S_1_25,pvalues$results_STAAR_S_1_1,
-			pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_A_1_25,
-			pvalues$results_STAAR_A_1_1,pvalues$results_ACAT_O,pvalues$results_STAAR_O)
+			                  pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_A_1_25,
+			                  pvalues$results_STAAR_A_1_1,pvalues$results_ACAT_O,pvalues$results_STAAR_O)
 		}else
 		{
 			results_temp <- c(results_temp,pvalues$cMAC,
-			pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_B)
+			                  pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_B)
 		}
 
 		results_plof_ds <- rbind(results_plof_ds,results_temp)
@@ -293,12 +293,12 @@ coding_incl_ptv <- function(chr,gene_name,genofile,obj_nullmodel,genes,
 		if(!use_SPA)
 		{
 			results_temp <- c(results_temp,pvalues$cMAC,pvalues$results_STAAR_S_1_25,pvalues$results_STAAR_S_1_1,
-			pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_A_1_25,
-			pvalues$results_STAAR_A_1_1,pvalues$results_ACAT_O,pvalues$results_STAAR_O)
+			                  pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_A_1_25,
+			                  pvalues$results_STAAR_A_1_1,pvalues$results_ACAT_O,pvalues$results_STAAR_O)
 		}else
 		{
 			results_temp <- c(results_temp,pvalues$cMAC,
-			pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_B)
+			                  pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_B)
 		}
 
 		results_ptv_ds <- rbind(results_ptv_ds,results_temp)
@@ -387,12 +387,12 @@ coding_incl_ptv <- function(chr,gene_name,genofile,obj_nullmodel,genes,
 		if(!use_SPA)
 		{
 			results_temp <- c(results_temp,pvalues$cMAC,pvalues$results_STAAR_S_1_25,pvalues$results_STAAR_S_1_1,
-			pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_A_1_25,
-			pvalues$results_STAAR_A_1_1,pvalues$results_ACAT_O,pvalues$results_STAAR_O)
+			                  pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_A_1_25,
+			                  pvalues$results_STAAR_A_1_1,pvalues$results_ACAT_O,pvalues$results_STAAR_O)
 		}else
 		{
 			results_temp <- c(results_temp,pvalues$cMAC,
-			pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_B)
+			                  pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_B)
 		}
 
 		results_plof <- rbind(results_plof,results_temp)
@@ -498,12 +498,12 @@ coding_incl_ptv <- function(chr,gene_name,genofile,obj_nullmodel,genes,
 		if(!use_SPA)
 		{
 			results_temp <- c(results_temp,pvalues$cMAC,pvalues$results_STAAR_S_1_25,pvalues$results_STAAR_S_1_1,
-			pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_A_1_25,
-			pvalues$results_STAAR_A_1_1,pvalues$results_ACAT_O,pvalues$results_STAAR_O)
+			                  pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_A_1_25,
+			                  pvalues$results_STAAR_A_1_1,pvalues$results_ACAT_O,pvalues$results_STAAR_O)
 		}else
 		{
 			results_temp <- c(results_temp,pvalues$cMAC,
-			pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_B)
+			                  pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_B)
 		}
 
 		results_ptv <- rbind(results_ptv,results_temp)
@@ -591,12 +591,12 @@ coding_incl_ptv <- function(chr,gene_name,genofile,obj_nullmodel,genes,
 		if(!use_SPA)
 		{
 			results_temp <- c(results_temp,pvalues$cMAC,pvalues$results_STAAR_S_1_25,pvalues$results_STAAR_S_1_1,
-			pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_A_1_25,
-			pvalues$results_STAAR_A_1_1,pvalues$results_ACAT_O,pvalues$results_STAAR_O)
+			                  pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_A_1_25,
+			                  pvalues$results_STAAR_A_1_1,pvalues$results_ACAT_O,pvalues$results_STAAR_O)
 		}else
 		{
 			results_temp <- c(results_temp,pvalues$cMAC,
-			pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_B)
+			                  pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_B)
 		}
 
 		results_synonymous <- rbind(results_synonymous,results_temp)
@@ -684,12 +684,12 @@ coding_incl_ptv <- function(chr,gene_name,genofile,obj_nullmodel,genes,
 		if(!use_SPA)
 		{
 			results_temp <- c(results_temp,pvalues$cMAC,pvalues$results_STAAR_S_1_25,pvalues$results_STAAR_S_1_1,
-			pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_A_1_25,
-			pvalues$results_STAAR_A_1_1,pvalues$results_ACAT_O,pvalues$results_STAAR_O)
+			                  pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_A_1_25,
+			                  pvalues$results_STAAR_A_1_1,pvalues$results_ACAT_O,pvalues$results_STAAR_O)
 		}else
 		{
 			results_temp <- c(results_temp,pvalues$cMAC,
-			pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_B)
+			                  pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_B)
 		}
 
 		results <- rbind(results,results_temp)
@@ -760,12 +760,12 @@ coding_incl_ptv <- function(chr,gene_name,genofile,obj_nullmodel,genes,
 		if(!use_SPA)
 		{
 			results_temp <- c(results_temp,pvalues$cMAC,pvalues$results_STAAR_S_1_25,pvalues$results_STAAR_S_1_1,
-			pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_A_1_25,
-			pvalues$results_STAAR_A_1_1,pvalues$results_ACAT_O,pvalues$results_STAAR_O)
+			                  pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_A_1_25,
+			                  pvalues$results_STAAR_A_1_1,pvalues$results_ACAT_O,pvalues$results_STAAR_O)
 		}else
 		{
 			results_temp <- c(results_temp,pvalues$cMAC,
-			pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_B)
+			                  pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_B)
 		}
 
 		results <- rbind(results,results_temp)

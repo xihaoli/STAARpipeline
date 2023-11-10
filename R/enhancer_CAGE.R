@@ -3,7 +3,7 @@ enhancer_CAGE <- function(chr,gene_name,genofile,obj_nullmodel,
                           QC_label="annotation/filter",variant_type=c("SNV","Indel","variant"),geno_missing_imputation=c("mean","minor"),
                           Annotation_dir="annotation/info/FunctionalAnnotation",Annotation_name_catalog,
                           Use_annotation_weights=c(TRUE,FALSE),Annotation_name=NULL,
-						  SPA_p_filter=FALSE,p_filter_cutoff=0.05,silent=FALSE){
+                          SPA_p_filter=FALSE,p_filter_cutoff=0.05,silent=FALSE){
 
 	## evaluate choices
 	variant_type <- match.arg(variant_type)
@@ -174,12 +174,12 @@ enhancer_CAGE <- function(chr,gene_name,genofile,obj_nullmodel,
 		if(!use_SPA)
 		{
 			results_temp <- c(results_temp,pvalues$cMAC,pvalues$results_STAAR_S_1_25,pvalues$results_STAAR_S_1_1,
-			pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_A_1_25,
-			pvalues$results_STAAR_A_1_1,pvalues$results_ACAT_O,pvalues$results_STAAR_O)
+			                  pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_A_1_25,
+			                  pvalues$results_STAAR_A_1_1,pvalues$results_ACAT_O,pvalues$results_STAAR_O)
 		}else
 		{
 			results_temp <- c(results_temp,pvalues$cMAC,
-			pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_B)
+			                  pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_B)
 		}
 
 		results <- rbind(results,results_temp)

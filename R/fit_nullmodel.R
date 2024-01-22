@@ -83,11 +83,14 @@ fit_nullmodel <- function(fixed, data = parent.frame(), kins, use_sparse = NULL,
 		if(use_SPA)
 		{
 			# generate XW
-			X <- model.matrix(obj_nullmodel)
+			X <- obj_nullmodel$X
 			working <- obj_nullmodel$weights
 
-			obj_nullmodel$XW <- t(X)%*%diag(working)
-			obj_nullmodel$XXWX_inv <- X%*%solve(t(X)%*%diag(working)%*%X)
+			obj_nullmodel$XW <- as.matrix(crossprod(X,obj_nullmodel$Sigma_i))
+			obj_nullmodel$XXWX_inv <- as.matrix(X%*%obj_nullmodel$cov)
+
+			obj_nullmodel$XSigma_i <- obj_nullmodel$XW
+			obj_nullmodel$XXSigma_iX_inv <- obj_nullmodel$XXWX_inv
 		}
 
 	}else if(!inherits(kins, "matrix") && !inherits(kins, "Matrix")){
@@ -147,11 +150,10 @@ fit_nullmodel <- function(fixed, data = parent.frame(), kins, use_sparse = NULL,
 
 		if(use_SPA)
 		{
-			X <- model.matrix(obj_nullmodel)
-			working <- obj_nullmodel$weights
+			X <- obj_nullmodel$X
 
-			obj_nullmodel$XW <- t(X)%*%diag(working)
-			obj_nullmodel$XXWX_inv <- X%*%solve(t(X)%*%diag(working)%*%X)
+			obj_nullmodel$XW <- as.matrix(crossprod(X,obj_nullmodel$Sigma_i))
+			obj_nullmodel$XXWX_inv <- as.matrix(X%*%obj_nullmodel$cov)
 		}
 	}
 	obj_nullmodel$relatedness <- TRUE

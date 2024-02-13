@@ -20,7 +20,7 @@ Gene_Centric_Coding(
   Annotation_name_catalog,
   Use_annotation_weights = c(TRUE, FALSE),
   Annotation_name = NULL,
-  SPA_p_filter = FALSE,
+  SPA_p_filter = TRUE,
   p_filter_cutoff = 0.05,
   silent = FALSE
 )

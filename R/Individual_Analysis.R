@@ -21,7 +21,7 @@
 #' @param tol a positive number specifying tolerance, the difference threshold for parameter
 #' estimates in saddlepoint approximation algorithm below which iterations should be stopped (default = ".Machine$double.eps^0.25").
 #' @param max_iter a positive integer specifying the maximum number of iterations for applying the saddlepoint approximation algorithm (default = "1000").
-#' @param SPA_p_filter logical: are only the variants with a score-test-based p-value smaller than a pre-specified threshold use the SPA method to recalculate the p-value, only used for imbalanced case-control setting (default = FALSE).
+#' @param SPA_p_filter logical: are only the variants with a score-test-based p-value smaller than a pre-specified threshold use the SPA method to recalculate the p-value, only used for imbalanced case-control setting (default = TRUE).
 #' @param p_filter_cutoff threshold for the p-value recalculation using the SPA method, only used for imbalanced case-control setting (default = 0.05)
 #' @return A data frame containing the score test p-value and the estimated effect size of the minor allele for each individual variant in the given genetic region.
 #' The first 4 columns correspond to chromosome (CHR), position (POS), reference allele (REF), and alternative allele (ALT).
@@ -36,7 +36,7 @@
 
 Individual_Analysis <- function(chr,start_loc,end_loc,genofile,obj_nullmodel,mac_cutoff=20,subset_variants_num=5e3,
                                 QC_label="annotation/filter",variant_type=c("variant","SNV","Indel"),geno_missing_imputation=c("mean","minor"),
-                                tol=.Machine$double.eps^0.25,max_iter=1000,SPA_p_filter=FALSE,p_filter_cutoff=0.05){
+                                tol=.Machine$double.eps^0.25,max_iter=1000,SPA_p_filter=TRUE,p_filter_cutoff=0.05){
 
 	## evaluate choices
 	variant_type <- match.arg(variant_type)

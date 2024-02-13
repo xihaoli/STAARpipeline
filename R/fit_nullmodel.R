@@ -103,7 +103,7 @@ fit_nullmodel <- function(fixed, data = parent.frame(), kins, use_sparse = NULL,
 		                         method.optim = method.optim, maxiter = maxiter,
 		                         tol = tol, taumin = taumin, taumax = taumax,
 		                         tauregion = tauregion, verbose = verbose, ...)
-    	obj_nullmodel$sparse_kins <- TRUE
+		obj_nullmodel$sparse_kins <- TRUE
 
 		if(use_SPA)
 		{

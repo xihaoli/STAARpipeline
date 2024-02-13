@@ -17,7 +17,7 @@ Individual_Analysis(
   geno_missing_imputation = c("mean", "minor"),
   tol = .Machine$double.eps^0.25,
   max_iter = 1000,
-  SPA_p_filter = FALSE,
+  SPA_p_filter = TRUE,
   p_filter_cutoff = 0.05
 )
 }
@@ -49,7 +49,7 @@ estimates in saddlepoint approximation algorithm below which iterations should b
 
 \item{max_iter}{a positive integer specifying the maximum number of iterations for applying the saddlepoint approximation algorithm (default = "1000").}
 
-\item{SPA_p_filter}{logical: are only the variants with a score-test-based p-value smaller than a pre-specified threshold use the SPA method to recalculate the p-value, only used for imbalanced case-control setting (default = FALSE).}
+\item{SPA_p_filter}{logical: are only the variants with a score-test-based p-value smaller than a pre-specified threshold use the SPA method to recalculate the p-value, only used for imbalanced case-control setting (default = TRUE).}
 
 \item{p_filter_cutoff}{threshold for the p-value recalculation using the SPA method, only used for imbalanced case-control setting (default = 0.05)}
 }

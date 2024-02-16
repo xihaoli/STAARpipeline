@@ -59,7 +59,7 @@ a given variant-set (default = 2).}
 
 \item{Annotation_name}{a vector of annotation names used in STAAR (default = NULL).}
 
-\item{SPA_p_filter}{logical: are only the variants with a normal approximation based p-value smaller than a pre-specified threshold use the SPA method to recalculate the p-value, only used for imbalanced case-control setting (default = FALSE).}
+\item{SPA_p_filter}{logical: are only the variants with a normal approximation based p-value smaller than a pre-specified threshold use the SPA method to recalculate the p-value, only used for imbalanced case-control setting (default = TRUE).}
 
 \item{p_filter_cutoff}{threshold for the p-value recalculation using the SPA method, only used for imbalanced case-control setting (default = 0.05).}
 

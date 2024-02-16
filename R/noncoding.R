@@ -885,7 +885,7 @@ noncoding <- function(chr,gene_name,genofile,obj_nullmodel,
 	enhancervpos <- as.numeric(seqGetData(genofile,"position"))
 	enhancervref <- as.character(seqGetData(genofile,"$ref"))
 	enhancervalt <- as.character(seqGetData(genofile,"$alt"))
-	dfHancerVarGene <- data.frame(enhancervchr,enhancervpos,enhancervref,enhancervalt,enhancer2GENE)
+	dfHancerCAGEVarGene <- data.frame(enhancervchr,enhancervpos,enhancervref,enhancervalt,enhancer2GENE)
 
 	## get SNV id
 	filter <- seqGetData(genofile, QC_label)
@@ -907,18 +907,18 @@ noncoding <- function(chr,gene_name,genofile,obj_nullmodel,
 	variant.id <- seqGetData(genofile, "variant.id")
 	variant.id.SNV <- variant.id[SNVlist]
 
-	dfHancerVarGene.SNV <- dfHancerVarGene[SNVlist,]
-	dfHancerVarGene.SNV$enhancervpos <- as.character(dfHancerVarGene.SNV$enhancervpos)
-	dfHancerVarGene.SNV$enhancervref <- as.character(dfHancerVarGene.SNV$enhancervref)
-	dfHancerVarGene.SNV$enhancervalt <- as.character(dfHancerVarGene.SNV$enhancervalt)
+	dfHancerCAGEVarGene.SNV <- dfHancerCAGEVarGene[SNVlist,]
+	dfHancerCAGEVarGene.SNV$enhancervpos <- as.character(dfHancerCAGEVarGene.SNV$enhancervpos)
+	dfHancerCAGEVarGene.SNV$enhancervref <- as.character(dfHancerCAGEVarGene.SNV$enhancervref)
+	dfHancerCAGEVarGene.SNV$enhancervalt <- as.character(dfHancerCAGEVarGene.SNV$enhancervalt)
 
 	seqResetFilter(genofile)
 
-	rm(dfHancerVarGene)
+	rm(dfHancerCAGEVarGene)
 	gc()
 
 	### Gene
-	is.in <- which(dfHancerVarGene.SNV[,5]==gene_name)
+	is.in <- which(dfHancerCAGEVarGene.SNV[,5]==gene_name)
 	variant.is.in <- variant.id.SNV[is.in]
 
 	seqSetFilter(genofile,variant.id=variant.is.in,sample.id=phenotype.id)
@@ -1005,7 +1005,7 @@ noncoding <- function(chr,gene_name,genofile,obj_nullmodel,
 	results_enhancer_CAGE <- c()
 	if(inherits(pvalues, "list"))
 	{
-		results_temp <- dfHancerVarGene.SNV[1,1:4]
+		results_temp <- dfHancerCAGEVarGene.SNV[1,1:4]
 		results_temp[3] <- "enhancer_CAGE"
 		results_temp[2] <- chr
 		results_temp[1] <- as.character(gene_name)
@@ -1059,7 +1059,7 @@ noncoding <- function(chr,gene_name,genofile,obj_nullmodel,
 	enhancervpos <- as.numeric(seqGetData(genofile,"position"))
 	enhancervref <- as.character(seqGetData(genofile,"$ref"))
 	enhancervalt <- as.character(seqGetData(genofile,"$alt"))
-	dfHancerVarGene <- data.frame(enhancervchr,enhancervpos,enhancervref,enhancervalt,enhancer2GENE)
+	dfHancerrOCRsVarGene <- data.frame(enhancervchr,enhancervpos,enhancervref,enhancervalt,enhancer2GENE)
 
 	rm(varid)
 	gc()
@@ -1084,18 +1084,18 @@ noncoding <- function(chr,gene_name,genofile,obj_nullmodel,
 	variant.id <- seqGetData(genofile, "variant.id")
 	variant.id.SNV <- variant.id[SNVlist]
 
-	dfHancerVarGene.SNV <- dfHancerVarGene[SNVlist,]
-	dfHancerVarGene.SNV$enhancervpos <- as.character(dfHancerVarGene.SNV$enhancervpos)
-	dfHancerVarGene.SNV$enhancervref <- as.character(dfHancerVarGene.SNV$enhancervref)
-	dfHancerVarGene.SNV$enhancervalt <- as.character(dfHancerVarGene.SNV$enhancervalt)
+	dfHancerrOCRsVarGene.SNV <- dfHancerrOCRsVarGene[SNVlist,]
+	dfHancerrOCRsVarGene.SNV$enhancervpos <- as.character(dfHancerrOCRsVarGene.SNV$enhancervpos)
+	dfHancerrOCRsVarGene.SNV$enhancervref <- as.character(dfHancerrOCRsVarGene.SNV$enhancervref)
+	dfHancerrOCRsVarGene.SNV$enhancervalt <- as.character(dfHancerrOCRsVarGene.SNV$enhancervalt)
 
 	seqResetFilter(genofile)
 
-	rm(dfHancerVarGene)
+	rm(dfHancerrOCRsVarGene)
 	gc()
 
 	### Gene
-	is.in <- which(dfHancerVarGene.SNV[,5]==gene_name)
+	is.in <- which(dfHancerrOCRsVarGene.SNV[,5]==gene_name)
 	variant.is.in <- variant.id.SNV[is.in]
 
 	seqSetFilter(genofile,variant.id=variant.is.in,sample.id=phenotype.id)
@@ -1182,7 +1182,7 @@ noncoding <- function(chr,gene_name,genofile,obj_nullmodel,
 	results_enhancer_DHS <- c()
 	if(inherits(pvalues, "list"))
 	{
-		results_temp <- dfHancerVarGene.SNV[1,1:4]
+		results_temp <- dfHancerrOCRsVarGene.SNV[1,1:4]
 		results_temp[3] <- "enhancer_DHS"
 		results_temp[2] <- chr
 		results_temp[1] <- as.character(gene_name)
@@ -1225,8 +1225,6 @@ noncoding <- function(chr,gene_name,genofile,obj_nullmodel,
 	results_noncoding <- list(upstream=results_upstream,downstream=results_downstream,UTR=results_UTR,
 	                          promoter_CAGE=results_promoter_CAGE,promoter_DHS=results_promoter_DHS,
 	                          enhancer_CAGE=results_enhancer_CAGE,enhancer_DHS=results_enhancer_DHS)
-
-	seqResetFilter(genofile)
 
 	return(results_noncoding)
 }

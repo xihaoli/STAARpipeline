@@ -210,7 +210,6 @@ coding_incl_ptv <- function(chr,gene_name,genofile,obj_nullmodel,genes,
 		}
 	}
 
-
 	################################################
 	#                  ptv_ds
 	################################################
@@ -323,7 +322,6 @@ coding_incl_ptv <- function(chr,gene_name,genofile,obj_nullmodel,genes,
 	#####################################################
 	#                      plof
 	#####################################################
-	# variant.id.gene <- seqGetData(genofile, "variant.id")
 	lof.in.plof <- (GENCODE.EXONIC.Category=="stopgain")|(GENCODE.EXONIC.Category=="stoploss")|(GENCODE.Category=="splicing")|(GENCODE.Category=="exonic;splicing")|(GENCODE.Category=="ncRNA_splicing")|(GENCODE.Category=="ncRNA_exonic;splicing")
 	variant.id.gene.category <- variant.id.gene[lof.in.plof]
 
@@ -413,12 +411,9 @@ coding_incl_ptv <- function(chr,gene_name,genofile,obj_nullmodel,genes,
 		}
 	}
 
-
 	#####################################################
 	#                      ptv
 	#####################################################
-	# variant.id.gene <- seqGetData(genofile, "variant.id")
-
 	if(variant_type=="SNV")
 	{
 		lof.in.plof <- (GENCODE.EXONIC.Category=="stopgain")|(GENCODE.EXONIC.Category=="stoploss")|(GENCODE.Category=="splicing")|(GENCODE.Category=="exonic;splicing")
@@ -523,7 +518,6 @@ coding_incl_ptv <- function(chr,gene_name,genofile,obj_nullmodel,genes,
 			colnames(results_ptv)[dim(results_ptv)[2]] <- c("STAAR-B")
 		}
 	}
-
 
 	#############################################
 	#             synonymous

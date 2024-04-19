@@ -172,7 +172,7 @@ LD_pruning <- function(chr,genofile,obj_nullmodel,variants_list,maf_cutoff=0.01,
 		while(check==1)
 		{
 			pvalue_log_cond <- Individual_Analysis_cond(chr=chr,individual_results=variants_list_chr[,1:4],genofile,obj_nullmodel,known_loci=known_loci_output,
-			                                            variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,method_cond=method_cond,
+			                                            variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,method_cond=method_cond,QC_label=QC_label,
 			                                            geno_position_ascending=geno_position_ascending)
 
 			if(sum(pvalue_log_cond$pvalue_cond < cond_p_thresh)<1)

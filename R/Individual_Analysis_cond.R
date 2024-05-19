@@ -218,24 +218,7 @@ Individual_Analysis_cond <- function(chr,individual_results,genofile,obj_nullmod
 			if(!obj_nullmodel$sparse_kins)
 			{
 				P <- obj_nullmodel$P
-				P_scalar <- sqrt(dim(P)[1])
-				P <- P*P_scalar
 
-				residuals.phenotype <- obj_nullmodel$scaled.residuals
-				residuals.phenotype <- residuals.phenotype*sqrt(P_scalar)
-
-				if(method_cond == "optimal"){
-					residuals.phenotype.fit <- lm(residuals.phenotype~genotype_adj+obj_nullmodel$X-1)
-				}else{
-					residuals.phenotype.fit <- lm(residuals.phenotype~genotype_adj)
-				}
-
-				residuals.phenotype <- as.vector(residuals.phenotype.fit$residuals)
-				X_adj <- model.matrix(residuals.phenotype.fit)
-				if(n_pheno > 1)
-				{
-					X_adj <- as.matrix(Diagonal(n = n_pheno) %x% X_adj)
-				}
 				PX_adj <- P%*%X_adj
 				P_cond <- P - X_adj%*%solve(t(X_adj)%*%X_adj)%*%t(PX_adj) -
 							PX_adj%*%solve(t(X_adj)%*%X_adj)%*%t(X_adj) +
@@ -255,16 +238,17 @@ Individual_Analysis_cond <- function(chr,individual_results,genofile,obj_nullmod
 			}
 		}else
 		{
+			residuals.phenotype <- as.vector(obj_nullmodel$scaled.residuals)
 			### sparse GRM
 			if(obj_nullmodel$sparse_kins)
 			{
 				if(n_pheno == 1)
 				{
-					Score_test <- Individual_Score_Test(as.matrix(Geno[,k],ncol=1), Sigma_i, Sigma_iX, cov, obj_nullmodel$scaled.residuals)
+					Score_test <- Individual_Score_Test(as.matrix(Geno[,k],ncol=1), Sigma_i, Sigma_iX, cov, residuals.phenotype)
 				}
 				else
 				{
-					Score_test <- Individual_Score_Test_multi(as.matrix(Diagonal(n = n_pheno) %x% Geno[,k]), Sigma_i, Sigma_iX, cov, obj_nullmodel$scaled.residuals, n_pheno)
+					Score_test <- Individual_Score_Test_multi(as.matrix(Diagonal(n = n_pheno) %x% Geno[,k]), Sigma_i, Sigma_iX, cov, residuals.phenotype, n_pheno)
 				}
 				pvalue_cond_log10 <- c(pvalue_cond_log10,Score_test$pvalue_log/log(10))
 			}
@@ -272,11 +256,6 @@ Individual_Analysis_cond <- function(chr,individual_results,genofile,obj_nullmod
 			if(!obj_nullmodel$sparse_kins)
 			{
 				P <- obj_nullmodel$P
-				P_scalar <- sqrt(dim(P)[1])
-				P <- P*P_scalar
-
-				residuals.phenotype <- as.vector(obj_nullmodel$scaled.residuals)
-				residuals.phenotype <- residuals.phenotype*sqrt(P_scalar)
 
 				if(n_pheno == 1)
 				{

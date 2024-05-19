@@ -3,9 +3,6 @@
 #' The \code{Individual_Analysis_cond_spa} function takes in chromosome, starting location, ending location,
 #' the object of opened annotated GDS file, and the object from fitting the null model to analyze the association between an
 #' imbalanced case-control phenotype and each individual variant in a genetic region by using score test.
-#' For multiple phenotype analysis (\code{obj_nullmodel$n.pheno > 1}),
-#' the results correspond to multi-trait score test p-values by leveraging
-#' the correlation structure between multiple phenotypes.
 #' @param chr chromosome.
 #' @param individual_results the data frame of (significant) individual variants for conditional analysis using score test.
 #' The first 4 columns should correspond to chromosome (CHR), position (POS), reference allele (REF), and alternative allele (ALT).
@@ -44,17 +41,13 @@ Individual_Analysis_cond_spa <- function(chr,individual_results,genofile,obj_nul
 	samplesize <- length(phenotype.id)
 
 	## residuals and cov
+	residuals.phenotype <- as.vector(obj_nullmodel$scaled.residuals)
 	if(SPA_p_filter)
 	{
 		### dense GRM
 		if(!obj_nullmodel$sparse_kins)
 		{
 			P <- obj_nullmodel$P
-			P_scalar <- sqrt(dim(P)[1])
-			P <- P*P_scalar
-
-			residuals.phenotype <- as.vector(obj_nullmodel$scaled.residuals)
-			residuals.phenotype <- residuals.phenotype*sqrt(P_scalar)
 		}
 
 		### sparse GRM
@@ -63,14 +56,8 @@ Individual_Analysis_cond_spa <- function(chr,individual_results,genofile,obj_nul
 			Sigma_i <- obj_nullmodel$Sigma_i
 			Sigma_iX <- as.matrix(obj_nullmodel$Sigma_iX)
 			cov <- obj_nullmodel$cov
-
-			residuals.phenotype <- as.vector(obj_nullmodel$scaled.residuals)
 		}
-	}else
-	{
-		residuals.phenotype <- as.vector(obj_nullmodel$scaled.residuals)
 	}
-
 
 	## SPA
 	muhat <- obj_nullmodel$fitted.values
@@ -91,7 +78,6 @@ Individual_Analysis_cond_spa <- function(chr,individual_results,genofile,obj_nul
 		XW <- obj_nullmodel$XW
 		XXWX_inv <- obj_nullmodel$XXWX_inv
 	}
-
 
 	## get SNV id
 	filter <- seqGetData(genofile, QC_label)

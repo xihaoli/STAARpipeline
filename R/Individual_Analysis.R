@@ -56,17 +56,13 @@ Individual_Analysis <- function(chr,start_loc,end_loc,genofile,obj_nullmodel,mac
 	}
 
 	## residuals and cov
+	residuals.phenotype <- as.vector(obj_nullmodel$scaled.residuals)
 	if(SPA_p_filter)
 	{
 		### dense GRM
 		if(!obj_nullmodel$sparse_kins)
 		{
 			P <- obj_nullmodel$P
-			P_scalar <- sqrt(dim(P)[1])
-			P <- P*P_scalar
-
-			residuals.phenotype <- as.vector(obj_nullmodel$scaled.residuals)
-			residuals.phenotype <- residuals.phenotype*sqrt(P_scalar)
 		}
 
 		### sparse GRM
@@ -75,12 +71,7 @@ Individual_Analysis <- function(chr,start_loc,end_loc,genofile,obj_nullmodel,mac
 			Sigma_i <- obj_nullmodel$Sigma_i
 			Sigma_iX <- as.matrix(obj_nullmodel$Sigma_iX)
 			cov <- obj_nullmodel$cov
-
-			residuals.phenotype <- as.vector(obj_nullmodel$scaled.residuals)
 		}
-	}else
-	{
-		residuals.phenotype <- as.vector(obj_nullmodel$scaled.residuals)
 	}
 
 	## SPA
@@ -110,10 +101,6 @@ Individual_Analysis <- function(chr,start_loc,end_loc,genofile,obj_nullmodel,mac
 		if(!obj_nullmodel$sparse_kins)
 		{
 			P <- obj_nullmodel$P
-			P_scalar <- sqrt(dim(P)[1])
-			P <- P*P_scalar
-
-			residuals.phenotype <- residuals.phenotype*sqrt(P_scalar)
 		}
 
 		### sparse GRM

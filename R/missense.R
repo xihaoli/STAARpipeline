@@ -356,7 +356,7 @@ missense <- function(chr,gene_name,genofile,obj_nullmodel,genes,
 						results_m[length(results_m)] <- 1
 					}
 
-					apc_num <- (length(results_m)-10)/6
+					apc_num <- (length(results_m)-10)/2
 					p_seq <- c(1:apc_num,1:apc_num+(apc_num+1),(length(results_m)-6):(length(results_m)-5))
 
 					## calculate STAAR-B

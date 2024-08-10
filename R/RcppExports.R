@@ -55,5 +55,5 @@ matrix_flip_minor <- function(G) {
 
 # Register entry points for exported C++ functions
 methods::setLoadAction(function(ns) {
-    .Call('_STAARpipeline_RcppExport_registerCCallable', PACKAGE = 'STAARpipeline')
+    .Call(`_STAARpipeline_RcppExport_registerCCallable`)
 })

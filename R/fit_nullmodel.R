@@ -82,15 +82,11 @@ fit_nullmodel <- function(fixed, data = parent.frame(), kins, use_sparse = NULL,
 
 		if(use_SPA)
 		{
-			# generate XW
 			X <- obj_nullmodel$X
-			working <- obj_nullmodel$weights
 
-			obj_nullmodel$XW <- as.matrix(crossprod(X,obj_nullmodel$Sigma_i))
-			obj_nullmodel$XXWX_inv <- as.matrix(X%*%obj_nullmodel$cov)
-
-			obj_nullmodel$XSigma_i <- obj_nullmodel$XW
-			obj_nullmodel$XXSigma_iX_inv <- obj_nullmodel$XXWX_inv
+			# generate XSigma_i
+			obj_nullmodel$XSigma_i <- as.matrix(crossprod(X,obj_nullmodel$Sigma_i))
+			obj_nullmodel$XXSigma_iX_inv <- as.matrix(X%*%obj_nullmodel$cov)
 		}
 
 	}else if(!inherits(kins, "matrix") && !inherits(kins, "Matrix")){
@@ -109,7 +105,7 @@ fit_nullmodel <- function(fixed, data = parent.frame(), kins, use_sparse = NULL,
 		{
 			X <- obj_nullmodel$X
 
-			## generate XSigma_iX
+			## generate XSigma_i
 			obj_nullmodel$XSigma_i <- crossprod(X,obj_nullmodel$Sigma_i)
 			obj_nullmodel$XXSigma_iX_inv <- X%*%obj_nullmodel$cov
 		}
@@ -133,7 +129,7 @@ fit_nullmodel <- function(fixed, data = parent.frame(), kins, use_sparse = NULL,
 		{
 			X <- obj_nullmodel$X
 
-			## generate Sigma_i
+			## generate XSigma_i
 			obj_nullmodel$XSigma_i <- crossprod(X,obj_nullmodel$Sigma_i)
 			obj_nullmodel$XXSigma_iX_inv <- X%*%obj_nullmodel$cov
 		}
@@ -151,9 +147,12 @@ fit_nullmodel <- function(fixed, data = parent.frame(), kins, use_sparse = NULL,
 		if(use_SPA)
 		{
 			X <- obj_nullmodel$X
+			muhat <- obj_nullmodel$fitted.values
+			working <- muhat*(1-muhat)
 
-			obj_nullmodel$XW <- as.matrix(crossprod(X,obj_nullmodel$Sigma_i))
-			obj_nullmodel$XXWX_inv <- as.matrix(X%*%obj_nullmodel$cov)
+			## generate XW
+			obj_nullmodel$XW <- t(X*working)
+			obj_nullmodel$XXWX_inv <- X%*%solve(t(X*working)%*%X)
 		}
 	}
 	obj_nullmodel$relatedness <- TRUE

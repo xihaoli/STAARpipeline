@@ -1,5 +1,5 @@
 plof_cond <- function(chr,gene_name,genofile,obj_nullmodel,genes,known_loci,
-                      rare_maf_cutoff=0.01,rv_num_cutoff=2,
+                      rare_maf_cutoff=0.01,rv_num_cutoff=2,rv_num_cutoff_max=1e9,
                       method_cond=c("optimal","naive"),
                       QC_label="annotation/filter",variant_type=c("SNV","Indel","variant"),geno_missing_imputation=c("mean","minor"),
                       Annotation_dir="annotation/info/FunctionalAnnotation",Annotation_name_catalog,

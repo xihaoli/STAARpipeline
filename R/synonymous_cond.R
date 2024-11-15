@@ -1,5 +1,5 @@
 synonymous_cond <- function(chr,gene_name,genofile,obj_nullmodel,genes,known_loci,
-                            rare_maf_cutoff=0.01,rv_num_cutoff=2,
+                            rare_maf_cutoff=0.01,rv_num_cutoff=2,rv_num_cutoff_max=1e9,
                             method_cond=c("optimal","naive"),
                             QC_label="annotation/filter",variant_type=c("SNV","Indel","variant"),geno_missing_imputation=c("mean","minor"),
                             Annotation_dir="annotation/info/FunctionalAnnotation",Annotation_name_catalog,
@@ -139,11 +139,11 @@ synonymous_cond <- function(chr,gene_name,genofile,obj_nullmodel,genes,known_loc
 		pvalues <- 0
 		if(n_pheno == 1)
 		{
-			try(pvalues <- STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff))
+			try(pvalues <- STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,rv_num_cutoff_max=rv_num_cutoff_max))
 		}
 		else
 		{
-			try(pvalues <- MultiSTAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff))
+			try(pvalues <- MultiSTAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,rv_num_cutoff_max=rv_num_cutoff_max))
 		}
 
 		if(inherits(pvalues, "list"))
@@ -232,11 +232,11 @@ synonymous_cond <- function(chr,gene_name,genofile,obj_nullmodel,genes,known_loc
 		pvalues <- 0
 		if(n_pheno == 1)
 		{
-			try(pvalues <- STAAR_cond(Geno,Geno_adjusted,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,method_cond=method_cond))
+			try(pvalues <- STAAR_cond(Geno,Geno_adjusted,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,rv_num_cutoff_max=rv_num_cutoff_max,method_cond=method_cond))
 		}
 		else
 		{
-			try(pvalues <- MultiSTAAR_cond(Geno,Geno_adjusted,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,method_cond=method_cond))
+			try(pvalues <- MultiSTAAR_cond(Geno,Geno_adjusted,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,rv_num_cutoff_max=rv_num_cutoff_max,method_cond=method_cond))
 		}
 
 		if(inherits(pvalues, "list"))

@@ -25,6 +25,8 @@
 #' a given variant-set (default = 2).
 #' @param rv_num_cutoff_max the cutoff of maximum number of variants of analyzing
 #' a given variant-set (default = 1e+09).
+#' @param rv_num_cutoff_max_prefilter the cutoff of maximum number of variants
+#' before extracting the genotype matrix (default = 1e+09).
 #' @param method_cond a character value indicating the method for conditional analysis.
 #' \code{optimal} refers to regressing residuals from the null model on \code{known_loci}
 #' as well as all covariates used in fitting the null model (fully adjusted) and taking the residuals;
@@ -52,7 +54,8 @@
 #' @export
 
 Sliding_Window_cond <- function(chr,start_loc,end_loc,genofile,obj_nullmodel,
-                                known_loci=NULL,rare_maf_cutoff=0.01,rv_num_cutoff=2,rv_num_cutoff_max=1e9,
+                                known_loci=NULL,rare_maf_cutoff=0.01,rv_num_cutoff=2,
+                                rv_num_cutoff_max=1e9,rv_num_cutoff_max_prefilter=1e9,
                                 method_cond=c("optimal","naive"),
                                 QC_label="annotation/filter",variant_type=c("SNV","Indel","variant"),geno_missing_imputation=c("mean","minor"),
                                 Annotation_dir="annotation/info/FunctionalAnnotation",Annotation_name_catalog,
@@ -111,8 +114,12 @@ Sliding_Window_cond <- function(chr,start_loc,end_loc,genofile,obj_nullmodel,
 	if(sum(is.in)>=2)
 	{
 		## Genotype
-		Geno <- seqGetData(genofile, "$dosage")
-		Geno <- Geno[id.genotype.match,,drop=FALSE]
+		Geno <- NULL
+		if(length(seqGetData(genofile, "variant.id"))<rv_num_cutoff_max_prefilter)
+		{
+			Geno <- seqGetData(genofile, "$dosage")
+			Geno <- Geno[id.genotype.match,,drop=FALSE]
+		}
 
 		## impute missing
 		if(!is.null(dim(Geno)))

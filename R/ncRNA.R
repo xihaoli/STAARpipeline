@@ -22,6 +22,8 @@
 #' a given variant-set (default = 2).
 #' @param rv_num_cutoff_max the cutoff of maximum number of variants of analyzing
 #' a given variant-set (default = 1e+09).
+#' @param rv_num_cutoff_max_prefilter the cutoff of maximum number of variants
+#' before extracting the genotype matrix (default = 1e+09).
 #' @param QC_label channel name of the QC label in the GDS/aGDS file (default = "annotation/filter").
 #' @param variant_type type of variant included in the analysis. Choices include "SNV", "Indel", or "variant" (default = "SNV").
 #' @param geno_missing_imputation method of handling missing genotypes. Either "mean" or "minor" (default = "mean").
@@ -44,7 +46,7 @@
 #' @export
 
 ncRNA <- function(chr,gene_name,genofile,obj_nullmodel,
-                  rare_maf_cutoff=0.01,rv_num_cutoff=2,rv_num_cutoff_max=1e9,
+                  rare_maf_cutoff=0.01,rv_num_cutoff=2,rv_num_cutoff_max=1e9,rv_num_cutoff_max_prefilter=1e9,
                   QC_label="annotation/filter",variant_type=c("SNV","Indel","variant"),geno_missing_imputation=c("mean","minor"),
                   Annotation_dir="annotation/info/FunctionalAnnotation",Annotation_name_catalog,
                   Use_annotation_weights=c(TRUE,FALSE),Annotation_name=NULL,
@@ -138,8 +140,12 @@ ncRNA <- function(chr,gene_name,genofile,obj_nullmodel,
 	id.genotype.match <- phenotype.id.merge$index
 
 	## Genotype
-	Geno <- seqGetData(genofile, "$dosage")
-	Geno <- Geno[id.genotype.match,,drop=FALSE]
+	Geno <- NULL
+	if(length(seqGetData(genofile, "variant.id"))<rv_num_cutoff_max_prefilter)
+	{
+		Geno <- seqGetData(genofile, "$dosage")
+		Geno <- Geno[id.genotype.match,,drop=FALSE]
+	}
 
 	## impute missing
 	if(!is.null(dim(Geno)))

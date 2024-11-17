@@ -23,11 +23,8 @@
 #' a given variant-set (default = 2).
 #' @param rv_num_cutoff_max the cutoff of maximum number of variants of analyzing
 #' a given variant-set (default = 1e+09).
-#' @param method_cond a character value indicating the method for conditional analysis.
-#' \code{optimal} refers to regressing residuals from the null model on \code{known_loci}
-#' as well as all covariates used in fitting the null model (fully adjusted) and taking the residuals;
-#' \code{naive} refers to regressing residuals from the null model on \code{known_loci}
-#' and taking the residuals (default = \code{optimal}).
+#' @param rv_num_cutoff_max_prefilter the cutoff of maximum number of variants
+#' before extracting the genotype matrix (default = 1e+09).
 #' @param QC_label channel name of the QC label in the GDS/aGDS file (default = "annotation/filter").
 #' @param variant_type type of variant included in the analysis. Choices include "SNV", "Indel", or "variant" (default = "SNV").
 #' @param geno_missing_imputation method of handling missing genotypes. Either "mean" or "minor" (default = "mean").
@@ -52,8 +49,8 @@
 #' @export
 
 Gene_Centric_Coding_cond_spa <- function(chr,gene_name,category=c("plof","plof_ds","missense","disruptive_missense","synonymous","ptv","ptv_ds"),
-                                         genofile,obj_nullmodel,known_loci=NULL,rare_maf_cutoff=0.01,rv_num_cutoff=2,rv_num_cutoff_max=1e9,
-                                         method_cond=c("optimal","naive"),
+                                         genofile,obj_nullmodel,known_loci=NULL,rare_maf_cutoff=0.01,rv_num_cutoff=2,
+                                         rv_num_cutoff_max=1e9,rv_num_cutoff_max_prefilter=1e9,
                                          QC_label="annotation/filter",variant_type=c("SNV","Indel","variant"),geno_missing_imputation=c("mean","minor"),
                                          Annotation_dir="annotation/info/FunctionalAnnotation",Annotation_name_catalog,
                                          Use_annotation_weights=c(TRUE,FALSE),Annotation_name=NULL,
@@ -61,7 +58,6 @@ Gene_Centric_Coding_cond_spa <- function(chr,gene_name,category=c("plof","plof_d
 
 	## evaluate choices
 	category <- match.arg(category)
-	method_cond <- match.arg(method_cond)
 	variant_type <- match.arg(variant_type)
 	geno_missing_imputation <- match.arg(geno_missing_imputation)
 
@@ -74,7 +70,8 @@ Gene_Centric_Coding_cond_spa <- function(chr,gene_name,category=c("plof","plof_d
 	if(category=="plof")
 	{
 		results <- plof_cond_spa(chr,gene_name,genofile,obj_nullmodel,genes,
-		                         known_loci,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,rv_num_cutoff_max=rv_num_cutoff_max,
+		                         known_loci,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,
+		                         rv_num_cutoff_max=rv_num_cutoff_max,rv_num_cutoff_max_prefilter=rv_num_cutoff_max_prefilter,
 		                         QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,
 		                         Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,
 		                         Use_annotation_weights=Use_annotation_weights,Annotation_name=Annotation_name,
@@ -84,7 +81,8 @@ Gene_Centric_Coding_cond_spa <- function(chr,gene_name,category=c("plof","plof_d
 	if(category=="plof_ds")
 	{
 		results <- plof_ds_cond_spa(chr,gene_name,genofile,obj_nullmodel,genes,
-		                            known_loci,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,rv_num_cutoff_max=rv_num_cutoff_max,
+		                            known_loci,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,
+		                            rv_num_cutoff_max=rv_num_cutoff_max,rv_num_cutoff_max_prefilter=rv_num_cutoff_max_prefilter,
 		                            QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,
 		                            Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,
 		                            Use_annotation_weights=Use_annotation_weights,Annotation_name=Annotation_name,
@@ -94,7 +92,8 @@ Gene_Centric_Coding_cond_spa <- function(chr,gene_name,category=c("plof","plof_d
 	if(category=="missense")
 	{
 		results <- missense_cond_spa(chr,gene_name,genofile,obj_nullmodel,genes,
-		                             known_loci,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,rv_num_cutoff_max=rv_num_cutoff_max,
+		                             known_loci,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,
+		                             rv_num_cutoff_max=rv_num_cutoff_max,rv_num_cutoff_max_prefilter=rv_num_cutoff_max_prefilter,
 		                             QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,
 		                             Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,
 		                             Use_annotation_weights=Use_annotation_weights,Annotation_name=Annotation_name,
@@ -104,7 +103,8 @@ Gene_Centric_Coding_cond_spa <- function(chr,gene_name,category=c("plof","plof_d
 	if(category=="disruptive_missense")
 	{
 		results <- disruptive_missense_cond_spa(chr,gene_name,genofile,obj_nullmodel,genes,
-		                                        known_loci,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,rv_num_cutoff_max=rv_num_cutoff_max,
+		                                        known_loci,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,
+		                                        rv_num_cutoff_max=rv_num_cutoff_max,rv_num_cutoff_max_prefilter=rv_num_cutoff_max_prefilter,
 		                                        QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,
 		                                        Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,
 		                                        Use_annotation_weights=Use_annotation_weights,Annotation_name=Annotation_name,
@@ -114,7 +114,8 @@ Gene_Centric_Coding_cond_spa <- function(chr,gene_name,category=c("plof","plof_d
 	if(category=="synonymous")
 	{
 		results <- synonymous_cond_spa(chr,gene_name,genofile,obj_nullmodel,genes,
-		                               known_loci,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,rv_num_cutoff_max=rv_num_cutoff_max,
+		                               known_loci,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,
+		                               rv_num_cutoff_max=rv_num_cutoff_max,rv_num_cutoff_max_prefilter=rv_num_cutoff_max_prefilter,
 		                               QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,
 		                               Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,
 		                               Use_annotation_weights=Use_annotation_weights,Annotation_name=Annotation_name,
@@ -124,7 +125,8 @@ Gene_Centric_Coding_cond_spa <- function(chr,gene_name,category=c("plof","plof_d
 	if(category=="ptv")
 	{
 		results <- ptv_cond_spa(chr,gene_name,genofile,obj_nullmodel,genes,
-		                        known_loci,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,rv_num_cutoff_max=rv_num_cutoff_max,
+		                        known_loci,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,
+		                        rv_num_cutoff_max=rv_num_cutoff_max,rv_num_cutoff_max_prefilter=rv_num_cutoff_max_prefilter,
 		                        QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,
 		                        Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,
 		                        Use_annotation_weights=Use_annotation_weights,Annotation_name=Annotation_name,
@@ -134,7 +136,8 @@ Gene_Centric_Coding_cond_spa <- function(chr,gene_name,category=c("plof","plof_d
 	if(category=="ptv_ds")
 	{
 		results <- ptv_ds_cond_spa(chr,gene_name,genofile,obj_nullmodel,genes,
-		                           known_loci,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,rv_num_cutoff_max=rv_num_cutoff_max,
+		                           known_loci,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,
+		                           rv_num_cutoff_max=rv_num_cutoff_max,rv_num_cutoff_max_prefilter=rv_num_cutoff_max_prefilter,
 		                           QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,
 		                           Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,
 		                           Use_annotation_weights=Use_annotation_weights,Annotation_name=Annotation_name,

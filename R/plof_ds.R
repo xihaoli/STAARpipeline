@@ -1,5 +1,5 @@
 plof_ds <- function(chr,gene_name,genofile,obj_nullmodel,genes,
-                    rare_maf_cutoff=0.01,rv_num_cutoff=2,rv_num_cutoff_max=1e9,
+                    rare_maf_cutoff=0.01,rv_num_cutoff=2,rv_num_cutoff_max=1e9,rv_num_cutoff_max_prefilter=1e9,
                     QC_label="annotation/filter",variant_type=c("SNV","Indel","variant"),geno_missing_imputation=c("mean","minor"),
                     Annotation_dir="annotation/info/FunctionalAnnotation",Annotation_name_catalog,
                     Use_annotation_weights=c(TRUE,FALSE),Annotation_name=NULL,
@@ -79,8 +79,12 @@ plof_ds <- function(chr,gene_name,genofile,obj_nullmodel,genes,
 	id.genotype.match <- phenotype.id.merge$index
 
 	## Genotype
-	Geno <- seqGetData(genofile, "$dosage")
-	Geno <- Geno[id.genotype.match,,drop=FALSE]
+	Geno <- NULL
+	if(length(seqGetData(genofile, "variant.id"))<rv_num_cutoff_max_prefilter)
+	{
+		Geno <- seqGetData(genofile, "$dosage")
+		Geno <- Geno[id.genotype.match,,drop=FALSE]
+	}
 
 	## impute missing
 	if(!is.null(dim(Geno)))

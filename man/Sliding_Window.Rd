@@ -15,6 +15,7 @@ Sliding_Window(
   rare_maf_cutoff = 0.01,
   rv_num_cutoff = 2,
   rv_num_cutoff_max = 1e+09,
+  rv_num_cutoff_max_prefilter = 1e+09,
   QC_label = "annotation/filter",
   variant_type = c("SNV", "Indel", "variant"),
   geno_missing_imputation = c("mean", "minor"),
@@ -52,6 +53,9 @@ a given variant-set (default = 2).}
 
 \item{rv_num_cutoff_max}{the cutoff of maximum number of variants of analyzing
 a given variant-set (default = 1e+09).}
+
+\item{rv_num_cutoff_max_prefilter}{the cutoff of maximum number of variants
+before extracting the genotype matrix (default = 1e+09).}
 
 \item{QC_label}{channel name of the QC label in the GDS/aGDS file (default = "annotation/filter").}
 

@@ -23,9 +23,9 @@ jobs:
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: |
-            bioc::GENESIS
-            bioc::GenomicFeatures
-            bioc::TxDb.Hsapiens.UCSC.hg38.knownGene
+            any::GENESIS
+            any::GenomicFeatures
+            any::TxDb.Hsapiens.UCSC.hg38.knownGene
             any::rcmdcheck
           needs: |
             website

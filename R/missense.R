@@ -318,7 +318,7 @@ missense <- function(chr,gene_name,genofile,obj_nullmodel,genes,
 					colnames(results)[(dim(results)[2]-5):dim(results)[2]] <- c("SKAT(1,25)-Disruptive","SKAT(1,1)-Disruptive","Burden(1,25)-Disruptive","Burden(1,1)-Disruptive","ACAT-V(1,25)-Disruptive","ACAT-V(1,1)-Disruptive")
 				}else{
 					results <- cbind(results,matrix(1,1,2))
-					colnames(results)[(dim(results)[2]-5):dim(results)[2]] <- c("Burden(1,25)-Disruptive","Burden(1,1)-Disruptive")
+					colnames(results)[(dim(results)[2]-1):dim(results)[2]] <- c("Burden(1,25)-Disruptive","Burden(1,1)-Disruptive")
 				}
 			}else
 			{

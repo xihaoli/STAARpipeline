@@ -26,16 +26,14 @@ jobs:
             any::GENESIS
             any::GenomicFeatures
             any::TxDb.Hsapiens.UCSC.hg38.knownGene
+            github::xihaoli/STAAR
+            github::xihaoli/MultiSTAAR
+            github::zilinli1988/SCANG
             any::rcmdcheck
           needs: |
             website
             coverage
           install-pandoc: true
-      - name: Install dependencies
-        run: |
-          pak::pkg_install("xihaoli/STAAR")
-          pak::pkg_install("xihaoli/MultiSTAAR")
-          pak::pkg_install("zilinli1988/SCANG")
       - name: Check
         run: rcmdcheck::rcmdcheck(args = "--no-manual", error_on = "error")
         shell: Rscript {0}

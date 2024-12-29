@@ -74,7 +74,7 @@ before extracting the genotype matrix (default = 1e+09).}
 \item{silent}{logical: should the report of error messages be suppressed (default = FALSE).}
 }
 \value{
-A list of data frames containing the STAAR p-values (including STAAR-O or STAAR-B in imbalanced case-control setting) corresponding to the coding functional category of the given gene.
+A list of data frames containing the STAAR p-values (including STAAR-O or STAAR-B in imbalanced case-control setting) corresponding to each coding functional category of the given gene.
 }
 \description{
 The \code{Gene_Centric_Coding} function takes in chromosome, gene name, functional category,

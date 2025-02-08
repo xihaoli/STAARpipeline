@@ -31,6 +31,9 @@
 #' heteroscedastic linear mixed model (allowing residual variances in different groups to be different).
 #' This variable must be included in the names of \code{data}, and \code{family} must be "gaussian"
 #' and \code{method.optim} must be "AI" (default = NULL).
+#' @param pop.groups an optional vector of defined ancestries for all individuals within the given data parameter. 
+#' @param B an optional positive numerical value for the number of base tests for ancestry-informed ensemble testing. 
+#' @param seed an optional numerical value to set the initial seed for generating ensemble weights. 
 #' @param family a description of the error distribution and link function to be used
 #' in the model. This can be a character string naming a family function, a family
 #' function or the result of a call to a family function. (See \code{\link{family}} for details of family functions).
@@ -53,6 +56,8 @@
 #' @return The function returns an object of the model fit from \code{\link{glmmkin}} (\code{obj_nullmodel}),
 #' whether the samples are under imbalanced case-control design (obj_nullmodel$use_SPA)
 #' and whether the \code{kins} matrix is sparse when fitting the null model. See \code{\link{glmmkin}} for more details.
+#' If the parameters \code{pop.groups} >= 2 and \code{B} are provided, initial ensemble weights 
+#' for further processing in \code{AI_STAAR} or \code{AI_Individual_Analysis} are also returned. 
 #' @references Chen, H., et al. (2016). Control for population structure and relatedness for binary traits
 #' in genetic association studies via logistic mixed models. \emph{The American Journal of Human Genetics}, \emph{98}(4), 653-666.
 #' (\href{https://doi.org/10.1016/j.ajhg.2016.02.012}{pub})
@@ -65,6 +70,7 @@
 
 fit_nullmodel <- function(fixed, data = parent.frame(), kins, use_sparse = NULL, use_SPA=FALSE,
                           kins_cutoff = 0.022, id, random.slope = NULL, groups = NULL,
+                          pop.groups = NULL, B = NULL, seed = 7590,
                           family = binomial(link = "logit"), method = "REML",
                           method.optim = "AI", maxiter = 500, tol = 1e-5,
                           taumin = 1e-5, taumax = 1e5, tauregion = 10,
@@ -158,6 +164,14 @@ fit_nullmodel <- function(fixed, data = parent.frame(), kins, use_sparse = NULL,
 	obj_nullmodel$relatedness <- TRUE
 	obj_nullmodel$use_SPA <- use_SPA
 
+	K <- length(unique(pop.groups))
+	if(K >= 2 && !is.null(B))
+	{
+		set.seed(seed)
+		obj_nullmodel$pop_weights_1_1 <- cbind(rep(1, K), matrix(abs(rnorm(K * B)), nrow = K))
+		obj_nullmodel$pop_weights_1_25 <- cbind(rep(1, K), matrix(abs(rnorm(K * B)), nrow = K))
+		obj_nullmodel$pop.groups <- pop.groups
+	}
 	return(obj_nullmodel)
 }
 

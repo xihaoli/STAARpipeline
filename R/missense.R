@@ -3,7 +3,7 @@ missense <- function(chr,gene_name,genofile,obj_nullmodel,genes,
                      QC_label="annotation/filter",variant_type=c("SNV","Indel","variant"),geno_missing_imputation=c("mean","minor"),
                      Annotation_dir="annotation/info/FunctionalAnnotation",Annotation_name_catalog,
                      Use_annotation_weights=c(TRUE,FALSE),Annotation_name=NULL,
-                     SPA_p_filter=FALSE,p_filter_cutoff=0.05,silent=FALSE){
+                     SPA_p_filter=FALSE,p_filter_cutoff=0.05,use_ancestry_informed=FALSE,find_weight=FALSE,silent=FALSE){
 
 	## evaluate choices
 	variant_type <- match.arg(variant_type)
@@ -138,7 +138,11 @@ missense <- function(chr,gene_name,genofile,obj_nullmodel,genes,
 	{
 		if(!use_SPA)
 		{
-			try(pvalues <- STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,rv_num_cutoff_max=rv_num_cutoff_max),silent=silent)
+			if(use_ancestry_informed == FALSE){
+				try(pvalues <- STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,rv_num_cutoff_max=rv_num_cutoff_max),silent=silent)
+			}else{
+				try(pvalues <- AI_STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,rv_num_cutoff_max=rv_num_cutoff_max,find_weight=find_weight),silent=silent)
+			}
 		}else{
 			try(pvalues <- STAAR_Binary_SPA(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,rv_num_cutoff_max=rv_num_cutoff_max,SPA_p_filter=SPA_p_filter,p_filter_cutoff=p_filter_cutoff),silent=silent)
 		}
@@ -258,37 +262,41 @@ missense <- function(chr,gene_name,genofile,obj_nullmodel,genes,
 		}
 	}
 
-	pvalues <- 0
+	pvalues_dm <- 0
 	if(n_pheno == 1)
 	{
 		if(!use_SPA)
 		{
-			try(pvalues <- STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,rv_num_cutoff_max=rv_num_cutoff_max),silent=silent)
+			if(use_ancestry_informed == FALSE){
+				try(pvalues_dm <- STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,rv_num_cutoff_max=rv_num_cutoff_max),silent=silent)
+			}else{
+				try(pvalues_dm <- AI_STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,rv_num_cutoff_max=rv_num_cutoff_max,find_weight=find_weight),silent=silent)
+			}
 		}else{
-			try(pvalues <- STAAR_Binary_SPA(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,rv_num_cutoff_max=rv_num_cutoff_max,SPA_p_filter=SPA_p_filter,p_filter_cutoff=p_filter_cutoff),silent=silent)
+			try(pvalues_dm <- STAAR_Binary_SPA(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,rv_num_cutoff_max=rv_num_cutoff_max,SPA_p_filter=SPA_p_filter,p_filter_cutoff=p_filter_cutoff),silent=silent)
 		}
 	}else
 	{
-		try(pvalues <- MultiSTAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,rv_num_cutoff_max=rv_num_cutoff_max),silent=silent)
+		try(pvalues_dm <- MultiSTAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,rv_num_cutoff_max=rv_num_cutoff_max),silent=silent)
 	}
 
-	if(inherits(pvalues, "list"))
+	if(inherits(pvalues_dm, "list"))
 	{
 		results_temp <- as.vector(genes[kk,])
 		results_temp[3] <- "disruptive_missense"
 		results_temp[2] <- chr
 		results_temp[1] <- as.character(genes[kk,1])
-		results_temp[4] <- pvalues$num_variant
+		results_temp[4] <- pvalues_dm$num_variant
 
 		if(!use_SPA)
 		{
-			results_temp <- c(results_temp,pvalues$cMAC,pvalues$results_STAAR_S_1_25,pvalues$results_STAAR_S_1_1,
-			                  pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_A_1_25,
-			                  pvalues$results_STAAR_A_1_1,pvalues$results_ACAT_O,pvalues$results_STAAR_O)
+			results_temp <- c(results_temp,pvalues_dm$cMAC,pvalues_dm$results_STAAR_S_1_25,pvalues_dm$results_STAAR_S_1_1,
+			                  pvalues_dm$results_STAAR_B_1_25,pvalues_dm$results_STAAR_B_1_1,pvalues_dm$results_STAAR_A_1_25,
+			                  pvalues_dm$results_STAAR_A_1_1,pvalues_dm$results_ACAT_O,pvalues_dm$results_STAAR_O)
 		}else
 		{
-			results_temp <- c(results_temp,pvalues$cMAC,
-			                  pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_B)
+			results_temp <- c(results_temp,pvalues_dm$cMAC,
+			                  pvalues_dm$results_STAAR_B_1_25,pvalues_dm$results_STAAR_B_1_1,pvalues_dm$results_STAAR_B)
 		}
 
 		results <- rbind(results,results_temp)
@@ -320,6 +328,50 @@ missense <- function(chr,gene_name,genofile,obj_nullmodel,genes,
 					results <- cbind(results,matrix(1,1,2))
 					colnames(results)[(dim(results)[2]-1):dim(results)[2]] <- c("Burden(1,25)-Disruptive","Burden(1,1)-Disruptive")
 				}
+
+				if(use_ancestry_informed == TRUE & find_weight == TRUE & !use_SPA){
+					results_weight <- results_weight1 <- results_weight2 <- c()
+					for(i in 1:ncol(pvalues$results_weight)){
+						results_m_weight <- pvalues$results_weight[-c(1,2),i]
+						results_m_weight <- unlist(pvalues$results_weight[,i][c(5:length(pvalues$results_weight[,i]), 4,3)])
+						names(results_m_weight) <- colnames(results)[-c(1:5,(dim(results)[2]-5):dim(results)[2])]
+						
+						results_m_weight <- c(results_m_weight, rep(1,6))
+						names(results_m_weight)[(length(results_m_weight)-5):length(results_m_weight)] <- c("SKAT(1,25)-Disruptive","SKAT(1,1)-Disruptive","Burden(1,25)-Disruptive","Burden(1,1)-Disruptive","ACAT-V(1,25)-Disruptive","ACAT-V(1,1)-Disruptive")
+						results_weight <- cbind(results_weight, results_m_weight)
+						colnames(results_weight)[i] <- c(i-1)
+					}
+
+					for(i in 1:ncol(pvalues$results_weight1)){
+						results_m_weight1 <- pvalues$results_weight1[-c(1,2),i]
+						results_m_weight1 <- unlist(pvalues$results_weight1[,i][c(5:length(pvalues$results_weight1[,i]), 4,3)])
+						names(results_m_weight1) <- colnames(results)[-c(1:5,(dim(results)[2]-5):dim(results)[2])]
+						
+						results_m_weight1 <- c(results_m_weight1, rep(1,6))
+						names(results_m_weight1)[(length(results_m_weight1)-5):length(results_m_weight1)] <- c("SKAT(1,25)-Disruptive","SKAT(1,1)-Disruptive","Burden(1,25)-Disruptive","Burden(1,1)-Disruptive","ACAT-V(1,25)-Disruptive","ACAT-V(1,1)-Disruptive")
+						results_weight1 <- cbind(results_weight1, results_m_weight1)
+						colnames(results_weight1)[i] <- c(i-1)
+					}
+
+					for(i in 1:ncol(pvalues$results_weight2)){
+						results_m_weight2 <- pvalues$results_weight2[-c(1,2),i]
+						results_m_weight2 <- unlist(pvalues$results_weight2[,i][c(5:length(pvalues$results_weight2[,i]), 4,3)])
+						names(results_m_weight2) <- colnames(results)[-c(1:5,(dim(results)[2]-5):dim(results)[2])]
+						
+						results_m_weight2 <- c(results_m_weight2, rep(1,6))
+						names(results_m_weight2)[(length(results_m_weight2)-5):length(results_m_weight2)] <- c("SKAT(1,25)-Disruptive","SKAT(1,1)-Disruptive","Burden(1,25)-Disruptive","Burden(1,1)-Disruptive","ACAT-V(1,25)-Disruptive","ACAT-V(1,1)-Disruptive")
+						results_weight2 <- cbind(results_weight2, results_m_weight2)
+						colnames(results_weight2)[i] <- c(i-1)
+					}
+
+					rownames(pvalues$weight_all_1) <- rownames(pvalues$weight_all_2) <- unique(obj_nullmodel$pop.groups)
+					results <- list(results,
+					                weight_all_1 = pvalues$weight_all_1,
+					                weight_all_2 = pvalues$weight_all_2,
+					                results_weight = results_weight,
+					                results_weight1 = results_weight1,
+					                results_weight2 = results_weight2)
+				}
 			}else
 			{
 				results <- c()
@@ -347,6 +399,83 @@ missense <- function(chr,gene_name,genofile,obj_nullmodel,genes,
 
 					results <- c()
 					results <- rbind(results,results_m)
+
+					#results_weight
+					if(use_ancestry_informed == TRUE & find_weight == TRUE){
+					  results_weight <- results_weight1 <- results_weight2 <- c()
+
+						for(i in 1:ncol(pvalues$results_weight)){
+							results_m_weight <- pvalues$results_weight[-c(1,2),i]
+							results_m_weight <- unlist(pvalues$results_weight[,i][c(5:length(pvalues$results_weight[,i]), 4,3)])
+							names(results_m_weight) <- names(results_m)[-c(1:5,(length(results_m)-5):length(results_m))]
+
+							results_m_weight <- c(results_m_weight, rep(0,6))
+							names(results_m_weight)[(length(results_m_weight)-5):length(results_m_weight)] <- c("SKAT(1,25)-Disruptive","SKAT(1,1)-Disruptive","Burden(1,25)-Disruptive","Burden(1,1)-Disruptive","ACAT-V(1,25)-Disruptive","ACAT-V(1,1)-Disruptive")
+							results_m_weight[(length(results_m_weight)-5):length(results_m_weight)] <- unlist(pvalues_dm$results_weight[,i][c("results_STAAR_S_1_25.SKAT(1,25)","results_STAAR_S_1_1.SKAT(1,1)","results_STAAR_B_1_25.Burden(1,25)",
+							                                                                                                                  "results_STAAR_B_1_1.Burden(1,1)","results_STAAR_A_1_25.ACAT-V(1,25)","results_STAAR_A_1_1.ACAT-V(1,1)")])
+							results_m_weight["STAAR-O"] <- CCT(as.numeric(results_m_weight[1:length(results_m_weight)][p_seq]))
+							results_m_weight["STAAR-S(1,25)"] <- CCT(as.numeric(results_m_weight[1:length(results_m_weight)][c(1:apc_num,6*apc_num+9)]))
+							results_m_weight["STAAR-S(1,1)"] <- CCT(as.numeric(results_m_weight[1:length(results_m_weight)][c(1:apc_num+(apc_num+1),6*apc_num+10)]))
+							results_m_weight["STAAR-B(1,25)"] <- CCT(as.numeric(results_m_weight[1:length(results_m_weight)][c(1:apc_num+2*(apc_num+1),6*apc_num+11)]))
+							results_m_weight["STAAR-B(1,1)"] <- CCT(as.numeric(results_m_weight[1:length(results_m_weight)][c(1:apc_num+3*(apc_num+1),6*apc_num+12)]))
+							results_m_weight["STAAR-A(1,25)"] <- CCT(as.numeric(results_m_weight[1:length(results_m_weight)][c(1:apc_num+4*(apc_num+1),6*apc_num+13)]))
+							results_m_weight["STAAR-A(1,1)"] <- CCT(as.numeric(results_m_weight[1:length(results_m_weight)][c(1:apc_num+5*(apc_num+1),6*apc_num+14)]))
+
+							results_weight <- cbind(results_weight, results_m_weight)
+							colnames(results_weight)[i] <- c(i-1)
+						}
+
+					#results_weight1
+						for(i in 1:ncol(pvalues$results_weight1)){
+							results_m_weight1 <- pvalues$results_weight1[-c(1,2),i]
+							results_m_weight1 <- unlist(pvalues$results_weight1[,i][c(5:length(pvalues$results_weight1[,i]), 4,3)])
+							names(results_m_weight1) <- names(results_m)[-c(1:5,(length(results_m)-5):length(results_m))]
+
+							results_m_weight1 <- c(results_m_weight1, rep(0,6))
+							names(results_m_weight1)[(length(results_m_weight1)-5):length(results_m_weight1)] <- c("SKAT(1,25)-Disruptive","SKAT(1,1)-Disruptive","Burden(1,25)-Disruptive","Burden(1,1)-Disruptive","ACAT-V(1,25)-Disruptive","ACAT-V(1,1)-Disruptive")
+							results_m_weight1[(length(results_m_weight1)-5):length(results_m_weight1)] <- unlist(pvalues_dm$results_weight1[,i][c("results_STAAR_S_1_25.SKAT(1,25)","results_STAAR_S_1_1.SKAT(1,1)","results_STAAR_B_1_25.Burden(1,25)",
+							                                                                                                                      "results_STAAR_B_1_1.Burden(1,1)","results_STAAR_A_1_25.ACAT-V(1,25)","results_STAAR_A_1_1.ACAT-V(1,1)")])
+							results_m_weight1["STAAR-O"] <- CCT(as.numeric(results_m_weight1[1:length(results_m_weight1)][p_seq]))
+							results_m_weight1["STAAR-S(1,25)"] <- CCT(as.numeric(results_m_weight1[1:length(results_m_weight1)][c(1:apc_num,6*apc_num+9)]))
+							results_m_weight1["STAAR-S(1,1)"] <- CCT(as.numeric(results_m_weight1[1:length(results_m_weight1)][c(1:apc_num+(apc_num+1),6*apc_num+10)]))
+							results_m_weight1["STAAR-B(1,25)"] <- CCT(as.numeric(results_m_weight1[1:length(results_m_weight1)][c(1:apc_num+2*(apc_num+1),6*apc_num+11)]))
+							results_m_weight1["STAAR-B(1,1)"] <- CCT(as.numeric(results_m_weight1[1:length(results_m_weight1)][c(1:apc_num+3*(apc_num+1),6*apc_num+12)]))
+							results_m_weight1["STAAR-A(1,25)"] <- CCT(as.numeric(results_m_weight1[1:length(results_m_weight1)][c(1:apc_num+4*(apc_num+1),6*apc_num+13)]))
+							results_m_weight1["STAAR-A(1,1)"] <- CCT(as.numeric(results_m_weight1[1:length(results_m_weight1)][c(1:apc_num+5*(apc_num+1),6*apc_num+14)]))
+
+							results_weight1 <- cbind(results_weight1, results_m_weight1)
+							colnames(results_weight1)[i] <- c(i-1)
+						}
+
+					#results_weight2
+					for(i in 1:ncol(pvalues$results_weight2)){
+						results_m_weight2 <- pvalues$results_weight2[-c(1,2),i]
+						results_m_weight2 <- unlist(pvalues$results_weight2[,i][c(5:length(pvalues$results_weight2[,i]), 4,3)])
+						names(results_m_weight2) <- names(results_m)[-c(1:5,(length(results_m)-5):length(results_m))]
+
+						results_m_weight2 <- c(results_m_weight2, rep(0,6))
+						names(results_m_weight2)[(length(results_m_weight2)-5):length(results_m_weight2)] <- c("SKAT(1,25)-Disruptive","SKAT(1,1)-Disruptive","Burden(1,25)-Disruptive","Burden(1,1)-Disruptive","ACAT-V(1,25)-Disruptive","ACAT-V(1,1)-Disruptive")
+						results_m_weight2[(length(results_m_weight2)-5):length(results_m_weight2)] <- unlist(pvalues_dm$results_weight2[,i][c("results_STAAR_S_1_25.SKAT(1,25)","results_STAAR_S_1_1.SKAT(1,1)","results_STAAR_B_1_25.Burden(1,25)",
+						                                                                                                                      "results_STAAR_B_1_1.Burden(1,1)","results_STAAR_A_1_25.ACAT-V(1,25)","results_STAAR_A_1_1.ACAT-V(1,1)")])
+						results_m_weight2["STAAR-O"] <- CCT(as.numeric(results_m_weight2[1:length(results_m_weight2)][p_seq]))
+						results_m_weight2["STAAR-S(1,25)"] <- CCT(as.numeric(results_m_weight2[1:length(results_m_weight2)][c(1:apc_num,6*apc_num+9)]))
+						results_m_weight2["STAAR-S(1,1)"] <- CCT(as.numeric(results_m_weight2[1:length(results_m_weight2)][c(1:apc_num+(apc_num+1),6*apc_num+10)]))
+						results_m_weight2["STAAR-B(1,25)"] <- CCT(as.numeric(results_m_weight2[1:length(results_m_weight2)][c(1:apc_num+2*(apc_num+1),6*apc_num+11)]))
+						results_m_weight2["STAAR-B(1,1)"] <- CCT(as.numeric(results_m_weight2[1:length(results_m_weight2)][c(1:apc_num+3*(apc_num+1),6*apc_num+12)]))
+						results_m_weight2["STAAR-A(1,25)"] <- CCT(as.numeric(results_m_weight2[1:length(results_m_weight2)][c(1:apc_num+4*(apc_num+1),6*apc_num+13)]))
+						results_m_weight2["STAAR-A(1,1)"] <- CCT(as.numeric(results_m_weight2[1:length(results_m_weight2)][c(1:apc_num+5*(apc_num+1),6*apc_num+14)]))
+
+						results_weight2 <- cbind(results_weight2, results_m_weight2)
+						colnames(results_weight2)[i] <- c(i-1)
+					}
+					rownames(pvalues$weight_all_1) <- rownames(pvalues$weight_all_2) <- unique(obj_nullmodel$pop.groups)
+					results <- list(results,
+					                weight_all_1 = pvalues$weight_all_1,
+					                weight_all_2 = pvalues$weight_all_2,
+					                results_weight = results_weight,
+					                results_weight1 = results_weight1,
+					                results_weight2 = results_weight2)
+				}
 				}else
 				{
 					results_m <- c(results[1,],rep(0,2))
@@ -368,20 +497,20 @@ missense <- function(chr,gene_name,genofile,obj_nullmodel,genes,
 					p_seq <- c(1:apc_num,1:apc_num+(apc_num+1),(length(results_m)-6):(length(results_m)-5))
 
 					## calculate STAAR-B
-					pvalues_sub <- as.numeric(results_m[6:length(results_m)][p_seq])
-					if(sum(is.na(pvalues_sub))>0)
+					pvalues_dm_sub <- as.numeric(results_m[6:length(results_m)][p_seq])
+					if(sum(is.na(pvalues_dm_sub))>0)
 					{
-						if(sum(is.na(pvalues_sub))==length(pvalues_sub))
+						if(sum(is.na(pvalues_dm_sub))==length(pvalues_dm_sub))
 						{
 							results_m["STAAR-B"] <- 1
 						}else
 						{
 							## not all NAs
-							pvalues_sub <- pvalues_sub[!is.na(pvalues_sub)]
-							if(sum(pvalues_sub[pvalues_sub<1])>0)
+							pvalues_dm_sub <- pvalues_dm_sub[!is.na(pvalues_dm_sub)]
+							if(sum(pvalues_dm_sub[pvalues_dm_sub<1])>0)
 							{
 								## not all ones
-								results_m["STAAR-B"] <- CCT(pvalues_sub[pvalues_sub<1])
+								results_m["STAAR-B"] <- CCT(pvalues_dm_sub[pvalues_dm_sub<1])
 
 							}else
 							{
@@ -391,9 +520,9 @@ missense <- function(chr,gene_name,genofile,obj_nullmodel,genes,
 						}
 					}else
 					{
-						if(sum(pvalues_sub[pvalues_sub<1])>0)
+						if(sum(pvalues_dm_sub[pvalues_dm_sub<1])>0)
 						{
-							results_m["STAAR-B"] <- CCT(pvalues_sub[pvalues_sub<1])
+							results_m["STAAR-B"] <- CCT(pvalues_dm_sub[pvalues_dm_sub<1])
 						}else
 						{
 							results_m["STAAR-B"] <- 1
@@ -401,20 +530,20 @@ missense <- function(chr,gene_name,genofile,obj_nullmodel,genes,
 					}
 
 					## calculate STAAR-B(1,25)
-					pvalues_sub <- as.numeric(results_m[6:length(results_m)][c(1:apc_num,(length(results_m)-6))])
-					if(sum(is.na(pvalues_sub))>0)
+					pvalues_dm_sub <- as.numeric(results_m[6:length(results_m)][c(1:apc_num,(length(results_m)-6))])
+					if(sum(is.na(pvalues_dm_sub))>0)
 					{
-						if(sum(is.na(pvalues_sub))==length(pvalues_sub))
+						if(sum(is.na(pvalues_dm_sub))==length(pvalues_dm_sub))
 						{
 							results_m["STAAR-B(1,25)"] <- 1
 						}else
 						{
 							## not all NAs
-							pvalues_sub <- pvalues_sub[!is.na(pvalues_sub)]
-							if(sum(pvalues_sub[pvalues_sub<1])>0)
+							pvalues_dm_sub <- pvalues_dm_sub[!is.na(pvalues_dm_sub)]
+							if(sum(pvalues_dm_sub[pvalues_dm_sub<1])>0)
 							{
 								## not all ones
-								results_m["STAAR-B(1,25)"] <- CCT(pvalues_sub[pvalues_sub<1])
+								results_m["STAAR-B(1,25)"] <- CCT(pvalues_dm_sub[pvalues_dm_sub<1])
 
 							}else
 							{
@@ -424,9 +553,9 @@ missense <- function(chr,gene_name,genofile,obj_nullmodel,genes,
 						}
 					}else
 					{
-						if(sum(pvalues_sub[pvalues_sub<1])>0)
+						if(sum(pvalues_dm_sub[pvalues_dm_sub<1])>0)
 						{
-							results_m["STAAR-B(1,25)"] <- CCT(pvalues_sub[pvalues_sub<1])
+							results_m["STAAR-B(1,25)"] <- CCT(pvalues_dm_sub[pvalues_dm_sub<1])
 						}else
 						{
 							results_m["STAAR-B(1,25)"] <- 1
@@ -434,20 +563,20 @@ missense <- function(chr,gene_name,genofile,obj_nullmodel,genes,
 					}
 
 					## calculate STAAR-B(1,1)
-					pvalues_sub <- as.numeric(results_m[6:length(results_m)][c(1:apc_num+(apc_num+1),(length(results_m)-5))])
-					if(sum(is.na(pvalues_sub))>0)
+					pvalues_dm_sub <- as.numeric(results_m[6:length(results_m)][c(1:apc_num+(apc_num+1),(length(results_m)-5))])
+					if(sum(is.na(pvalues_dm_sub))>0)
 					{
-						if(sum(is.na(pvalues_sub))==length(pvalues_sub))
+						if(sum(is.na(pvalues_dm_sub))==length(pvalues_dm_sub))
 						{
 							results_m["STAAR-B(1,1)"] <- 1
 						}else
 						{
 							## not all NAs
-							pvalues_sub <- pvalues_sub[!is.na(pvalues_sub)]
-							if(sum(pvalues_sub[pvalues_sub<1])>0)
+							pvalues_dm_sub <- pvalues_dm_sub[!is.na(pvalues_dm_sub)]
+							if(sum(pvalues_dm_sub[pvalues_dm_sub<1])>0)
 							{
 								## not all ones
-								results_m["STAAR-B(1,1)"] <- CCT(pvalues_sub[pvalues_sub<1])
+								results_m["STAAR-B(1,1)"] <- CCT(pvalues_dm_sub[pvalues_dm_sub<1])
 
 							}else
 							{
@@ -457,9 +586,9 @@ missense <- function(chr,gene_name,genofile,obj_nullmodel,genes,
 						}
 					}else
 					{
-						if(sum(pvalues_sub[pvalues_sub<1])>0)
+						if(sum(pvalues_dm_sub[pvalues_dm_sub<1])>0)
 						{
-							results_m["STAAR-B(1,1)"] <- CCT(pvalues_sub[pvalues_sub<1])
+							results_m["STAAR-B(1,1)"] <- CCT(pvalues_dm_sub[pvalues_dm_sub<1])
 						}else
 						{
 							results_m["STAAR-B(1,1)"] <- 1

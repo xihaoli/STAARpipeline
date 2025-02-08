@@ -11,6 +11,8 @@
 #' For multiple phenotype analysis (\code{obj_nullmodel$n.pheno > 1}),
 #' the results correspond to multi-trait association p-values (e.g. MultiSTAAR-O) by leveraging
 #' the correlation structure between multiple phenotypes.
+#' For ancestry-informed analysis, the results correspond to ensemble p-values across base tests, 
+#' with the option to return a list of base weights and p-values for each base test.
 #' @param chr chromosome.
 #' @param start_loc starting location (position) of the genetic region to be analyzed using STAAR procedure.
 #' @param end_loc ending location (position) of the genetic region to be analyzed using STAAR procedure.
@@ -37,8 +39,12 @@
 #' @param Annotation_name a vector of annotation names used in STAAR (default = NULL).
 #' @param SPA_p_filter logical: are only the variants with a normal approximation based p-value smaller than a pre-specified threshold use the SPA method to recalculate the p-value, only used for imbalanced case-control setting (default = TRUE).
 #' @param p_filter_cutoff threshold for the p-value recalculation using the SPA method, only used for imbalanced case-control setting (default = 0.05).
+#' @param use_ancestry_informed logical: is ancestry-informed association analysis used to estimate p-values (default = FALSE).
+#' @param find_weight logical: should the ancestry group-specific weights and weighting scenario-specific p-values for each base test be saved as output (default = FALSE).
 #' @param silent logical: should the report of error messages be suppressed (default = FALSE).
-#' @return A data frame containing the STAAR p-values (including STAAR-O or STAAR-B in imbalanced case-control setting) corresponding to each sliding window in the given genetic region.
+#' @return A data frame containing the STAAR p-values (including STAAR-O or STAAR-B in imbalanced case-control setting), or AI-STAAR p-values under ancestry-informed analysis, corresponding to each sliding window in the given genetic region.
+#' If \code{find_weight} is TRUE, returns a list containing the AI-STAAR p-values corresponding to each sliding window in the given genetic region, as well as the ensemble weights under two sampling scenarios 
+#' and p-values under scenarios 1, 2, and combined for each base test. 
 #' @references Li, Z., Li, X., et al. (2022). A framework for detecting
 #' noncoding rare-variant associations of large-scale whole-genome sequencing
 #' studies. \emph{Nature Methods}, \emph{19}(12), 1599-1611.
@@ -55,7 +61,7 @@ Sliding_Window <- function(chr,start_loc,end_loc,sliding_window_length=2000,type
                            QC_label="annotation/filter",variant_type=c("SNV","Indel","variant"),geno_missing_imputation=c("mean","minor"),
                            Annotation_dir="annotation/info/FunctionalAnnotation",Annotation_name_catalog,
                            Use_annotation_weights=c(TRUE,FALSE),Annotation_name=NULL,
-                           SPA_p_filter=TRUE,p_filter_cutoff=0.05,silent=FALSE){
+                           SPA_p_filter=TRUE,p_filter_cutoff=0.05,use_ancestry_informed=FALSE,find_weight=FALSE,silent=FALSE){
 
 	## evaluate choices
 	type <- match.arg(type)
@@ -71,7 +77,8 @@ Sliding_Window <- function(chr,start_loc,end_loc,sliding_window_length=2000,type
 		                                 QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,
 		                                 Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,
 		                                 Use_annotation_weights=Use_annotation_weights,Annotation_name=Annotation_name,
-		                                 SPA_p_filter=SPA_p_filter,p_filter_cutoff=p_filter_cutoff,silent=silent)
+		                                 SPA_p_filter=SPA_p_filter,p_filter_cutoff=p_filter_cutoff,
+		                                 use_ancestry_informed=use_ancestry_informed,find_weight=find_weight,silent=silent)
 	}
 
 	if(type=="multiple")
@@ -84,7 +91,8 @@ Sliding_Window <- function(chr,start_loc,end_loc,sliding_window_length=2000,type
 		                                   QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,
 		                                   Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,
 		                                   Use_annotation_weights=Use_annotation_weights,Annotation_name=Annotation_name,
-		                                   SPA_p_filter=SPA_p_filter,p_filter_cutoff=p_filter_cutoff,silent=silent)
+		                                   SPA_p_filter=SPA_p_filter,p_filter_cutoff=p_filter_cutoff,
+		                                   use_ancestry_informed=use_ancestry_informed,find_weight=find_weight,silent=silent)
 	}
 
 	return(results)

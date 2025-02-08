@@ -11,6 +11,8 @@
 #' For multiple phenotype analysis (\code{obj_nullmodel$n.pheno > 1}),
 #' the results correspond to multi-trait association p-values (e.g. MultiSTAAR-O) by leveraging
 #' the correlation structure between multiple phenotypes.
+#' For ancestry-informed analysis, the results correspond to ensemble p-values across base tests, 
+#' with the option to return a list of base weights and p-values for each base test.
 #' @param chr chromosome.
 #' @param gene_name name of the ncRNA gene to be analyzed using STAAR procedure.
 #' @param genofile an object of opened annotated GDS (aGDS) file.
@@ -33,8 +35,12 @@
 #' @param Annotation_name a vector of annotation names used in STAAR (default = NULL).
 #' @param SPA_p_filter logical: are only the variants with a normal approximation based p-value smaller than a pre-specified threshold use the SPA method to recalculate the p-value, only used for imbalanced case-control setting (default = TRUE).
 #' @param p_filter_cutoff threshold for the p-value recalculation using the SPA method, only used for imbalanced case-control setting (default = 0.05).
+#' @param use_ancestry_informed logical: is ancestry-informed association analysis used to estimate p-values (default = FALSE).
+#' @param find_weight logical: should the ancestry group-specific weights and weighting scenario-specific p-values for each base test be saved as output (default = FALSE).
 #' @param silent logical: should the report of error messages be suppressed (default = FALSE).
-#' @return A data frame containing the STAAR p-values (including STAAR-O) corresponding to the exonic and splicing category of the given ncRNA gene.
+#' @return A data frame containing the STAAR p-values (including STAAR-O), or AI-STAAR p-values under ancestry-informed analysis, corresponding to the exonic and splicing category of the given ncRNA gene.
+#' If \code{find_weight} is TRUE, returns a list containing the AI-STAAR p-values corresponding to the exonic and splicing category of the given ncRNA gene, as well as the ensemble weights under two sampling scenarios 
+#' and p-values under scenarios 1, 2, and combined for each base test.
 #' @references Li, Z., Li, X., et al. (2022). A framework for detecting
 #' noncoding rare-variant associations of large-scale whole-genome sequencing
 #' studies. \emph{Nature Methods}, \emph{19}(12), 1599-1611.
@@ -50,7 +56,7 @@ ncRNA <- function(chr,gene_name,genofile,obj_nullmodel,
                   QC_label="annotation/filter",variant_type=c("SNV","Indel","variant"),geno_missing_imputation=c("mean","minor"),
                   Annotation_dir="annotation/info/FunctionalAnnotation",Annotation_name_catalog,
                   Use_annotation_weights=c(TRUE,FALSE),Annotation_name=NULL,
-                  SPA_p_filter=TRUE,p_filter_cutoff=0.05,silent=FALSE){
+                  SPA_p_filter=TRUE,p_filter_cutoff=0.05,use_ancestry_informed=FALSE,find_weight=FALSE,silent=FALSE){
 
 	## evaluate choices
 	variant_type <- match.arg(variant_type)
@@ -203,9 +209,12 @@ ncRNA <- function(chr,gene_name,genofile,obj_nullmodel,
 	{
 		if(!use_SPA)
 		{
-			try(pvalues <- STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,rv_num_cutoff_max=rv_num_cutoff_max),silent=silent)
-		}else
-		{
+			if(use_ancestry_informed == FALSE){
+				try(pvalues <- STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,rv_num_cutoff_max=rv_num_cutoff_max),silent=silent)
+			}else{
+				try(pvalues <- AI_STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,rv_num_cutoff_max=rv_num_cutoff_max,find_weight=find_weight),silent=silent)
+			}
+		}else{
 			try(pvalues <- STAAR_Binary_SPA(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,rv_num_cutoff_max=rv_num_cutoff_max,SPA_p_filter=SPA_p_filter,p_filter_cutoff=p_filter_cutoff),silent=silent)
 		}
 	}else
@@ -248,6 +257,44 @@ ncRNA <- function(chr,gene_name,genofile,obj_nullmodel,
 			colnames(results) <- colnames(results, do.NULL = FALSE, prefix = "col")
 			colnames(results)[1:5] <- c("Gene name","Chr","Category","#SNV","cMAC")
 			colnames(results)[dim(results)[2]] <- c("STAAR-B")
+		}
+
+		if(use_ancestry_informed == TRUE & find_weight == TRUE & !use_SPA){
+			results_weight <- results_weight1 <- results_weight2 <- c()
+			for(i in 1:ncol(pvalues$results_weight)){
+				results_weight_temp <- pvalues$results_weight[-c(1,2),i]
+				results_weight_temp <- unlist(pvalues$results_weight[,i][c(5:length(pvalues$results_weight[,i]), 4,3)])
+				names(results_weight_temp) <- colnames(results)[-c(1:5)]
+
+				results_weight <- cbind(results_weight, results_weight_temp)
+				colnames(results_weight)[i] <- c(i-1)
+			}
+
+			for(i in 1:ncol(pvalues$results_weight1)){
+				results_weight_temp1 <- pvalues$results_weight1[-c(1,2),i]
+				results_weight_temp1 <- unlist(pvalues$results_weight1[,i][c(5:length(pvalues$results_weight1[,i]), 4,3)])
+				names(results_weight_temp1) <- colnames(results)[-c(1:5)]
+
+				results_weight1 <- cbind(results_weight1, results_weight_temp1)
+				colnames(results_weight1)[i] <- c(i-1)
+			}
+
+			for(i in 1:ncol(pvalues$results_weight2)){
+				results_weight_temp2 <- pvalues$results_weight2[-c(1,2),i]
+				results_weight_temp2 <- unlist(pvalues$results_weight2[,i][c(5:length(pvalues$results_weight2[,i]), 4,3)])
+				names(results_weight_temp2) <- colnames(results)[-c(1:5)]
+
+				results_weight2 <- cbind(results_weight2, results_weight_temp2)
+				colnames(results_weight2)[i] <- c(i-1)
+			}
+			rownames(pvalues$weight_all_1) <- rownames(pvalues$weight_all_2) <- unique(obj_nullmodel$pop.groups)
+
+			results <- list(results,
+			                weight_all_1 = pvalues$weight_all_1,
+			                weight_all_2 = pvalues$weight_all_2,
+			                results_weight = results_weight,
+			                results_weight1 = results_weight1,
+			                results_weight2 = results_weight2)
 		}
 	}
 

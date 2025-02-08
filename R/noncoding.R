@@ -3,7 +3,7 @@ noncoding <- function(chr,gene_name,genofile,obj_nullmodel,
                       QC_label="annotation/filter",variant_type=c("SNV","Indel","variant"),geno_missing_imputation=c("mean","minor"),
                       Annotation_dir="annotation/info/FunctionalAnnotation",Annotation_name_catalog,
                       Use_annotation_weights=c(TRUE,FALSE),Annotation_name=NULL,
-                      SPA_p_filter=FALSE,p_filter_cutoff=0.05,silent=FALSE){
+                      SPA_p_filter=FALSE,p_filter_cutoff=0.05,use_ancestry_informed=FALSE,find_weight=FALSE,silent=FALSE){
 
 	## evaluate choices
 	variant_type <- match.arg(variant_type)
@@ -156,9 +156,13 @@ noncoding <- function(chr,gene_name,genofile,obj_nullmodel,
 	{
 		if(!use_SPA)
 		{
-			try(pvalues <- STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,rv_num_cutoff_max=rv_num_cutoff_max),silent=silent)
-		}else
-		{
+			if(use_ancestry_informed == FALSE){
+				try(pvalues <- STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,rv_num_cutoff_max=rv_num_cutoff_max),silent=silent)
+			}else{
+				try(pvalues <- AI_STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,rv_num_cutoff_max=rv_num_cutoff_max,find_weight=find_weight),silent=silent)
+			  pvalues_downstream <- pvalues
+			}
+		}else{
 			try(pvalues <- STAAR_Binary_SPA(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,rv_num_cutoff_max=rv_num_cutoff_max,SPA_p_filter=SPA_p_filter,p_filter_cutoff=p_filter_cutoff),silent=silent)
 		}
 	}else
@@ -316,9 +320,13 @@ noncoding <- function(chr,gene_name,genofile,obj_nullmodel,
 	{
 		if(!use_SPA)
 		{
-			try(pvalues <- STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,rv_num_cutoff_max=rv_num_cutoff_max),silent=silent)
-		}else
-		{
+			if(use_ancestry_informed == FALSE){
+				try(pvalues <- STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,rv_num_cutoff_max=rv_num_cutoff_max),silent=silent)
+			}else{
+				try(pvalues <- AI_STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,rv_num_cutoff_max=rv_num_cutoff_max,find_weight=find_weight),silent=silent)
+			  pvalues_upstream <- pvalues
+			}
+		}else{
 			try(pvalues <- STAAR_Binary_SPA(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,rv_num_cutoff_max=rv_num_cutoff_max,SPA_p_filter=SPA_p_filter,p_filter_cutoff=p_filter_cutoff),silent=silent)
 		}
 	}else
@@ -474,9 +482,13 @@ noncoding <- function(chr,gene_name,genofile,obj_nullmodel,
 	{
 		if(!use_SPA)
 		{
-			try(pvalues <- STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,rv_num_cutoff_max=rv_num_cutoff_max),silent=silent)
-		}else
-		{
+			if(use_ancestry_informed == FALSE){
+				try(pvalues <- STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,rv_num_cutoff_max=rv_num_cutoff_max),silent=silent)
+			}else{
+				try(pvalues <- AI_STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,rv_num_cutoff_max=rv_num_cutoff_max,find_weight=find_weight),silent=silent)
+			  pvalues_UTR <- pvalues
+			}
+		}else{
 			try(pvalues <- STAAR_Binary_SPA(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,rv_num_cutoff_max=rv_num_cutoff_max,SPA_p_filter=SPA_p_filter,p_filter_cutoff=p_filter_cutoff),silent=silent)
 		}
 	}else
@@ -656,9 +668,13 @@ noncoding <- function(chr,gene_name,genofile,obj_nullmodel,
 	{
 		if(!use_SPA)
 		{
-			try(pvalues <- STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,rv_num_cutoff_max=rv_num_cutoff_max),silent=silent)
-		}else
-		{
+			if(use_ancestry_informed == FALSE){
+				try(pvalues <- STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,rv_num_cutoff_max=rv_num_cutoff_max),silent=silent)
+			}else{
+				try(pvalues <- AI_STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,rv_num_cutoff_max=rv_num_cutoff_max,find_weight=find_weight),silent=silent)
+			  pvalues_promoter_CAGE <- pvalues
+			}
+		}else{
 			try(pvalues <- STAAR_Binary_SPA(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,rv_num_cutoff_max=rv_num_cutoff_max,SPA_p_filter=SPA_p_filter,p_filter_cutoff=p_filter_cutoff),silent=silent)
 		}
 	}else
@@ -834,9 +850,13 @@ noncoding <- function(chr,gene_name,genofile,obj_nullmodel,
 	{
 		if(!use_SPA)
 		{
-			try(pvalues <- STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,rv_num_cutoff_max=rv_num_cutoff_max),silent=silent)
-		}else
-		{
+			if(use_ancestry_informed == FALSE){
+				try(pvalues <- STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,rv_num_cutoff_max=rv_num_cutoff_max),silent=silent)
+			}else{
+				try(pvalues <- AI_STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,rv_num_cutoff_max=rv_num_cutoff_max,find_weight=find_weight),silent=silent)
+			  pvalues_promoter_DHS <- pvalues
+			}
+		}else{
 			try(pvalues <- STAAR_Binary_SPA(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,rv_num_cutoff_max=rv_num_cutoff_max,SPA_p_filter=SPA_p_filter,p_filter_cutoff=p_filter_cutoff),silent=silent)
 		}
 	}else
@@ -1016,9 +1036,13 @@ noncoding <- function(chr,gene_name,genofile,obj_nullmodel,
 	{
 		if(!use_SPA)
 		{
-			try(pvalues <- STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,rv_num_cutoff_max=rv_num_cutoff_max),silent=silent)
-		}else
-		{
+			if(use_ancestry_informed == FALSE){
+				try(pvalues <- STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,rv_num_cutoff_max=rv_num_cutoff_max),silent=silent)
+			}else{
+				try(pvalues <- AI_STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,rv_num_cutoff_max=rv_num_cutoff_max,find_weight=find_weight),silent=silent)
+			  pvalues_enhancer_CAGE <- pvalues
+			}
+		}else{
 			try(pvalues <- STAAR_Binary_SPA(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,rv_num_cutoff_max=rv_num_cutoff_max,SPA_p_filter=SPA_p_filter,p_filter_cutoff=p_filter_cutoff),silent=silent)
 		}
 	}else
@@ -1197,9 +1221,13 @@ noncoding <- function(chr,gene_name,genofile,obj_nullmodel,
 	{
 		if(!use_SPA)
 		{
-			try(pvalues <- STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,rv_num_cutoff_max=rv_num_cutoff_max),silent=silent)
-		}else
-		{
+			if(use_ancestry_informed == FALSE){
+				try(pvalues <- STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,rv_num_cutoff_max=rv_num_cutoff_max),silent=silent)
+			}else{
+				try(pvalues <- AI_STAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,rv_num_cutoff_max=rv_num_cutoff_max,find_weight=find_weight),silent=silent)
+			  pvalues_enhancer_DHS <- pvalues
+			}
+		}else{
 			try(pvalues <- STAAR_Binary_SPA(Geno,obj_nullmodel,Anno.Int.PHRED.sub,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,rv_num_cutoff_max=rv_num_cutoff_max,SPA_p_filter=SPA_p_filter,p_filter_cutoff=p_filter_cutoff),silent=silent)
 		}
 	}else
@@ -1242,6 +1270,51 @@ noncoding <- function(chr,gene_name,genofile,obj_nullmodel,
 			colnames(results_enhancer_DHS) <- colnames(results_enhancer_DHS, do.NULL = FALSE, prefix = "col")
 			colnames(results_enhancer_DHS)[1:5] <- c("Gene name","Chr","Category","#SNV","cMAC")
 			colnames(results_enhancer_DHS)[dim(results_enhancer_DHS)[2]] <- c("STAAR-B")
+		}
+	}
+
+	#Assign results_weight objects across functional categories
+	categories <- c("downstream", "upstream", "UTR", "promoter_CAGE", "promoter_DHS", "enhancer_CAGE", "enhancer_DHS")
+	if(use_ancestry_informed == TRUE & find_weight == TRUE & !use_SPA){
+		for(k in categories){
+			if(!is.null(eval(as.name(paste0("results_", k))))){
+				pvalues <- eval(as.name(paste0("pvalues_", k)))
+
+			results_weight <- results_weight1 <- results_weight2 <- c()
+			for(i in 1:ncol(pvalues$results_weight)){
+				results_weight_temp <- pvalues$results_weight[-c(1,2),i]
+				results_weight_temp <- unlist(pvalues$results_weight[,i][c(5:length(pvalues$results_weight[,i]), 4,3)])
+				names(results_weight_temp) <- colnames(eval(as.name(paste0("results_", k))))[-c(1:5)]
+
+				results_weight <- cbind(results_weight, results_weight_temp)
+				colnames(results_weight)[i] <- c(i-1)
+			}
+
+			for(i in 1:ncol(pvalues$results_weight1)){
+				results_weight_temp1 <- pvalues$results_weight1[-c(1,2),i]
+				results_weight_temp1 <- unlist(pvalues$results_weight1[,i][c(5:length(pvalues$results_weight1[,i]), 4,3)])
+				names(results_weight_temp1) <- colnames(eval(as.name(paste0("results_", k))))[-c(1:5)]
+
+				results_weight1 <- cbind(results_weight1, results_weight_temp1)
+				colnames(results_weight1)[i] <- c(i-1)
+			}
+
+			for(i in 1:ncol(pvalues$results_weight2)){
+				results_weight_temp2 <- pvalues$results_weight2[-c(1,2),i]
+				results_weight_temp2 <- unlist(pvalues$results_weight2[,i][c(5:length(pvalues$results_weight2[,i]), 4,3)])
+				names(results_weight_temp2) <- colnames(eval(as.name(paste0("results_", k))))[-c(1:5)]
+
+				results_weight2 <- cbind(results_weight2, results_weight_temp2)
+				colnames(results_weight2)[i] <- c(i-1)
+			}
+			rownames(pvalues$weight_all_1) <- rownames(pvalues$weight_all_2) <- unique(obj_nullmodel$pop.groups)
+			assign(paste0("results_", k), list(eval(as.name(paste0("results_", k))),
+			                                   weight_all_1 = pvalues$weight_all_1,
+			                                   weight_all_2 = pvalues$weight_all_2,
+			                                   results_weight = results_weight,
+			                                   results_weight1 = results_weight1,
+			                                   results_weight2 = results_weight2))
+			}
 		}
 	}
 

@@ -894,9 +894,9 @@ coding_incl_ptv <- function(chr,gene_name,genofile,obj_nullmodel,genes,
 						colnames(results_weight2)[i] <- c(i-1)
 					}
 
-					results_weight_m <- results_weight; results_weight_ds <- c()
-					results_weight1_m <- results_weight1; results_weight1_ds <- c()
-					results_weight2_m <- results_weight2; results_weight2_ds <- c()
+					results_weight_m <- results_weight
+					results_weight1_m <- results_weight1
+					results_weight2_m <- results_weight2
 
 					rownames(pvalues_m$weight_all_1) <-rownames(pvalues_m$weight_all_2) <- unique(obj_nullmodel$pop.groups)
 
@@ -906,18 +906,15 @@ coding_incl_ptv <- function(chr,gene_name,genofile,obj_nullmodel,genes,
 					                results_weight = results_weight_m,
 					                results_weight1 = results_weight1_m,
 					                results_weight2 = results_weight2_m)
+				}
 			}else
 			{
-				results_missense <- results
-				results_ds <- c()
+				results_missense <- c()
+				results_ds <- results
 				results <- c()
-
-				results_weight_m <- results_weight_ds <- c()
-				results_weight1_m <- results_weight1_ds <- c()
-				results_weight2_m <- results_weight2_ds <- c()
 			}
 		}
-	}
+		
 		if(!is.null(results))
 		{
 			if(dim(results)[1]==2)
